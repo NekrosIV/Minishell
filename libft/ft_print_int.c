@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_print_int.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/12/01 09:24:13 by kasingh           #+#    #+#             */
+/*   Updated: 2023/12/18 12:32:28 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+int	ft_print_int(int nbr)
 {
-	char	*line;
+	int	len;
+	int	n;
 
-	(void)av;
-	if (ac != 1)
+	len = 0;
+	n = nbr;
+	if (n < 0 && n != -2147483648)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		n = n * -1;
+		len++;
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
+	if (n == 0)
+		len = 1;
+	while (n != 0 && n != -2147483648)
 	{
-		line = readline("minirt>");
-		printf("line = %s", line);
+		n = n / 10;
+		len++;
 	}
+	if (n == -2147483648)
+		len = 11;
+	ft_putnbr_fd(nbr, 1);
+	return (len);
 }

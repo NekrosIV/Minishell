@@ -1,32 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/14 11:26:05 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:42:51 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <unistd.h>
 
-int	main(int ac, char **av, char **env)
+/* ft_putnbr_fd: Affiche un entier sur un descripteur de fichier */
+void	ft_putnbr_fd(int n, int fd)
 {
-	char	*line;
+	char	c;
 
-	(void)av;
-	if (ac != 1)
+	if (n == -2147483648)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(-(n % 10), fd);
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
+	else if (n < 0)
 	{
-		line = readline("minirt>");
-		printf("line = %s", line);
+		write(fd, "-", 1);
+		ft_putnbr_fd(-n, fd);
+	}
+	else if (n >= 10)
+	{
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(n % 10, fd);
+	}
+	else
+	{
+		c = n + '0';
+		write(fd, &c, 1);
 	}
 }

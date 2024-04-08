@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/12 11:16:47 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:48:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
+#include <stdlib.h>
 
-int	main(int ac, char **av, char **env)
+/* ft_strdup: Duplique une chaîne de caractères */
+char	*ft_strdup(const char *src)
 {
-	char	*line;
+	int		size_src;
+	int		i;
+	char	*cpy;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	size_src = ft_strlen((char *)src);
+	cpy = malloc((size_src + 1) * sizeof(char));
+	if (cpy == 0)
+		return (0);
+	while (src[i])
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		cpy[i] = src[i];
+		i++;
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	cpy[i] = '\0';
+	return (cpy);
 }

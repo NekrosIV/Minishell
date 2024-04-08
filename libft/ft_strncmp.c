@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/09 10:17:27 by kasingh           #+#    #+#             */
+/*   Updated: 2024/01/05 12:17:40 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stddef.h>
 
-int	main(int ac, char **av, char **env)
+/* ft_strncmp: Compare les n premiers caractères de deux chaînes */
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	char	*line;
+	size_t	i;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	while ((s1[i] || s2[i]) && (i < n))
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		if ((unsigned char)(s1[i]) > (unsigned char)(s2[i]))
+			return (1);
+		if ((unsigned char)(s1[i]) < (unsigned char)(s2[i]))
+			return (-1);
+		i++;
 	}
-	printf("Hello, World!\n");
 	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
 }

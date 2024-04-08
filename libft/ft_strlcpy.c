@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/08 09:24:32 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:56:22 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stddef.h>
 
-int	main(int ac, char **av, char **env)
+/* ft_strlcpy: Copie une chaîne dans un espace mémoire limité */
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-	char	*line;
+	size_t	i;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	while (src[i] && i + 1 < size)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		dest[i] = src[i];
+		i++;
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	if (size > 0)
+		dest[i] = '\0';
+	while (src[i])
+		i++;
+	return (i);
 }

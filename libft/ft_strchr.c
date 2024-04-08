@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/09 09:06:09 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:45:04 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int ac, char **av, char **env)
+/* ft_strchr: Cherche la première occurrence d'un caractère dans une chaîne. */
+char	*ft_strchr(const char *str, int c)
 {
-	char	*line;
+	int	i;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	while (str[i])
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		if (str[i] == (unsigned char)c)
+			return ((char *)(str + i));
+		i++;
 	}
-	printf("Hello, World!\n");
+	if (c == '\0')
+		return ((char *)(str + i));
 	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
 }

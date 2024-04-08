@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/07 15:56:04 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:04:29 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int ac, char **av, char **env)
+/* ft_bzero: Met à zéro une zone de mémoire */
+void	ft_bzero(void *s, unsigned int size)
 {
-	char	*line;
+	unsigned int	i;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	while (i < size)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
-	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
+		*(char *)(s + i) = 0;
+		i++;
 	}
 }
+
+// #include <stdio.h>
+// int	main(void)
+// {
+// 	char d[] = "bonjour";
+// 	int i = 0;
+
+// 	printf("%s\n", d);
+// 	ft_bzero(d, 8);
+// 	printf("[%s]\n", d);
+// }

@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/09 10:02:55 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:59:49 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+/* ft_strrchr: Cherche la dernière occurrence d'un caractère dans une chaîne */
+char	*ft_strrchr(const char *str, int c)
 {
-	char	*line;
+	int	i;
 
-	(void)av;
-	if (ac != 1)
+	i = ft_strlen((char *)str);
+	while (i >= 0)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		if (str[i] == (unsigned char)c)
+			return ((char *)(str + i));
+		i--;
 	}
-	printf("Hello, World!\n");
 	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
 }

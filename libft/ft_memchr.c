@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/10 08:51:33 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:15:31 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stddef.h>
 
-int	main(int ac, char **av, char **env)
+/* ft_memchr: Cherche la première occurrence d'un octet
+dans une zone de memoire */
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	char	*line;
+	size_t	i;
 
-	(void)av;
-	if (ac != 1)
+	i = 0;
+	while (i < n)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		if (*(unsigned char *)(s + i) == (unsigned char)c)
+			return ((void *)(s + i));
+		i++;
 	}
-	printf("Hello, World!\n");
 	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
 }

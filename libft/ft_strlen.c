@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/07 13:55:51 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 10:57:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include <stddef.h>
 
-int	main(int ac, char **av, char **env)
+/* ft_strlen: Calcule la longueur d'une chaîne de caractères. */
+size_t	ft_strlen(const char *str)
 {
-	char	*line;
+	size_t	i;
 
-	(void)av;
-	if (ac != 1)
-	{
-		printf("Error: Too many arguments\n");
-		return (1);
-	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }

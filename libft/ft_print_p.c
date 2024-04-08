@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_print_p.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/12/01 09:26:00 by kasingh           #+#    #+#             */
+/*   Updated: 2023/12/18 12:32:36 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+int	ft_print_p(unsigned long int n)
 {
-	char	*line;
+	unsigned long int	p;
+	int					len;
 
-	(void)av;
-	if (ac != 1)
+	len = 0;
+	p = n;
+	if (p == 0)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		len = ft_print_str("(nil)");
+		return (len);
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	len = ft_print_str("0x");
+	len = ft_putnbr_base_16(p, "0123456789abcdef", len);
+	return (len);
 }

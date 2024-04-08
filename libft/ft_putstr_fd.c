@@ -1,32 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/14 11:15:26 by kasingh           #+#    #+#             */
+/*   Updated: 2024/02/08 17:17:30 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
+#include <unistd.h>
 
-int	main(int ac, char **av, char **env)
+/*ft_putstr_fd: Affiche une chaîne sur un descripteur de fichier*/
+void	ft_putstr_fd(char *s, int fd)
 {
-	char	*line;
-
-	(void)av;
-	if (ac != 1)
-	{
-		printf("Error: Too many arguments\n");
-		return (1);
-	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	write(fd, s, ft_strlen(s));
 }

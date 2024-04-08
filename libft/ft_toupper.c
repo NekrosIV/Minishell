@@ -1,32 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/08 16:33:31 by kasingh           #+#    #+#             */
+/*   Updated: 2023/11/17 11:01:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	main(int ac, char **av, char **env)
+/* ft_toupper: Convertit un caractère en majuscule. */
+int	ft_toupper(int c)
 {
-	char	*line;
-
-	(void)av;
-	if (ac != 1)
-	{
-		printf("Error: Too many arguments\n");
-		return (1);
-	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	if ((c >= 'a' && c <= 'z'))
+		c = c - 32;
+	return (c);
 }

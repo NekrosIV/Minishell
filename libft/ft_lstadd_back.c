@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/11/16 12:34:07 by kasingh           #+#    #+#             */
+/*   Updated: 2023/12/26 12:52:18 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+/* ft_lstadd_back.c : Ajoute un nouvel élément à
+	la fin de la liste */
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	char	*line;
+	t_list	*last;
 
-	(void)av;
-	if (ac != 1)
+	if (*lst == 0)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		*lst = new;
+		return ;
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
-	{
-		line = readline("minirt>");
-		printf("line = %s", line);
-	}
+	last = *lst;
+	while (last->next)
+		last = last->next;
+	last->next = new;
 }

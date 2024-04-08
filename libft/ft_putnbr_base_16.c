@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnbr_base_16.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Created: 2023/12/01 11:40:52 by kasingh           #+#    #+#             */
+/*   Updated: 2023/12/18 12:35:40 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+int	ft_putnbr_base_16(unsigned long int n, char *base, int len)
 {
-	char	*line;
-
-	(void)av;
-	if (ac != 1)
+	if (n >= 16)
 	{
-		printf("Error: Too many arguments\n");
-		return (1);
+		len = ft_putnbr_base_16(n / 16, base, len);
+		len = ft_putnbr_base_16(n % 16, base, len);
 	}
-	printf("Hello, World!\n");
-	return (0);
-	while (1)
+	else
 	{
-		line = readline("minirt>");
-		printf("line = %s", line);
+		len = len + ft_print_char(base[n]);
 	}
+	return (len);
 }
