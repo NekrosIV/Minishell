@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/08 14:00:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/09 18:18:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,37 @@
 
 int	main(int ac, char **av, char **env)
 {
-	char	*line;
+	t_var	*var;
 
 	(void)av;
+	(void)env;
 	if (ac != 1)
 	{
 		printf("Error: Too many arguments\n");
 		return (1);
 	}
-	printf("Hello, World!\n");
-	return (0);
 	while (1)
 	{
-		line = readline("minirt>");
-		printf("line = %s", line);
+		var = malloc(sizeof(t_var));
+		if (!var)
+		{
+			printf("Error: malloc failed\n");
+			return (1);
+		}
+		init_var(var);
+		var->line = readline("minirt>");
+		if (!var->line || !ft_strncmp(var->line, "exit", 4))
+		{
+			if (var->line)
+				printf("exit\n");
+			free(var->line);
+			exit(0);
+		}
+		printf("line = %s\n", var->line);
+		parsing(var);
+		exec(*var);
+		free(var->line);
+		free(var);
 	}
+	return (0);
 }
