@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/11 13:48:39 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/12 18:41:24 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,64 +44,61 @@ void	add_word(t_word **word, int token, char *str)
 void	handle_pipe(t_word **word, char *line, int *i)
 {
 	char	*str;
-	int		j;
+	int		start;
 
-	j = *i;
-	str = malloc(sizeof(char) * 2);
-	if (!str)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
-	str[0] = line[j];
-	str[1] = '\0';
-	add_word(word, PIPE, str);
+	start = *i;
 	(*i)++;
+	str = ft_strndup(line, *i, start);
+	add_word(word, PIPE, str);
 }
 
 void	handle_redir_in(t_word **word, char *line, int *i)
 {
 	char	*str;
-	int		j;
+	int		start;
 
-	j = *i;
-	if (line[j + 1] == '<')
+	start = *i;
+	if (line[start + 1] == '<')
 	{
-		str = malloc(sizeof(char) * 3);
-		if (!str)
-		{
-			printf("Error: malloc failed\n");
-			exit(1);
-		}
-		str[0] = line[j];
-		str[1] = line[j + 1];
-		str[2] = '\0';
-		add_word(word, REDIR_APPEND, str);
 		(*i) += 2;
+		str = ft_strndup(line, i, start);
+		add_word(word, HERE_DOC, str);
 	}
 	else
 	{
-		str = malloc(sizeof(char) * 2);
-		if (!str)
-		{
-			printf("Error: malloc failed\n");
-			exit(1);
-		}
-		str[0] = line[j];
-		str[1] = '\0';
-		add_word(word, REDIR_IN, str);
 		(*i)++;
+		str = ft_strndup(line, i, start);
+		add_word(word, REDIR_IN, str);
+	}
+}
+
+void	handle_redir_out(t_word **word, char *line, int *i)
+{
+	char	*str;
+	int		start;
+
+	start = *i;
+	if (line[start + 1] == '>')
+	{
+		(*i) += 2;
+		str = ft_strndup(line, i, start);
+		add_word(word, REDIR_APPEND, str);
+	}
+	else
+	{
+		(*i)++;
+		str = ft_strndup(line, i, start);
+		add_word(word, REDIR_OUT, str);
 	}
 }
 
 void	parsing(t_var *var)
 {
-	int i;
-	int *tab;
-	t_word *word;
+	int		i;
+	int		*tab;
+	t_word	*word;
 
 	i = 0;
-
 	word = NULL;
 	tab = malloc(sizeof(int) * (strlen(var->line) + 1));
 	if (!tab)
@@ -134,20 +131,20 @@ void	parsing(t_var *var)
 		if (tab[i] == PIPE)
 			handle_pipe(&word, var->line, &i);
 		else if (tab[i] == REDIR_IN)
-			printf("REDIR_IN\n");
+			handle_redir_in(&word, var->line, &i);
 		else if (tab[i] == REDIR_OUT)
-			printf("REDIR_OUT\n");
+			handle_redir_out(&word, var->line, &i);
 		else if (tab[i] == SPACES)
-			printf("SPACES\n");
+			handle_spaces(&word, var->line, &i);
 		else if (tab[i] == SINGLE_QUOTE)
-			printf("SINGLE_QUOTE\n");
+			handle_single_quote(&word, var->line, &i);
 		else if (tab[i] == DOUBLE_QUOTE)
-			printf("DOUBLE_QUOTE\n");
+			handle_double_quote(&word, var->line, &i);
 		else
-			printf("CHAR\n");
+			handle_char(&word, var->line, &i);
 		i++;
 	}
-	if (tab[i] == END)
-		printf("END\n");
+	// if (tab[i] == END)
+	// 	printf("END\n");
 	free(tab);
 }

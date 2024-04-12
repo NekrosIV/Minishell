@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/11 13:42:23 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/12 17:40:47 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef enum e_token
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
+	HERE_DOC,
 	SINGLE_QUOTE,
 	DOUBLE_QUOTE,
 	SPACES,
@@ -83,5 +84,8 @@ void				parsing(t_var *var);
 /* ********************************* UTILS.C ******************************** */
 
 void				init_var(t_var *var);
+char				*ft_strndup(char *line, int i, int start);
+
+/* ********************************* TEST.C ********************************* */
 
 #endif

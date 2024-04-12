@@ -1,22 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/12 17:29:16 by pscala           ###   ########.fr       */
+/*   Created: 2024/04/12 16:59:06 by pscala            #+#    #+#             */
+/*   Updated: 2024/04/12 17:23:15 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	init_var(t_var *var)
-{
-	var->line = NULL;
-	var->lexer = NULL;
-}
+#include "./include/minishell.h"
 
 char	*ft_strndup(char *line, int i, int start)
 {
@@ -37,4 +31,17 @@ char	*ft_strndup(char *line, int i, int start)
 	}
 	str[j] = '\0';
 	return (str);
+}
+
+int	main(int ac, char **av)
+
+{
+	char *str;
+	if (ac == 2)
+	{
+		str = ft_strndup(av[1], 7, 3);
+		printf("%s\n", str);
+		free(str);
+	}
+	return (0);
 }
