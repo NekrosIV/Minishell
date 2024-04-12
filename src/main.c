@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/09 18:18:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/10 15:33:21 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **env)
 			return (1);
 		}
 		init_var(var);
-		var->line = readline("minirt>");
+		var->line = readline("minirt> ");
 		if (!var->line || !ft_strncmp(var->line, "exit", 4))
 		{
 			if (var->line)
@@ -42,7 +42,6 @@ int	main(int ac, char **av, char **env)
 		}
 		printf("line = %s\n", var->line);
 		parsing(var);
-		exec(*var);
 		free(var->line);
 		free(var);
 	}

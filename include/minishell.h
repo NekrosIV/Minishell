@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/09 18:20:08 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/11 13:42:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ typedef enum e_token
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
-	ARG,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE,
+	SPACES,
+	CHAR,
 	CMD,
 	END
 }					t_token;
@@ -53,7 +56,7 @@ typedef struct s_env
 
 typedef struct s_word
 {
-	char			*token;
+	int				token;
 	char			*word;
 	struct s_token	*prev;
 	struct s_token	*next;
