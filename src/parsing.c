@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/12 18:41:24 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/13 11:06:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ void	handle_pipe(t_word **word, char *line, int *i)
 	start = *i;
 	(*i)++;
 	str = ft_strndup(line, *i, start);
+	if (!str)
+	{
+		printf("Error: malloc failed\n");
+		exit(1);
+	}
 	add_word(word, PIPE, str);
 }
 
@@ -56,47 +61,59 @@ void	handle_redir_in(t_word **word, char *line, int *i)
 {
 	char	*str;
 	int		start;
+	int		token;
 
 	start = *i;
 	if (line[start + 1] == '<')
 	{
 		(*i) += 2;
-		str = ft_strndup(line, i, start);
-		add_word(word, HERE_DOC, str);
+		token = HERE_DOC;
 	}
 	else
 	{
 		(*i)++;
-		str = ft_strndup(line, i, start);
-		add_word(word, REDIR_IN, str);
+		token = REDIR_IN;
 	}
+	str = ft_strndup(line, i, start);
+	if (!str)
+	{
+		printf("Error: malloc failed\n");
+		exit(1);
+	}
+	add_word(word, token, str);
 }
 
 void	handle_redir_out(t_word **word, char *line, int *i)
 {
 	char	*str;
 	int		start;
+	int		token;
 
 	start = *i;
 	if (line[start + 1] == '>')
 	{
 		(*i) += 2;
-		str = ft_strndup(line, i, start);
-		add_word(word, REDIR_APPEND, str);
+		token = REDIR_APPEND;
 	}
 	else
 	{
 		(*i)++;
-		str = ft_strndup(line, i, start);
-		add_word(word, REDIR_OUT, str);
+		token = REDIR_OUT;
 	}
+	str = ft_strndup(line, i, start);
+	if (!str)
+	{
+		printf("Error: malloc failed\n");
+		exit(1);
+	}
+	add_word(word, token, str);
 }
 
 void	parsing(t_var *var)
 {
-	int		i;
-	int		*tab;
-	t_word	*word;
+	int i;
+	int *tab;
+	t_word *word;
 
 	i = 0;
 	word = NULL;
