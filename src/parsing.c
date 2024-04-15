@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/13 16:35:58 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/15 12:18:13 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,14 @@ void	handle_pipe(t_word **word, char *line, int *i)
 {
 	char	*str;
 	int		start;
+	int		token;
 
 	start = *i;
+	if (line[start - 1] == '\\')
+		token = CHAR;
+	else
+		token = PIPE;
 	(*i)++;
-	printf("i = %d\n", *i);
 	str = ft_strndup(line, *i, start);
 	if (!str)
 	{
@@ -64,16 +68,16 @@ void	handle_redir_in(t_word **word, char *line, int *i)
 	int		token;
 
 	start = *i;
-	if (line[start + 1] == '<')
+	if (line[start - 1] == '\\')
+		token = CHAR;
+	else if (line[start + 1] == '<')
 	{
-		(*i) += 2;
+		(*i)++;
 		token = HERE_DOC;
 	}
 	else
-	{
-		(*i)++;
 		token = REDIR_IN;
-	}
+	(*i)++;
 	str = ft_strndup(line, *i, start);
 	if (!str)
 	{
@@ -90,16 +94,16 @@ void	handle_redir_out(t_word **word, char *line, int *i)
 	int		token;
 
 	start = *i;
-	if (line[start + 1] == '>')
+	if (line[start - 1] == '\\')
+		token = CHAR;
+	else if (line[start + 1] == '>')
 	{
-		(*i) += 2;
+		(*i)++;
 		token = REDIR_APPEND;
 	}
 	else
-	{
-		(*i)++;
 		token = REDIR_OUT;
-	}
+	(*i)++;
 	str = ft_strndup(line, *i, start);
 	if (!str)
 	{
@@ -130,7 +134,7 @@ void	handle_back_slash(t_word **word, char *line, int *i)
 		add_word(word, CHAR, str);
 	}
 }
- 
+
 void	parsing(t_var *var)
 {
 	int i;
