@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/15 12:18:13 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/15 18:15:42 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	handle_redir_in(t_word **word, char *line, int *i)
 
 	start = *i;
 	if (line[start - 1] == '\\')
-		token = CHAR;
+		token = CMD;
 	else if (line[start + 1] == '<')
 	{
 		(*i)++;
@@ -95,7 +95,7 @@ void	handle_redir_out(t_word **word, char *line, int *i)
 
 	start = *i;
 	if (line[start - 1] == '\\')
-		token = CHAR;
+		token = CMD;
 	else if (line[start + 1] == '>')
 	{
 		(*i)++;
@@ -120,7 +120,9 @@ void	handle_back_slash(t_word **word, char *line, int *i)
 
 	start = *i;
 	str = NULL;
-	if (line[start - 1] != '\\')
+	if (start == 0)
+		(*i)++;
+	else if (line[start - 1] && prevs_backu_slashu(line, start) % 2 == 0)
 		(*i)++;
 	else
 	{
@@ -131,8 +133,76 @@ void	handle_back_slash(t_word **word, char *line, int *i)
 			printf("Error: malloc failed\n");
 			exit(1);
 		}
-		add_word(word, CHAR, str);
+		add_word(word, CMD, str);
 	}
+}
+
+void	handle_char(t_word **word, char *line, int *i, int *tab)
+{
+	int		start;
+	char	*str;
+
+	start = *i;
+	while (tab[(*i)] == CHAR)
+		(*i)++;
+	str = ft_strndup(line, *i, start);
+	if (!str)
+	{
+		printf("Error: malloc failed\n");
+		exit(1);
+	}
+	add_word(word, CMD, str);
+}
+
+void	handle_quotes(t_word **word, char *line, int *i)
+{
+	int		start;
+	char	*str;
+	int		flag;
+
+	start = *i;
+	(*i)++;
+	while (line[(*i)])
+	{
+		if (line[(*i)] == line[start] && line[(*i) - 1] != '\\')
+			break ;
+		(*i)++;
+	}
+	if (line[(*i)] != line[start])
+		printf("Error: quotes\n");
+	else
+	{
+		str = ft_strndup(line, *i, start + 1);
+		if (!str)
+		{
+			printf("Error: malloc failed\n");
+			exit(1);
+		}
+		add_word(word, CMD, str);
+	}
+}
+
+void	handle_space(t_word **word, char *line, int *i)
+{
+	char	*str;
+	int		start;
+	int		token;
+
+	start = *i;
+	if (start == 0)
+		(*i)++;
+	else if (line[start - 1] && prevs_backu_slashu(line, start) % 2 != 0)
+		token = CMD;
+	else
+		token = SPACES;
+	(*i)++;
+	str = ft_strndup(line, *i, start);
+	if (!str)
+	{
+		printf("Error: malloc failed\n");
+		exit(1);
+	}
+	add_word(word, token, str);
 }
 
 void	parsing(t_var *var)
@@ -181,12 +251,12 @@ void	parsing(t_var *var)
 			handle_redir_out(&word, var->line, &i);
 		else if (tab[i] == BACKU_SLASHU)
 			handle_back_slash(&word, var->line, &i);
-		// else if (tab[i] == SINGLE_QUOTE)
-		// 	handle_single_quote(&word, var->line, &i);
-		// else if (tab[i] == DOUBLE_QUOTE)
-		// 	handle_double_quote(&word, var->line, &i);
-		// else
-		// 	handle_char(&word, var->line, &i);
+		else if (tab[i] == SINGLE_QUOTE || tab[i] == DOUBLE_QUOTE)
+			handle_quotes(&word, var->line, &i);
+		else if (tab[i] == SPACES)
+			handle_space(&word, var->line, &i);
+		else
+			handle_char(&word, var->line, &i, tab);
 		// i++;
 	}
 	if (tab[i] == END)

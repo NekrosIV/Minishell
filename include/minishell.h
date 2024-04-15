@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/13 16:44:53 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/15 13:43:05 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,14 @@ void				parsing(t_var *var);
 
 void				init_var(t_var *var);
 char				*ft_strndup(char *line, int i, int start);
-t_word				*get_last_tword(t_word *word);
 void				print_list(t_word *word);
 void				count_node(t_word *word);
 void				handle_back_slash(t_word **word, char *line, int *i);
+int					prevs_backu_slashu(char *line, int end);
+
+/* ******************************** GLNODE.C ******************************** */
+
+t_word				*get_last_tword(t_word *word);
 
 /* ********************************* TEST.C ********************************* */
 
