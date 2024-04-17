@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/15 17:57:30 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/16 16:05:14 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,29 @@ void	print_list(t_word *word)
 	}
 }
 
-int	prevs_backu_slashu(char *line, int end)
+void	print_list_env(t_env *env)
 {
-	int	i;
-	int	count;
-
-	if (!line)
-		return (0);
-	i = 0;
-	count = 0;
-	while (i < end)
+	while (env)
 	{
-		if (line[i] == '\\')
-			count++;
-		i++;
+		printf("%s\n", env->line);
+		env = env->next;
 	}
-	return (count);
 }
+
+// int	prevs_backu_slashu(char *line, int end)
+// {
+// 	int	i;
+// 	int	count;
+
+// 	if (!line)
+// 		return (0);
+// 	i = 0;
+// 	count = 0;
+// 	while (i < end)
+// 	{
+// 		if (line[i] == '\\')
+// 			count++;
+// 		i++;
+// 	}
+// 	return (count);
+// }

@@ -5,7 +5,7 @@ CC = cc
 CFLAGS = #-Wall -Wextra -Werror 
 LIBFTDIR = ./libft
 
-SRCS = ./src/main.c ./src/parsing.c ./src/utils.c ./src/get_last_node.c
+SRCS = ./src/main.c ./src/parsing.c ./src/utils.c ./src/get_last_node.c ./src/env.c
 BONUS_SRCS = 
 OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)

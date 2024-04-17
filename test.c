@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:06 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/13 15:28:27 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/16 16:41:37 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,11 @@ void	testi(int *i)
 
 int	main(void)
 {
-	char *str;
-	int i;
-
-	str = "bonjour";
-	i = 0;
-	printf("pre appel : %d\n", i);
-	while (str[i])
+	extern char **environ;
+	char **env = environ;
+	while (*env != NULL)
 	{
-		if (str[i] == 'o')
-			testi(&i);
-		i++;
+		printf("%s\n", *env);
+		env++;
 	}
-	printf("post appel : %d\n", i);
-	return (0);
 }
