@@ -6,30 +6,11 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:02:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/16 16:16:38 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/17 13:54:38 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_list_env(t_env **env)
-{
-	t_env	*temp;
-	t_env	*current;
-
-	if (*env)
-	{
-		current = *env;
-		while (current)
-		{
-			temp = current->next;
-			free(current->line);
-			free(current);
-			current = temp;
-		}
-		*env = NULL;
-	}
-}
 
 void	add_node_env(t_env **envs, char *str)
 {

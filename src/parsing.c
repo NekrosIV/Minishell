@@ -6,23 +6,20 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/16 14:44:45 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/17 17:50:52 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_word(t_word **word, int token, char *str)
+int	add_word(t_word **word, int token, char *str)
 {
 	t_word	*new_word;
 	t_word	*last_word;
 
 	new_word = malloc(sizeof(t_word));
 	if (!new_word)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
+		return (-1);
 	new_word->word = str;
 	new_word->token = token;
 	new_word->next = NULL;
@@ -38,32 +35,31 @@ void	add_word(t_word **word, int token, char *str)
 		last_word->next = new_word;
 		new_word->prev = last_word;
 	}
+	return (0);
 }
 
-void	handle_pipe(t_word **word, char *line, int *i)
+void	handle_pipe(t_var *var, int *i)
 {
 	char	*str;
 	int		start;
 
 	start = *i;
 	(*i)++;
-	str = ft_strndup(line, *i, start);
+	str = ft_strndup(var->line, *i, start);
 	if (!str)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
-	add_word(word, PIPE, str);
+		free_error(var, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, PIPE, str) == -1)
+		free_error(var, E_Malloc, "add_word", 1);
 }
 
-void	handle_redir_in(t_word **word, char *line, int *i)
+void	handle_redir_in(t_var *var, int *i)
 {
 	char	*str;
 	int		start;
 	int		token;
 
 	start = *i;
-	if (line[start + 1] == '<')
+	if (var->line[start + 1] == '<')
 	{
 		(*i)++;
 		token = HERE_DOC;
@@ -71,23 +67,21 @@ void	handle_redir_in(t_word **word, char *line, int *i)
 	else
 		token = REDIR_IN;
 	(*i)++;
-	str = ft_strndup(line, *i, start);
+	str = ft_strndup(var->line, *i, start);
 	if (!str)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
-	add_word(word, token, str);
+		free_error(var, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(var, E_Malloc, "add_word", 1);
 }
 
-void	handle_redir_out(t_word **word, char *line, int *i)
+void	handle_redir_out(t_var *var, int *i)
 {
 	char	*str;
 	int		start;
 	int		token;
 
 	start = *i;
-	if (line[start + 1] == '>')
+	if (var->line[start + 1] == '>')
 	{
 		(*i)++;
 		token = REDIR_APPEND;
@@ -95,16 +89,14 @@ void	handle_redir_out(t_word **word, char *line, int *i)
 	else
 		token = REDIR_OUT;
 	(*i)++;
-	str = ft_strndup(line, *i, start);
+	str = ft_strndup(var->line, *i, start);
 	if (!str)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
-	add_word(word, token, str);
+		free_error(var, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(var, E_Malloc, "add_word", 1);
 }
 
-// void	handle_back_slash(t_word **word, char *line, int *i)
+// void	handle_back_slash(t_var *var, int *i)
 // {
 // 	int		start;
 // 	char	*str;
@@ -113,22 +105,23 @@ void	handle_redir_out(t_word **word, char *line, int *i)
 // 	str = NULL;
 // 	if (start == 0)
 // 		(*i)++;
-// 	else if (line[start - 1] && prevs_backu_slashu(line, start) % 2 == 0)
+// 	else if (var->line[start - 1] && prevs_backu_slashu(var->line, start)
+// % 2 == 0)
 // 		(*i)++;
 // 	else
 // 	{
 // 		(*i)++;
-// 		str = ft_strndup(line, *i, start);
+// 		str = ft_strndup(var->line, *i, start);
 // 		if (!str)
 // 		{
 // 			printf("Error: malloc failed\n");
 // 			exit(1);
 // 		}
-// 		add_word(word, CMD, str);
+// 		add_word(&var->lexer, CMD, str);
 // 	}
 // }
 
-void	handle_char(t_word **word, char *line, int *i, int *tab)
+void	handle_char(t_var *var, int *i, int *tab)
 {
 	int		start;
 	char	*str;
@@ -136,16 +129,14 @@ void	handle_char(t_word **word, char *line, int *i, int *tab)
 	start = *i;
 	while (tab[(*i)] == CHAR)
 		(*i)++;
-	str = ft_strndup(line, *i, start);
+	str = ft_strndup(var->line, *i, start);
 	if (!str)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
-	add_word(word, CMD, str);
+		free_error(var, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, CMD, str) == -1)
+		free_error(var, E_Malloc, "add_word", 1);
 }
 
-void	handle_quotes(t_word **word, char *line, int *i)
+void	handle_quotes(t_var *var, int *i)
 {
 	int		start;
 	char	*str;
@@ -153,52 +144,48 @@ void	handle_quotes(t_word **word, char *line, int *i)
 
 	start = *i;
 	(*i)++;
-	while (line[(*i)] && line[(*i)] != line[start])
+	while (var->line[(*i)] && var->line[(*i)] != var->line[start])
 		(*i)++;
-	if (line[(*i)] != line[start])
-		printf("Error: quotes\n");
+	if (var->line[(*i)] != var->line[start])
+	{
+		var->error = true;
+		free_error(NULL, "Error: quotes : ", "\"", -99);
+	}
 	else
 	{
-		str = ft_strndup(line, *i, start + 1);
+		printf("else\n");
+		str = ft_strndup(var->line, *i, start + 1);
 		if (!str)
-		{
-			printf("Error: malloc failed\n");
-			exit(1);
-		}
-		add_word(word, CMD, str);
+			free_error(var, E_Malloc, "str", 1);
+		(*i)++;
+		if (add_word(&var->lexer, QUOTE_CMD, str) == -1)
+			free_error(var, E_Malloc, "add_word", 1);
 	}
 }
 
-void	handle_space(t_word **word, char *line, int *i)
+void	handle_space(t_var *var, int *i)
 {
 	char	*str;
 	int		start;
 
 	start = *i;
 	(*i)++;
-	str = ft_strndup(line, *i, start);
+	str = ft_strndup(var->line, *i, start);
 	if (!str)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
-	add_word(word, SPACES, str);
+		free_error(NULL, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, SPACES, str) == -1)
+		free_error(NULL, E_Malloc, "add_word", 1);
 }
 
 void	parsing(t_var *var)
 {
-	int i;
-	int *tab;
-	// t_word *word;
+	int	i;
+	int	*tab;
 
 	i = 0;
-	// word = NULL;
 	tab = malloc(sizeof(int) * (strlen(var->line) + 1));
 	if (!tab)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
+		free_error(var, E_Malloc, "var", 1);
 	while (var->line[i])
 	{
 		if (var->line[i] == '|')
@@ -222,22 +209,22 @@ void	parsing(t_var *var)
 	while (tab[i] != END)
 	{
 		if (tab[i] == PIPE)
-			handle_pipe(&var->lexer, var->line, &i);
+			handle_pipe(var, &i);
 		else if (tab[i] == REDIR_IN)
-			handle_redir_in(&var->lexer, var->line, &i);
+			handle_redir_in(var, &i);
 		else if (tab[i] == REDIR_OUT)
-			handle_redir_out(&var->lexer, var->line, &i);
+			handle_redir_out(var, &i);
 		else if (tab[i] == SINGLE_QUOTE || tab[i] == DOUBLE_QUOTE)
-			handle_quotes(&var->lexer, var->line, &i);
+			handle_quotes(var, &i);
 		else if (tab[i] == SPACES)
-			handle_space(&var->lexer, var->line, &i);
+			handle_space(var, &i);
 		else
-			handle_char(&var->lexer, var->line, &i, tab);
-		// i++;
+			handle_char(var, &i, tab);
 	}
-	if (tab[i] == END)
-		printf("END\n");
-	count_node(var->lexer);
-	print_list(var->lexer);
 	free(tab);
+	if (var->error == false)
+	{
+		count_node(var->lexer);
+		print_list(var->lexer);
+	}
 }

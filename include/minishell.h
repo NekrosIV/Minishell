@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/16 16:01:05 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/17 16:31:38 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -29,6 +30,8 @@
 /* ************************************************************************** */
 
 # define PROMPT "minishell$ "
+# define E_Malloc "Error: malloc failed : "
+# define E_args "Error: too many arguments\n"
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -45,7 +48,7 @@ typedef enum e_token
 	SPACES,
 	CHAR,
 	CMD,
-	BACKU_SLASHU,
+	QUOTE_CMD,
 	END
 }					t_token;
 
@@ -67,6 +70,8 @@ typedef struct s_word
 typedef struct s_var
 {
 	char			*line;
+	bool			exit;
+	bool			error;
 	t_word			*lexer;
 	t_env			*env;
 }					t_var;
@@ -85,7 +90,7 @@ void				parsing(t_var *var);
 
 /* ********************************* UTILS.C ******************************** */
 
-void				init_var(t_var *var);
+void				init_var(t_var *var, t_env **envs);
 char				*ft_strndup(char *line, int i, int start);
 void				print_list(t_word *word);
 void				count_node(t_word *word);
@@ -100,8 +105,12 @@ t_env				*get_last_tenv(t_env *env);
 
 /* ********************************* ENV.C ********************************** */
 
-void				free_list_env(t_env **env);
 void				init_env(t_env **envs, char **env);
 void				add_node_env(t_env **envs, char *str);
 
+/* ********************************* FREE.C ********************************* */
+void				free_var(t_var *var);
+void				free_list_env(t_env **env);
+void				free_list_lexer(t_word **lexer);
+void				free_error(t_var *var, char *error, char *fautif, int ff);
 #endif

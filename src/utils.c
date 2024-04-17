@@ -6,16 +6,19 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/16 16:05:14 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/17 15:47:42 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_var(t_var *var)
+void	init_var(t_var *var, t_env **envs)
 {
+	var->exit = false;
+	var->error = false;
 	var->line = NULL;
 	var->lexer = NULL;
+	var->env = *envs;
 }
 
 char	*ft_strndup(char *line, int end, int start)
@@ -70,6 +73,8 @@ void	print_list(t_word *word)
 			printf("token: CMD\n");
 		else if (word->token == SPACES)
 			printf("token: SPACE\n");
+		else if (word->token == QUOTE_CMD)
+			printf("token: QUOTE_CMD\n");
 		word = word->next;
 	}
 }
