@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/17 17:50:52 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/18 11:52:03 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,36 +176,37 @@ void	handle_space(t_var *var, int *i)
 	if (add_word(&var->lexer, SPACES, str) == -1)
 		free_error(NULL, E_Malloc, "add_word", 1);
 }
-
-void	parsing(t_var *var)
+int	*init_tab_token(char *line, int i)
 {
-	int	i;
 	int	*tab;
 
-	i = 0;
-	tab = malloc(sizeof(int) * (strlen(var->line) + 1));
+	tab = malloc(sizeof(int) * (strlen(line) + 1));
 	if (!tab)
-		free_error(var, E_Malloc, "var", 1);
-	while (var->line[i])
+		return (NULL);
+	while (line[i])
 	{
-		if (var->line[i] == '|')
+		if (line[i] == '|')
 			tab[i] = PIPE;
-		else if (var->line[i] == '<')
+		else if (line[i] == '<')
 			tab[i] = REDIR_IN;
-		else if (var->line[i] == '>')
+		else if (line[i] == '>')
 			tab[i] = REDIR_OUT;
-		else if (var->line[i] == ' ')
+		else if (line[i] == ' ')
 			tab[i] = SPACES;
-		else if (var->line[i] == '\'')
+		else if (line[i] == '\'')
 			tab[i] = SINGLE_QUOTE;
-		else if (var->line[i] == '\"')
+		else if (line[i] == '\"')
 			tab[i] = DOUBLE_QUOTE;
 		else
 			tab[i] = CHAR;
 		i++;
 	}
 	tab[i] = END;
-	i = 0;
+	return (tab);
+}
+
+void	handle_token(t_var *var, int *tab, int i)
+{
 	while (tab[i] != END)
 	{
 		if (tab[i] == PIPE)
@@ -221,6 +222,18 @@ void	parsing(t_var *var)
 		else
 			handle_char(var, &i, tab);
 	}
+}
+
+void	parsing(t_var *var)
+{
+	int	i;
+	int	*tab;
+
+	i = 0;
+	tab = init_tab_token(var->line, i);
+	if (!tab)
+		free_error(var, E_Malloc, "tab", 1);
+	handle_token(var, tab, i);
 	free(tab);
 	if (var->error == false)
 	{
