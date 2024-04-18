@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/17 16:31:38 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/18 17:28:06 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define PROMPT "minishell$ "
 # define E_Malloc "Error: malloc failed : "
 # define E_args "Error: too many arguments\n"
+# define E_syntax "syntax error near unexpected token "
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -49,6 +50,7 @@ typedef enum e_token
 	CHAR,
 	CMD,
 	QUOTE_CMD,
+	DOL,
 	END
 }					t_token;
 
@@ -87,6 +89,10 @@ typedef struct s_var
 /* ******************************** PARSING.C ******************************** */
 
 void				parsing(t_var *var);
+
+/* ***************************** CHECK_SYNSTAX.C ***************************** */
+
+void				check_syntax(t_var *var);
 
 /* ********************************* UTILS.C ******************************** */
 

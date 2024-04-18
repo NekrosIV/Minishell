@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/17 15:47:42 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/18 14:29:56 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ void	print_list(t_word *word)
 			printf("token: SPACE\n");
 		else if (word->token == QUOTE_CMD)
 			printf("token: QUOTE_CMD\n");
+		else if (word->token == DOL)
+			printf("token: DOL\n");
+		else if (word->token == END)
+			printf("token: END\n");
 		word = word->next;
 	}
 }

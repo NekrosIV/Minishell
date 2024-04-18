@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/18 11:52:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/18 18:29:06 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ void	handle_quotes(t_var *var, int *i)
 {
 	int		start;
 	char	*str;
-	int		flag;
 
 	start = *i;
 	(*i)++;
@@ -149,7 +148,10 @@ void	handle_quotes(t_var *var, int *i)
 	if (var->line[(*i)] != var->line[start])
 	{
 		var->error = true;
-		free_error(NULL, "Error: quotes : ", "\"", -99);
+		if (var->line[start] == '\'')
+			free_error(NULL, E_syntax, "\'", -99);
+		else
+			free_error(NULL, E_syntax, "\"", -99);
 	}
 	else
 	{
@@ -176,6 +178,41 @@ void	handle_space(t_var *var, int *i)
 	if (add_word(&var->lexer, SPACES, str) == -1)
 		free_error(NULL, E_Malloc, "add_word", 1);
 }
+
+void	handle_dol(t_var *var, int *i, int *tab)
+{
+	char	*str;
+	int		start;
+	int		token;
+
+	start = *i;
+	(*i)++;
+	if (tab[start + 1] == CHAR)
+	{
+		while (tab[(*i)] == CHAR)
+			(*i)++;
+		token = DOL;
+	}
+	else
+		token = CMD;
+	str = ft_strndup(var->line, *i, start);
+	if (!str)
+		free_error(NULL, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(NULL, E_Malloc, "add_word", 1);
+}
+
+void	handle_end(t_var *var)
+{
+	char	*str;
+
+	str = ft_strdup("newline");
+	if (!str)
+		free_error(NULL, E_Malloc, "str", 1);
+	if (add_word(&var->lexer, END, str) == -1)
+		free_error(NULL, E_Malloc, "add_word", 1);
+}
+
 int	*init_tab_token(char *line, int i)
 {
 	int	*tab;
@@ -197,6 +234,8 @@ int	*init_tab_token(char *line, int i)
 			tab[i] = SINGLE_QUOTE;
 		else if (line[i] == '\"')
 			tab[i] = DOUBLE_QUOTE;
+		else if (line[i] == '$')
+			tab[i] = DOL;
 		else
 			tab[i] = CHAR;
 		i++;
@@ -219,9 +258,12 @@ void	handle_token(t_var *var, int *tab, int i)
 			handle_quotes(var, &i);
 		else if (tab[i] == SPACES)
 			handle_space(var, &i);
+		else if (tab[i] == DOL)
+			handle_dol(var, &i, tab);
 		else
 			handle_char(var, &i, tab);
 	}
+	handle_end(var);
 }
 
 void	parsing(t_var *var)
@@ -235,6 +277,9 @@ void	parsing(t_var *var)
 		free_error(var, E_Malloc, "tab", 1);
 	handle_token(var, tab, i);
 	free(tab);
+	if (var->error == false)
+		check_syntax(var);
+	// check la syntaxe de <><<>>, ordre de prio de gauche a droite,
 	if (var->error == false)
 	{
 		count_node(var->lexer);
