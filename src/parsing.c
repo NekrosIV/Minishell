@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/18 18:29:06 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/19 15:51:16 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ void	handle_quotes(t_var *var, int *i)
 	}
 	else
 	{
-		printf("else\n");
 		str = ft_strndup(var->line, *i, start + 1);
 		if (!str)
 			free_error(var, E_Malloc, "str", 1);
@@ -278,7 +277,11 @@ void	parsing(t_var *var)
 	handle_token(var, tab, i);
 	free(tab);
 	if (var->error == false)
+	{
+		count_node(var->lexer);
+		print_list(var->lexer);
 		check_syntax(var);
+	}
 	// check la syntaxe de <><<>>, ordre de prio de gauche a droite,
 	if (var->error == false)
 	{
