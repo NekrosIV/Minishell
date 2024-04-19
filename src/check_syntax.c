@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:46:34 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/18 18:15:50 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/19 12:24:47 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,24 @@ int	check_syntax_pipe(t_word *lexer)
 	return (0);
 }
 
+int	check_syntax_redir(t_word *lexer)
+{
+	while (lexer)
+	{
+		if (lexer->token == REDIR_IN || lexer->token == REDIR_OUT
+			|| lexer->token == REDIR_APPEND)
+		{
+			if (lexer->next->token == END || lexer->next->token == PIPE)
+				return (free_error(NULL, E_syntax, lexer->word, -99), -1);
+		}
+		lexer = lexer->next;
+	}
+}
+
 void	check_syntax(t_var *var)
 {
 	if (check_syntax_pipe(var->lexer) == -1)
+		var->error = true;
+	if (check_syntax_redir(var->lexer) == -1)
 		var->error = true;
 }
