@@ -3,27 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:59:06 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/16 16:41:37 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/21 16:25:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/minishell.h"
 
-void	testi(int *i)
-{
-	(*i)++;
-}
-
 int	main(void)
 {
-	extern char **environ;
-	char **env = environ;
-	while (*env != NULL)
-	{
-		printf("%s\n", *env);
-		env++;
-	}
+	char *str;
+
+	str = strjoin("Hello", " World!");
+	printf("%s\n", str);
+	free(str);
 }

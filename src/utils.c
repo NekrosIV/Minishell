@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/18 14:29:56 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/21 18:52:21 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init_var(t_var *var, t_env **envs)
 	var->error = false;
 	var->line = NULL;
 	var->lexer = NULL;
+	var->envp = NULL;
 	var->env = *envs;
 }
 
@@ -54,6 +55,44 @@ void	count_node(t_word *word)
 	}
 	printf("nombre de noeud %d\n", i);
 }
+int	count_node_env(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	while (env)
+	{
+		i++;
+		env = env->next;
+	}
+	return (i);
+}
+
+int	node_cmp_token(t_word *lexer, int token)
+{
+	while (lexer)
+	{
+		if (lexer->token == token)
+			return (1);
+		lexer = lexer->next;
+	}
+	return (0);
+}
+
+int	count_node_token(t_word *lexer, int token)
+{
+	int	i;
+
+	i = 0;
+	while (lexer)
+	{
+		if (lexer->token == token)
+			i++;
+		lexer = lexer->next;
+	}
+	return (i);
+}
+
 void	print_list(t_word *word)
 {
 	while (word)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/19 16:59:23 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/21 16:40:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,18 @@ int	main(int ac, char **av, char **env)
 			free_error(NULL, E_Malloc, "var", 1);
 		}
 		init_var(var, &envs);
-		// ft_printf("minirt> ");
-		var->line = readline("minirt> ");
-		// var->line = get_next_line(0);
+		ft_printf("minirt> ");
+		// var->line = readline("minirt> ");
+		var->line = get_next_line(0);
 		if (!var->line || !ft_strncmp(var->line, "exit", 4))
 		{
 			if (var->line)
 				ft_putstr_fd("exit\n", 2);
 			free_error(var, NULL, NULL, 0);
 		}
-		printf("line = %s\n", var->line);
 		parsing(var);
+		if (var->error == false)
+			before_exe(var);
 		free_var(var);
 	}
 	return (0);

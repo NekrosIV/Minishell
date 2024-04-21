@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/18 17:28:06 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/21 18:51:49 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 /* ************************************************************************** */
 
 # include "../libft/libft.h"
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
@@ -33,6 +34,7 @@
 # define E_Malloc "Error: malloc failed : "
 # define E_args "Error: too many arguments\n"
 # define E_syntax "syntax error near unexpected token "
+# define E_pipe "Error: pipe failed\n"
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -72,6 +74,7 @@ typedef struct s_word
 typedef struct s_var
 {
 	char			*line;
+	char			**envp;
 	bool			exit;
 	bool			error;
 	t_word			*lexer;
@@ -101,6 +104,9 @@ char				*ft_strndup(char *line, int i, int start);
 void				print_list(t_word *word);
 void				count_node(t_word *word);
 void				print_list_env(t_env *env);
+int					node_cmp_token(t_word *lexer, int token);
+int					count_node_token(t_word *lexer, int token);
+int					count_node_env(t_env *env);
 
 /* ******************************** GLNODE.C ******************************** */
 
@@ -119,4 +125,10 @@ void				free_var(t_var *var);
 void				free_list_env(t_env **env);
 void				free_list_lexer(t_word **lexer);
 void				free_error(t_var *var, char *error, char *fautif, int ff);
+void				free_tab(char **tab);
+
+/* ******************************** BEFOR_EXE.C ***************************** */
+
+void				before_exe(t_var *var);
+
 #endif
