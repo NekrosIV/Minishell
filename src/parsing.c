@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/21 15:37:49 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/22 14:35:28 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,11 +277,7 @@ void	parsing(t_var *var)
 	handle_token(var, tab, i);
 	free(tab);
 	if (var->error == false)
-	{
-		count_node(var->lexer);
-		print_list(var->lexer);
 		check_syntax(var);
-	}
 	// check la syntaxe de <><<>>, ordre de prio de gauche a droite,
 	if (var->error == false)
 	{

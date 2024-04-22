@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   befor_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/22 13:05:02 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:51:13 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	loop_here_doc(char *eof, int fd)
 	}
 }
 
-int	here_doc(t_word *tmp)
+int	here_doc(t_word *tmp, t_var *var)
 {
 	char		*eof;
 	static int	i = 0;
@@ -47,16 +47,16 @@ int	here_doc(t_word *tmp)
 
 	nb = ft_itoa(i++);
 	if (!nb)
-		return (free_error(NULL, E_Malloc, "nb", 1), -1);
-	file_name = ft_strjoin("/tmp/here_doc", nb);
+		return (free_error(var, E_Malloc, "nb", 1), -1);
+	file_name = ft_strjoin("/tmp/here_doc_", nb);
 	if (!file_name)
-		return (free(nb), free_error(NULL, E_Malloc, "file_name", 1), -1);
+		return (free(nb), free_error(var, E_Malloc, "file_name", 1), -1);
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (free(nb), perror("here_doc :"), -1);
+		return (free(nb), free(file_name), perror("here_doc :"), -1);
 	eof = ft_strjoin(tmp->word, "\n");
 	if (!eof)
-		return (free(nb), free_error(NULL, E_Malloc, "eof", 1), -1);
+		return (free(nb), free_error(var, E_Malloc, "eof", 1), -1);
 	loop_here_doc(eof, fd);
 	free(tmp->word);
 	tmp->word = file_name;
@@ -68,12 +68,12 @@ void	do_here_doc(t_var *var)
 	t_word	*tmp;
 
 	tmp = var->lexer;
-	while (tmp && var->exit == false)
+	while (tmp && var->error == false)
 	{
 		if (tmp->token == HERE_DOC)
 		{
-			if (here_doc(tmp) == -1)
-				var->exit = true;
+			if (here_doc(tmp, var) == -1)
+				var->error = true;
 		}
 		tmp = tmp->next;
 	}
@@ -109,29 +109,17 @@ void	do_dup_in(int pipe_fd[2], int c_fd, int i, t_var *var)
 		}
 		tmp = tmp->next;
 	}
-	if (flag == 0)
+	if (flag == 0 && i != 0)
 	{
-		if (i != 0)
+		if (dup2(c_fd, STDIN_FILENO) == -1)
 		{
-			if (dup2(c_fd, STDIN_FILENO) == -1)
-			{
-				perror("dup2(c_fd)");
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
-			{
-				perror("dup2(pipe_fd[0])");
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
-				exit(EXIT_FAILURE);
-			}
+			perror("dup2(c_fd)");
+			(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+			exit(EXIT_FAILURE);
 		}
 	}
 }
-void	do_dup_out(int pipe_fd[2], int c_fd, int i, t_var *var)
+void	do_dup_out(int pipe_fd[2], t_var *var)
 {
 	int		fd_out;
 	t_word	*tmp;
@@ -150,39 +138,26 @@ void	do_dup_out(int pipe_fd[2], int c_fd, int i, t_var *var)
 			if (fd_out == -1)
 			{
 				perror(tmp->word);
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				(close(pipe_fd[0]), close(pipe_fd[1]));
 				exit(EXIT_FAILURE);
 			}
 			if (dup2(fd_out, STDOUT_FILENO) == -1)
 			{
 				perror(tmp->word);
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd),
-					close(fd_out));
+				(close(pipe_fd[0]), close(pipe_fd[1])), close(fd_out);
 				exit(EXIT_FAILURE);
 			}
 			(close(fd_out), flag = 1);
 		}
 		tmp = tmp->next;
 	}
-	if (flag == 0)
+	if (flag == 0 && tmp->token != END)
 	{
-		if (i != 0)
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		{
-			if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-			{
-				perror("dup2(pipe_fd[1])");
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			if (dup2(c_fd, STDOUT_FILENO) == -1)
-			{
-				perror("dup2(c_fd)");
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
-				exit(EXIT_FAILURE);
-			}
+			perror("dup2(pipe_fd[1])");
+			(close(pipe_fd[0]), close(pipe_fd[1]));
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -191,12 +166,14 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	do_dup_in(pipe_fd, c_fd, i, var);
 	(close(c_fd), close(pipe_fd[0]));
-	do_dup_out(pipe_fd, c_fd, i, var);
+	do_dup_out(pipe_fd, var);
+	ft_putendl_fd("werqwerw", 1);
 	close(pipe_fd[1]);
+	ft_printf("nombre de commandes %d\n", count_cmd(var->lexer));
 	exit(EXIT_SUCCESS);
 	// excute(get_cmd(av), env);
 }
-static int	wait_for_child(pid_t pid, int flag, char **av)
+static int	wait_for_child(pid_t pid)
 {
 	int		status[2];
 	pid_t	r_waitpid;
@@ -209,8 +186,6 @@ static int	wait_for_child(pid_t pid, int flag, char **av)
 		if (r_waitpid == pid)
 			status[1] = status[0];
 	}
-	if (flag == 1)
-		unlink(av[1]);
 	if (WIFEXITED(status[1]))
 		return (WEXITSTATUS(status[1]));
 	else if (WIFSIGNALED(status[1]))
@@ -226,23 +201,25 @@ int	fork_loop(t_var *var, int nb_cmd)
 	pid_t	pid;
 
 	i = 0;
+	c_fd = 0;
 	while (nb_cmd > i)
 	{
 		if (i != 0)
 			c_fd = pipe_fd[0];
 		if (pipe(pipe_fd) == -1)
-			return (close(c_fd), -1);
+			return (close_fd(c_fd, i), -1);
 		pid = fork();
 		if (pid == -1)
-			return (close(pipe_fd[0]), close(c_fd), close(pipe_fd[1]), -1);
+			return (close(pipe_fd[0]), close_fd(c_fd, i), close(pipe_fd[1]),
+				-1);
 		if (pid == 0)
 			child(c_fd, pipe_fd, i, var);
 		close(pipe_fd[1]);
-		if (i != 0)
-			close(c_fd);
+		close_fd(c_fd, i);
 		i++;
+		del_cmd(&var->lexer);
 	}
-	return (0);
+	return (wait_for_child(pid));
 }
 
 void	exe_cmd(t_var *var)
@@ -251,7 +228,7 @@ void	exe_cmd(t_var *var)
 
 	var->envp = split_env(var->env);
 	if (!var->envp)
-		free_error(NULL, E_Malloc, "env", 1);
+		free_error(var, E_Malloc, "env", 1);
 	nb_pipe = count_node_token(var->lexer, PIPE);
 	if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_pipe, NULL, -99);
@@ -261,6 +238,6 @@ void	before_exe(t_var *var)
 {
 	if (node_cmp_token(var->lexer, HERE_DOC) == 1)
 		do_here_doc(var);
-	if (var->exit == false)
+	if (var->error == false)
 		exe_cmd(var);
 }

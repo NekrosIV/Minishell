@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/22 11:33:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/22 17:16:28 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,3 +168,27 @@ void	print_list_env(t_env *env)
 // 	}
 // 	return (count);
 // }
+
+void	close_fd(int fd, int i)
+{
+	if (i != 0)
+		close(fd);
+}
+
+void	del_cmd(t_word **word)
+{
+	t_word *tmp;
+
+	while ((*word)->token != PIPE && (*word)->token != END)
+	{
+		tmp = *word;
+		(*word) = (*word)->next;
+		del_tword(&tmp);
+	}
+	if ((*word)->token == PIPE)
+	{
+		tmp = *word;
+		(*word) = (*word)->next;
+		del_tword(&tmp);
+	}
+}
