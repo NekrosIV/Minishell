@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/21 18:52:21 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:33:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,26 @@ int	count_node_token(t_word *lexer, int token)
 		lexer = lexer->next;
 	}
 	return (i);
+}
+char	**split_env(t_env *env)
+{
+	char	**result;
+	int		i;
+
+	result = malloc(sizeof(char *) * (count_node_env(env) + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (env)
+	{
+		result[i] = ft_strdup(env->line);
+		if (!result[i])
+			return (free_tab(result), NULL);
+		i++;
+		env = env->next;
+	}
+	result[i] = NULL;
+	return (result);
 }
 
 void	print_list(t_word *word)

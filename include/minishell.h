@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/21 18:51:49 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/22 11:33:47 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void				print_list_env(t_env *env);
 int					node_cmp_token(t_word *lexer, int token);
 int					count_node_token(t_word *lexer, int token);
 int					count_node_env(t_env *env);
+char				**split_env(t_env *env);
 
 /* ******************************** GLNODE.C ******************************** */
 

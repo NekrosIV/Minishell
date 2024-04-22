@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/21 18:49:21 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/22 13:05:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,24 +79,143 @@ void	do_here_doc(t_var *var)
 	}
 }
 
-void	child_loop(int c_fd, int pipe_fd[2], char *av, char **env)
+void	do_dup_in(int pipe_fd[2], int c_fd, int i, t_var *var)
 {
-	close(pipe_fd[0]);
-	if (dup2(c_fd, STDIN_FILENO) == -1)
+	int		fd_in;
+	t_word	*tmp;
+	int		flag;
+
+	flag = 0;
+	tmp = var->lexer;
+	while (tmp->token != END && tmp->token != PIPE)
 	{
-		perror("child_loop:dup2(c_fd)");
-		close(c_fd);
-		exit(EXIT_FAILURE);
+		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
+		{
+			fd_in = open(tmp->word, O_RDONLY);
+			if (fd_in == -1)
+			{
+				perror(tmp->word);
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				exit(EXIT_FAILURE);
+			}
+			if (dup2(fd_in, STDIN_FILENO) == -1)
+			{
+				perror(tmp->word);
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd),
+					close(fd_in));
+				exit(EXIT_FAILURE);
+			}
+			(close(fd_in), flag = 1);
+		}
+		tmp = tmp->next;
 	}
-	close(c_fd);
-	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+	if (flag == 0)
 	{
-		perror("child_loop:dup2(pipe_fd[1])");
-		close(pipe_fd[1]);
-		exit(EXIT_FAILURE);
+		if (i != 0)
+		{
+			if (dup2(c_fd, STDIN_FILENO) == -1)
+			{
+				perror("dup2(c_fd)");
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			if (dup2(pipe_fd[0], STDIN_FILENO) == -1)
+			{
+				perror("dup2(pipe_fd[0])");
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				exit(EXIT_FAILURE);
+			}
+		}
 	}
+}
+void	do_dup_out(int pipe_fd[2], int c_fd, int i, t_var *var)
+{
+	int		fd_out;
+	t_word	*tmp;
+	int		flag;
+
+	flag = 0;
+	tmp = var->lexer;
+	while (tmp->token != END && tmp->token != PIPE)
+	{
+		if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
+		{
+			if (tmp->token == REDIR_OUT)
+				fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			else
+				fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd_out == -1)
+			{
+				perror(tmp->word);
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				exit(EXIT_FAILURE);
+			}
+			if (dup2(fd_out, STDOUT_FILENO) == -1)
+			{
+				perror(tmp->word);
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd),
+					close(fd_out));
+				exit(EXIT_FAILURE);
+			}
+			(close(fd_out), flag = 1);
+		}
+		tmp = tmp->next;
+	}
+	if (flag == 0)
+	{
+		if (i != 0)
+		{
+			if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+			{
+				perror("dup2(pipe_fd[1])");
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			if (dup2(c_fd, STDOUT_FILENO) == -1)
+			{
+				perror("dup2(c_fd)");
+				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+				exit(EXIT_FAILURE);
+			}
+		}
+	}
+}
+
+void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
+{
+	do_dup_in(pipe_fd, c_fd, i, var);
+	(close(c_fd), close(pipe_fd[0]));
+	do_dup_out(pipe_fd, c_fd, i, var);
 	close(pipe_fd[1]);
-	excute(get_cmd(av), env);
+	exit(EXIT_SUCCESS);
+	// excute(get_cmd(av), env);
+}
+static int	wait_for_child(pid_t pid, int flag, char **av)
+{
+	int		status[2];
+	pid_t	r_waitpid;
+
+	while (1)
+	{
+		r_waitpid = waitpid(-1, &status[0], 0);
+		if (r_waitpid == -1)
+			break ;
+		if (r_waitpid == pid)
+			status[1] = status[0];
+	}
+	if (flag == 1)
+		unlink(av[1]);
+	if (WIFEXITED(status[1]))
+		return (WEXITSTATUS(status[1]));
+	else if (WIFSIGNALED(status[1]))
+		return (WTERMSIG(status[1]) + 128);
+	return (0);
 }
 
 int	fork_loop(t_var *var, int nb_cmd)
@@ -126,37 +245,15 @@ int	fork_loop(t_var *var, int nb_cmd)
 	return (0);
 }
 
-char	**split_env(t_env *env)
-{
-	char	**result;
-	int		i;
-
-	result = malloc(sizeof(char *) * (count_node_env(env) + 1));
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (env)
-	{
-		result[i] = ft_strdup(env->line);
-		if (!result[i])
-			return (free_tab(result), NULL);
-		i++;
-		env = env->next;
-	}
-	result[i] = NULL;
-	return (result);
-}
-
 void	exe_cmd(t_var *var)
 {
-	char	**env;
-	int		nb_pipe;
+	int	nb_pipe;
 
-	env = split_env(var->env);
-	if (!env)
+	var->envp = split_env(var->env);
+	if (!var->envp)
 		free_error(NULL, E_Malloc, "env", 1);
 	nb_pipe = count_node_token(var->lexer, PIPE);
-	if (fork_loop(var, nb_pipe) == -1)
+	if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_pipe, NULL, -99);
 }
 
