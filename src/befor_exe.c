@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   befor_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/22 17:51:13 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/23 12:21:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,14 +162,26 @@ void	do_dup_out(int pipe_fd[2], t_var *var)
 	}
 }
 
+void	print_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split[i])
+	{
+		ft_putendl_fd(split[i], 2);
+		i++;
+	}
+}
+
 void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	do_dup_in(pipe_fd, c_fd, i, var);
 	(close(c_fd), close(pipe_fd[0]));
 	do_dup_out(pipe_fd, var);
-	ft_putendl_fd("werqwerw", 1);
+	ft_putendl_fd("werqwerw", 2);
 	close(pipe_fd[1]);
-	ft_printf("nombre de commandes %d\n", count_cmd(var->lexer));
+	print_split(split_cmd(var));
 	exit(EXIT_SUCCESS);
 	// excute(get_cmd(av), env);
 }

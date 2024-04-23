@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/22 11:33:47 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/23 12:00:14 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <wait.h>
 
 /* ************************************************************************** */
 /*                            DEFINE ALL CONSTANT                             */
@@ -96,6 +97,7 @@ void				parsing(t_var *var);
 /* ***************************** CHECK_SYNSTAX.C ***************************** */
 
 void				check_syntax(t_var *var);
+void				del_tword(t_word **word);
 
 /* ********************************* UTILS.C ******************************** */
 
@@ -108,6 +110,8 @@ int					node_cmp_token(t_word *lexer, int token);
 int					count_node_token(t_word *lexer, int token);
 int					count_node_env(t_env *env);
 char				**split_env(t_env *env);
+void				del_cmd(t_word **word);
+void				close_fd(int fd, int i);
 
 /* ******************************** GLNODE.C ******************************** */
 
@@ -131,5 +135,10 @@ void				free_tab(char **tab);
 /* ******************************** BEFOR_EXE.C ***************************** */
 
 void				before_exe(t_var *var);
+
+/* ****************************** EXEC_UTLIS.C ****************************** */
+
+char				**split_cmd(t_var *var);
+int					count_cmd(t_word *node);
 
 #endif
