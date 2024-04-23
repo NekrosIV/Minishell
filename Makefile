@@ -6,7 +6,7 @@ CFLAGS = -g3 #-Wall -Wextra -Werror
 LIBFTDIR = ./libft
 
 SRCS = ./src/main.c ./src/parsing.c ./src/utils.c ./src/get_last_node.c ./src/env.c \
-	   ./src/free.c ./src/check_syntax.c ./src/befor_exe.c ./src/exec_utils.c 
+	   ./src/free.c ./src/check_syntax.c ./src/before_exec.c ./src/split_cmd.c ./src/exec.c
 BONUS_SRCS = 
 OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)

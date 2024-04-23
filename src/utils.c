@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/22 17:16:28 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/23 15:36:09 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	**split_env(t_env *env)
 	{
 		result[i] = ft_strdup(env->line);
 		if (!result[i])
-			return (free_tab(result), NULL);
+			return (free_split(result), NULL);
 		i++;
 		env = env->next;
 	}

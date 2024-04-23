@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/22 14:35:28 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/23 16:38:38 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,9 +279,9 @@ void	parsing(t_var *var)
 	if (var->error == false)
 		check_syntax(var);
 	// check la syntaxe de <><<>>, ordre de prio de gauche a droite,
-	if (var->error == false)
-	{
-		count_node(var->lexer);
-		print_list(var->lexer);
-	}
+	// if (var->error == false)
+	// {
+	// 	count_node(var->lexer);
+	// 	print_list(var->lexer);
+	// }
 }

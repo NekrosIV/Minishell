@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/23 12:00:14 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/23 15:34:32 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,16 @@ void				free_var(t_var *var);
 void				free_list_env(t_env **env);
 void				free_list_lexer(t_word **lexer);
 void				free_error(t_var *var, char *error, char *fautif, int ff);
-void				free_tab(char **tab);
+void				free_split(char **tab);
 
-/* ******************************** BEFOR_EXE.C ***************************** */
+/* ******************************** BEFORE_EXEC.C ***************************** */
 
 void				before_exe(t_var *var);
 
-/* ****************************** EXEC_UTLIS.C ****************************** */
+/* *********************************** EXEC.C ******************************** */
+void				exec(char **cmd, char **env);
+
+/* ****************************** SPLIT_CMD.C ****************************** */
 
 char				**split_cmd(t_var *var);
 int					count_cmd(t_word *node);

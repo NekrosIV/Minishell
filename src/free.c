@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/21 18:53:13 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/23 19:03:27 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void	free_var(t_var *var)
 		free_list_env(&var->env);
 	free_list_lexer(&var->lexer);
 	free(var->line);
-	if (var->envp)
-		free_tab(var->envp);
 	free(var);
 }
 
@@ -77,7 +75,7 @@ void	free_error(t_var *var, char *error, char *fautif, int ff)
 		exit(ff);
 }
 
-void	free_tab(char **tab)
+void	free_split(char **tab)
 {
 	int	i;
 

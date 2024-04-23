@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:17:46 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/23 12:17:16 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/23 15:03:38 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ char	**split_cmd(t_var *var)
 			if (!cmd[i])
 				return (NULL);
 			i++;
-			ft_printf("cmd: %s\n", cmd[i - 1]);
 			word = next_word(word);
 		}
 		else

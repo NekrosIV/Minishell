@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   befor_exe.c                                        :+:      :+:    :+:   */
+/*   before_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/23 12:21:23 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/23 19:21:50 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	do_dup_in(int pipe_fd[2], int c_fd, int i, t_var *var)
 	{
 		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
 		{
-			fd_in = open(tmp->word, O_RDONLY);
+			fd_in = open(tmp->word, O_RDONLY | O_CREAT);
 			if (fd_in == -1)
 			{
 				perror(tmp->word);
@@ -166,9 +166,11 @@ void	print_split(char **split)
 {
 	int	i;
 
+	ft_putstr_fd("_________\n", 2);
 	i = 0;
 	while (split[i])
 	{
+		ft_putstr_fd("tab cmd: ", 2);
 		ft_putendl_fd(split[i], 2);
 		i++;
 	}
@@ -176,14 +178,23 @@ void	print_split(char **split)
 
 void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
+	char	**env;
+	char	**cmd;
+
 	do_dup_in(pipe_fd, c_fd, i, var);
-	(close(c_fd), close(pipe_fd[0]));
+	(close_fd(c_fd, i), close(pipe_fd[0]));
 	do_dup_out(pipe_fd, var);
-	ft_putendl_fd("werqwerw", 2);
 	close(pipe_fd[1]);
-	print_split(split_cmd(var));
-	exit(EXIT_SUCCESS);
-	// excute(get_cmd(av), env);
+	// print_split(split_cmd(var));
+	env = split_env(var->env);
+	if (!env)
+		free_error(var, E_Malloc, "env", 1);
+	cmd = split_cmd(var);
+	if (!cmd)
+		free_error(var, E_Malloc, "cmd", 1);
+	var->exit = true;
+	free_var(var);
+	exec(cmd, env);
 }
 static int	wait_for_child(pid_t pid)
 {
@@ -231,16 +242,13 @@ int	fork_loop(t_var *var, int nb_cmd)
 		i++;
 		del_cmd(&var->lexer);
 	}
-	return (wait_for_child(pid));
+	return (close(pipe_fd[0]), wait_for_child(pid));
 }
 
 void	exe_cmd(t_var *var)
 {
 	int	nb_pipe;
 
-	var->envp = split_env(var->env);
-	if (!var->envp)
-		free_error(var, E_Malloc, "env", 1);
 	nb_pipe = count_node_token(var->lexer, PIPE);
 	if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_pipe, NULL, -99);
