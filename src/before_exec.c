@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   before_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/24 12:45:10 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/24 17:26:55 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	here_doc(t_word *tmp, t_var *var)
 	loop_here_doc(eof, fd);
 	free(tmp->word);
 	tmp->word = file_name;
-	return (free(eof), free(nb), 1);
+	return (free(eof), free(nb), close(fd), 1);
 }
 
 void	do_here_doc(t_var *var)

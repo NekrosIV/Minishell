@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/24 12:02:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/24 18:16:44 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 /* ************************************************************************** */
 /*                            DEFINE ALL CONSTANT                             */
 /* ************************************************************************** */
-
+# define RED "\033[38;5;160m"
+# define RESET "\033[00m"
 # define PROMPT "minishell$ "
 # define E_Malloc "Error: malloc failed : "
 # define E_args "Error: too many arguments\n"

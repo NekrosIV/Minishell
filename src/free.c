@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/23 19:03:27 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/24 18:19:43 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,13 @@ void	free_error(t_var *var, char *error, char *fautif, int ff)
 	if (error)
 		ft_putstr_fd(error, 2);
 	if (fautif)
-		ft_putendl_fd(fautif, 2);
+	{
+		ft_putstr_fd(RED, 2);
+		ft_putstr_fd("\'", 2);
+		ft_putstr_fd(fautif, 2);
+		ft_putstr_fd("\'\n", 2);
+		ft_putstr_fd(RESET, 2);
+	}
 	if (ff >= 0)
 		exit(ff);
 }
