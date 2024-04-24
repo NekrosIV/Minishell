@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:46:34 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/19 16:56:47 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/24 12:50:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	del_tword(t_word **word)
 		prev->next = (*word);
 	}
 	(*word)->prev = prev;
+	if (temp->token == HERE_DOC && !ft_strncmp(temp->word, "<<", 2))
+		unlink(temp->word);
 	free(temp->word);
 	free(temp);
 }

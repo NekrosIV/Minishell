@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   before_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/23 19:21:50 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/24 12:45:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,37 +79,28 @@ void	do_here_doc(t_var *var)
 	}
 }
 
-void	do_dup_in(int pipe_fd[2], int c_fd, int i, t_var *var)
+void	do_dup_in(int pipe_fd[2], int c_fd, int flag[3], t_word *tmp)
 {
-	int		fd_in;
-	t_word	*tmp;
-	int		flag;
+	int	fd_in;
 
-	flag = 0;
-	tmp = var->lexer;
-	while (tmp->token != END && tmp->token != PIPE)
+	if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
 	{
-		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
+		fd_in = open(tmp->word, O_RDONLY);
+		if (fd_in == -1)
 		{
-			fd_in = open(tmp->word, O_RDONLY | O_CREAT);
-			if (fd_in == -1)
-			{
-				perror(tmp->word);
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
-				exit(EXIT_FAILURE);
-			}
-			if (dup2(fd_in, STDIN_FILENO) == -1)
-			{
-				perror(tmp->word);
-				(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd),
-					close(fd_in));
-				exit(EXIT_FAILURE);
-			}
-			(close(fd_in), flag = 1);
+			perror(tmp->word);
+			(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd));
+			exit(EXIT_FAILURE);
 		}
-		tmp = tmp->next;
+		if (dup2(fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2(fd_in)");
+			(close(pipe_fd[0]), close(pipe_fd[1]), close(c_fd), close(fd_in));
+			exit(EXIT_FAILURE);
+		}
+		close(fd_in);
 	}
-	if (flag == 0 && i != 0)
+	else if (flag[0] != 0 && flag[2] != 0)
 	{
 		if (dup2(c_fd, STDIN_FILENO) == -1)
 		{
@@ -119,40 +110,33 @@ void	do_dup_in(int pipe_fd[2], int c_fd, int i, t_var *var)
 		}
 	}
 }
-void	do_dup_out(int pipe_fd[2], t_var *var)
+void	do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp)
 {
-	int		fd_out;
-	t_word	*tmp;
-	int		flag;
+	int	fd_out;
 
-	flag = 0;
-	tmp = var->lexer;
-	while (tmp->token != END && tmp->token != PIPE)
+	if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
 	{
-		if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
+		if (tmp->token == REDIR_OUT)
+			fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else
+			fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd_out == -1)
 		{
-			if (tmp->token == REDIR_OUT)
-				fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			else
-				fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd_out == -1)
-			{
-				perror(tmp->word);
-				(close(pipe_fd[0]), close(pipe_fd[1]));
-				exit(EXIT_FAILURE);
-			}
-			if (dup2(fd_out, STDOUT_FILENO) == -1)
-			{
-				perror(tmp->word);
-				(close(pipe_fd[0]), close(pipe_fd[1])), close(fd_out);
-				exit(EXIT_FAILURE);
-			}
-			(close(fd_out), flag = 1);
+			perror(tmp->word);
+			(close(pipe_fd[0]), close(pipe_fd[1]));
+			exit(EXIT_FAILURE);
 		}
-		tmp = tmp->next;
+		if (dup2(fd_out, STDOUT_FILENO) == -1)
+		{
+			perror("dup2(fd_out)");
+			(close(pipe_fd[0]), close(pipe_fd[1])), close(fd_out);
+			exit(EXIT_FAILURE);
+		}
+		close(fd_out);
 	}
-	if (flag == 0 && tmp->token != END)
+	else if (flag[1] != 0 && tmp->token != END)
 	{
+		ft_printf("out\n");
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		{
 			perror("dup2(pipe_fd[1])");
@@ -160,6 +144,33 @@ void	do_dup_out(int pipe_fd[2], t_var *var)
 			exit(EXIT_FAILURE);
 		}
 	}
+}
+
+void	do_dup(int c_fd, int pipe_fd[2], int i, t_var *var)
+{
+	t_word	*tmp;
+	int		flag[3];
+
+	tmp = var->lexer;
+	flag[0] = 1;
+	flag[1] = 1;
+	flag[2] = i;
+	while (tmp->token != END && tmp->token != PIPE)
+	{
+		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
+		{
+			do_dup_in(pipe_fd, c_fd, flag, tmp);
+			flag[0] = 0;
+		}
+		else if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
+		{
+			do_dup_out(pipe_fd, flag, tmp);
+			flag[1] = 0;
+		}
+		tmp = tmp->next;
+	}
+	(do_dup_in(pipe_fd, c_fd, flag, tmp), do_dup_out(pipe_fd, flag, tmp));
+	(close_fd(c_fd, i), close(pipe_fd[0]), close(pipe_fd[1]));
 }
 
 void	print_split(char **split)
@@ -181,11 +192,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	char	**env;
 	char	**cmd;
 
-	do_dup_in(pipe_fd, c_fd, i, var);
-	(close_fd(c_fd, i), close(pipe_fd[0]));
-	do_dup_out(pipe_fd, var);
-	close(pipe_fd[1]);
-	// print_split(split_cmd(var));
+	do_dup(c_fd, pipe_fd, i, var);
 	env = split_env(var->env);
 	if (!env)
 		free_error(var, E_Malloc, "env", 1);
@@ -194,6 +201,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 		free_error(var, E_Malloc, "cmd", 1);
 	var->exit = true;
 	free_var(var);
+	print_split(cmd);
 	exec(cmd, env);
 }
 static int	wait_for_child(pid_t pid)
