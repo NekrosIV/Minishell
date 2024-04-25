@@ -6,7 +6,8 @@ CFLAGS = -g3 #-Wall -Wextra -Werror
 LIBFTDIR = ./libft
 
 SRCS = ./src/main.c ./src/parsing.c ./src/utils.c ./src/get_last_node.c ./src/env.c \
-	   ./src/free.c ./src/check_syntax.c ./src/before_exec.c ./src/split_cmd.c ./src/exec.c
+	   ./src/free.c ./src/check_syntax.c ./src/before_exec.c ./src/split_cmd.c ./src/exec.c \
+	   ./src/expand.c
 BONUS_SRCS = 
 OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
@@ -61,6 +62,7 @@ $(NAME): $(OBJS)
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠁⠀⠀⠈⠻⢿⣿⣿⣿⡇⣿⣿⣿⣿⡿⢋⢠⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣄"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⣀⡀⢸⣦⡒⠨⠛⠿⣷⡹⣿⣟⣫⣬⣭⣼⣿⣿⣷⣄⣀⣀⣀⣀⣀⣀⣀⣈⣭⣥⣿⣿⣿⣿"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⢘⣿⣧⣀⣻⣿⣦⣽⣿⣿⡷⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
+	@echo "\033[00m"
 	
 %.o: %.c
 	@printf "$(LBLUE)[Compilation]$(RESET) In progress... $(GREEN)$<" && \
@@ -102,6 +104,7 @@ ${BONUS_NAME} : $(BONUS_OBJS)
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠁⠀⠀⠈⠻⢿⣿⣿⣿⡇⣿⣿⣿⣿⡿⢋⢠⣿⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣄"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⣀⡀⢸⣦⡒⠨⠛⠿⣷⡹⣿⣟⣫⣬⣭⣼⣿⣿⣷⣄⣀⣀⣀⣀⣀⣀⣀⣈⣭⣥⣿⣿⣿⣿"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⢘⣿⣧⣀⣻⣿⣦⣽⣿⣿⡷⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
+	@echo "\033[00m"
 
 clean:
 	@cd $(LIBFTDIR) && make clean

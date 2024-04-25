@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/24 18:16:44 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/25 18:18:08 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define E_args "Error: too many arguments\n"
 # define E_syntax "syntax error near unexpected token "
 # define E_pipe "Error: pipe failed\n"
+# define E_REDIR "ambiguous redirect : "
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -79,6 +80,7 @@ typedef struct s_var
 	char			**envp;
 	bool			exit;
 	bool			error;
+	int				status;
 	t_word			*lexer;
 	t_env			*env;
 }					t_var;
@@ -102,7 +104,7 @@ void				del_tword(t_word **word);
 
 /* ********************************* UTILS.C ******************************** */
 
-void				init_var(t_var *var, t_env **envs);
+void				init_var(t_var *var, t_env **envs, int exit_status);
 char				*ft_strndup(char *line, int i, int start);
 void				print_list(t_word *word);
 void				count_node(t_word *word);
@@ -144,5 +146,9 @@ void				exec(char **cmd, char **env);
 
 char				**split_cmd(t_var *var);
 int					count_cmd(t_word *node);
+
+/* ******************************** EXPAND.C ******************************** */
+void				expand(t_var *var);
+void				find_and_replace(t_word *tmp, t_var *var);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:46:34 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/24 12:50:10 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/25 18:42:04 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,18 @@ int	check_pipe(t_word *tmp, bool dir)
 	return (0);
 }
 
-int	check_syntax_pipe(t_word *lexer)
+int	check_syntax_pipe(t_word *lexer, t_var *var)
 {
 	t_word	*tmp;
 
+	tmp = 0;
 	while (lexer)
 	{
 		if (lexer->token == PIPE)
 		{
 			tmp = lexer;
 			if (check_pipe(tmp, true) == -1 || check_pipe(tmp, false) == -1)
-				return (free_error(NULL, E_syntax, lexer->word, -99), -1);
+				return (free_error(var, E_syntax, lexer->word, -2), -1);
 		}
 		lexer = lexer->next;
 	}
@@ -114,6 +115,19 @@ t_word	*trim_rout(t_word *start)
 	trim_tword(&start, &tmp);
 	return (tmp);
 }
+bool	check_token(t_word *tmp, t_word *start, t_var *var)
+{
+	;
+	if (tmp->token == DOL && start->token != HERE_DOC)
+	{
+		find_and_replace(tmp, var);
+		if (tmp->token == DOL)
+			return (free_error(var, E_REDIR, tmp->word, -1), -1);
+	}
+	if (tmp->token != CMD && tmp->token != QUOTE_CMD && tmp->token != DOL)
+		return (free_error(var, E_syntax, tmp->word, -2), -1);
+	return (0);
+}
 
 int	check_syntax_redir(t_var *var)
 {
@@ -131,8 +145,8 @@ int	check_syntax_redir(t_var *var)
 			else
 			{
 				tmp = skip_space(start->next);
-				if (tmp->token != CMD && tmp->token != QUOTE_CMD)
-					return (free_error(NULL, E_syntax, tmp->word, -99), -1);
+				if (check_token(tmp, start, var))
+					return (-1);
 				trim_tword(&start, &tmp);
 			}
 			start = tmp;
@@ -146,7 +160,7 @@ int	check_syntax_redir(t_var *var)
 
 void	check_syntax(t_var *var)
 {
-	if (check_syntax_pipe(var->lexer) == -1)
+	if (check_syntax_pipe(var->lexer, var) == -1)
 		var->error = true;
 	else if (check_syntax_redir(var) == -1)
 		var->error = true;

@@ -6,13 +6,13 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/23 15:36:09 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/25 17:29:25 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_var(t_var *var, t_env **envs)
+void	init_var(t_var *var, t_env **envs, int exit_statut)
 {
 	var->exit = false;
 	var->error = false;
@@ -20,6 +20,7 @@ void	init_var(t_var *var, t_env **envs)
 	var->lexer = NULL;
 	var->envp = NULL;
 	var->env = *envs;
+	var->status = exit_statut;
 }
 
 char	*ft_strndup(char *line, int end, int start)

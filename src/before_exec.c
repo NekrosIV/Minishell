@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/24 17:26:55 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/25 17:30:29 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,6 @@ void	do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp)
 	}
 	else if (flag[1] != 0 && tmp->token != END)
 	{
-		ft_printf("out\n");
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		{
 			perror("dup2(pipe_fd[1])");
@@ -201,7 +200,6 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 		free_error(var, E_Malloc, "cmd", 1);
 	var->exit = true;
 	free_var(var);
-	print_split(cmd);
 	exec(cmd, env);
 }
 static int	wait_for_child(pid_t pid)
@@ -250,7 +248,8 @@ int	fork_loop(t_var *var, int nb_cmd)
 		i++;
 		del_cmd(&var->lexer);
 	}
-	return (close(pipe_fd[0]), wait_for_child(pid));
+	var->status = wait_for_child(pid);
+	return (close(pipe_fd[0]), 0);
 }
 
 void	exe_cmd(t_var *var)
@@ -266,6 +265,8 @@ void	before_exe(t_var *var)
 {
 	if (node_cmp_token(var->lexer, HERE_DOC) == 1)
 		do_here_doc(var);
+	if (var->error == false)
+		expand(var);
 	if (var->error == false)
 		exe_cmd(var);
 }

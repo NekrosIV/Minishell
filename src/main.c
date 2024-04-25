@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/23 18:37:49 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/25 17:32:29 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ int	main(int ac, char **av, char **env)
 {
 	t_var	*var;
 	t_env	*envs;
+	int		exit_status;
 
 	(void)av;
 	if (ac != 1)
 		free_error(NULL, E_args, NULL, 0);
 	envs = NULL;
 	init_env(&envs, env);
+	exit_status = 0;
 	while (1)
 	{
 		var = malloc(sizeof(t_var));
@@ -30,7 +32,7 @@ int	main(int ac, char **av, char **env)
 			free_list_env(&envs);
 			free_error(NULL, E_Malloc, "var", 1);
 		}
-		init_var(var, &envs);
+		init_var(var, &envs, exit_status);
 		// ft_printf("minirt> ");
 		var->line = readline("minirt> ");
 		// var->line = get_next_line(0);
@@ -43,6 +45,7 @@ int	main(int ac, char **av, char **env)
 		parsing(var);
 		if (var->error == false)
 			before_exe(var);
+		exit_status = var->status;
 		free_var(var);
 	}
 	return (0);
