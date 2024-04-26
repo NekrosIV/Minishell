@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/25 18:18:08 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/26 18:21:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_var
 	bool			error;
 	int				status;
 	t_word			*lexer;
+	t_word			*quoted_cmds;
 	t_env			*env;
 }					t_var;
 
@@ -96,6 +97,7 @@ typedef struct s_var
 /* ******************************** PARSING.C ******************************** */
 
 void				parsing(t_var *var);
+int					add_word(t_word **word, int token, char *str);
 
 /* ***************************** CHECK_SYNSTAX.C ***************************** */
 

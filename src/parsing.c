@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/24 18:18:51 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/26 17:03:50 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,19 +186,23 @@ void	handle_dol(t_var *var, int *i, int *tab)
 
 	start = *i;
 	(*i)++;
+	token = -1;
 	if (tab[start + 1] == CHAR)
 	{
 		while (tab[(*i)] == CHAR)
 			(*i)++;
 		token = DOL;
 	}
-	else
+	else if (tab[start + 1] != DOUBLE_QUOTE && tab[start + 1] != SINGLE_QUOTE)
 		token = CMD;
-	str = ft_strndup(var->line, *i, start);
-	if (!str)
-		free_error(NULL, E_Malloc, "str", 1);
-	if (add_word(&var->lexer, token, str) == -1)
-		free_error(NULL, E_Malloc, "add_word", 1);
+	if (token != -1)
+	{
+		str = ft_strndup(var->line, *i, start);
+		if (!str)
+			free_error(NULL, E_Malloc, "str", 1);
+		if (add_word(&var->lexer, token, str) == -1)
+			free_error(NULL, E_Malloc, "add_word", 1);
+	}
 }
 
 void	handle_end(t_var *var)

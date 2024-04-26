@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/25 17:29:25 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/26 17:45:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	init_var(t_var *var, t_env **envs, int exit_statut)
 	var->envp = NULL;
 	var->env = *envs;
 	var->status = exit_statut;
+	var->quoted_cmds = NULL;
 }
 
 char	*ft_strndup(char *line, int end, int start)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:46:34 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/25 18:42:04 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/26 16:06:40 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,17 +107,8 @@ t_word	*skip_space(t_word *tmp)
 	return (tmp);
 }
 
-t_word	*trim_rout(t_word *start)
-{
-	t_word	*tmp;
-
-	tmp = skip_space(start->next->next);
-	trim_tword(&start, &tmp);
-	return (tmp);
-}
 bool	check_token(t_word *tmp, t_word *start, t_var *var)
 {
-	;
 	if (tmp->token == DOL && start->token != HERE_DOC)
 	{
 		find_and_replace(tmp, var);
@@ -129,9 +120,43 @@ bool	check_token(t_word *tmp, t_word *start, t_var *var)
 	return (0);
 }
 
-int	check_syntax_redir(t_var *var)
+t_word	*trim_rout(t_word *start, t_var *var)
 {
 	t_word	*tmp;
+
+	tmp = skip_space(start->next->next);
+	if (check_token(tmp, start, var))
+		return (NULL);
+	trim_tword(&start, &tmp);
+	return (tmp);
+}
+
+t_word	*check_and_trim(t_word *start, t_var *var)
+{
+	t_word	*tmp;
+
+	tmp = start;
+	if (start->token == REDIR_OUT && start->next->token == PIPE)
+	{
+		tmp = trim_rout(start, var);
+		if (!tmp)
+			return (NULL);
+	}
+	else
+	{
+		tmp = skip_space(start->next);
+		if (check_token(tmp, start, var))
+			return (NULL);
+		trim_tword(&start, &tmp);
+	}
+	start = tmp;
+	if (start->prev == NULL)
+		var->lexer = start;
+	return (start);
+}
+
+int	check_syntax_redir(t_var *var)
+{
 	t_word	*start;
 
 	start = var->lexer;
@@ -140,18 +165,9 @@ int	check_syntax_redir(t_var *var)
 		if (start->token == REDIR_IN || start->token == REDIR_OUT
 			|| start->token == REDIR_APPEND || start->token == HERE_DOC)
 		{
-			if (start->token == REDIR_OUT && start->next->token == PIPE)
-				tmp = trim_rout(start);
-			else
-			{
-				tmp = skip_space(start->next);
-				if (check_token(tmp, start, var))
-					return (-1);
-				trim_tword(&start, &tmp);
-			}
-			start = tmp;
-			if (start->prev == NULL)
-				var->lexer = start;
+			start = check_and_trim(start, var);
+			if (!start)
+				return (-1);
 		}
 		start = start->next;
 	}
