@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 18:52:26 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:13:36 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	add_word(t_word **word, int token, char *str)
 	return (0);
 }
 
-/*void	init_tab_token_2(char *line, int *tab, int i)
+void	init_tab_token_2(char *line, int *tab, int i)
 {
 	if (line[i] == ' ')
 		tab[i] = SPACES;
@@ -50,7 +50,7 @@ int	add_word(t_word **word, int token, char *str)
 		tab[i] = DOL;
 	else
 		tab[i] = CHAR;
-}*/
+}
 
 int	*init_tab_token(char *line, int i)
 {
@@ -65,18 +65,8 @@ int	*init_tab_token(char *line, int i)
 			tab[i] = PIPE;
 		else if (line[i] == '<')
 			tab[i] = REDIR_IN;
-		else if (line[i] == '>')
-			tab[i] = REDIR_OUT;
-		else if (line[i] == ' ')
-			tab[i] = SPACES;
-		else if (line[i] == '\'')
-			tab[i] = SINGLE_QUOTE;
-		else if (line[i] == '\"')
-			tab[i] = DOUBLE_QUOTE;
-		else if (line[i] == '$')
-			tab[i] = DOL;
 		else
-			tab[i] = CHAR;
+			init_tab_token_2(line, tab, i);
 		i++;
 	}
 	tab[i] = END;
@@ -91,7 +81,7 @@ void	parsing(t_var *var)
 	i = 0;
 	tab = init_tab_token(var->line, i);
 	if (!tab)
-		free_error(var, E_Malloc, "tab", 1);
+		free_error(var, E_MALLOC, "tab", 1);
 	handle_token(var, tab, i);
 	free(tab);
 	if (var->error == false)

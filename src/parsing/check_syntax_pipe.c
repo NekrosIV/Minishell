@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:11:28 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 17:12:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:10:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	check_syntax_pipe(t_word *lexer, t_var *var)
 		{
 			tmp = lexer;
 			if (check_pipe(tmp, true) == -1 || check_pipe(tmp, false) == -1)
-				return (free_error(var, E_syntax, lexer->word, -2), -1);
+				return (free_error(var, E_SYNTAX, lexer->word, -2), -1);
 		}
 		lexer = lexer->next;
 	}

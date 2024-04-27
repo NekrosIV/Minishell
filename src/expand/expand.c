@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/27 17:32:05 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	replace_dol(t_word *tmp, char *str)
 	free(tmp->word);
 	tmp->word = str;
 	if (!tmp->word)
-		free_error(NULL, E_Malloc, "find_and_replace", 1);
+		free_error(NULL, E_MALLOC, "find_and_replace", 1);
 	tmp->token = CMD;
 }
 
@@ -63,7 +63,7 @@ void	init_quoted_cmd(t_word *tmp, t_var *var)
 	i = 0;
 	tab = malloc(sizeof(int) * (ft_strlen(tmp->word) + 1));
 	if (!tab)
-		free_error(var, E_Malloc, "tab", 1);
+		free_error(var, E_MALLOC, "tab", 1);
 	while (tmp->word[i])
 	{
 		if (tmp->word[i] == '$')

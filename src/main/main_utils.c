@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 17:15:29 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_var	*init_var(t_env **envs, int exit_statut)
 	if (!var)
 	{
 		free_list_env(envs);
-		free_error(NULL, E_Malloc, "var", 1);
+		free_error(NULL, E_MALLOC, "var", 1);
 	}
 	var->exit = false;
 	var->error = false;

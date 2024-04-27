@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 18:52:46 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:13:46 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@
 # define RED "\033[38;5;160m"
 # define RESET "\033[00m"
 # define PROMPT "minishell$ "
-# define E_Malloc "Error: malloc failed : "
-# define E_args "Error: too many arguments\n"
-# define E_syntax "syntax error near unexpected token "
-# define E_pipe "Error: pipe failed\n"
+# define E_MALLOC "Error: malloc failed : "
+# define E_ARGS "Error: too many arguments\n"
+# define E_SYNTAX "syntax error near unexpected token "
+# define E_PIPE "Error: pipe failed\n"
 # define E_REDIR "ambiguous redirect : "
 
 /* ************************************************************************** */
@@ -122,13 +122,13 @@ int					count_node_env(t_env *env);
 /* ******************************** PARSING.C ******************************* */
 
 int					add_word(t_word **word, int token, char *str);
-// void				init_tab_token_2(char *line, int *tab, int i);
+void				init_tab_token_2(char *line, int *tab, int i);
 int					*init_tab_token(char *line, int i);
 void				parsing(t_var *var);
 
 /* ****************************** HANDLE_ONE.C ****************************** */
 
-void				handle_pipe(t_var *var, int *i);
+void				handlE_PIPE(t_var *var, int *i);
 void				handle_redir_in(t_var *var, int *i);
 void				handle_redir_out(t_var *var, int *i);
 void				handle_quotes(t_var *var, int *i);

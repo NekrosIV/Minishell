@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 16:46:04 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,16 @@ int	here_doc(t_word *tmp, t_var *var)
 
 	nb = ft_itoa(i++);
 	if (!nb)
-		return (free_error(var, E_Malloc, "nb", 1), -1);
+		return (free_error(var, E_MALLOC, "nb", 1), -1);
 	file_name = ft_strjoin("/tmp/here_doc_", nb);
 	if (!file_name)
-		return (free(nb), free_error(var, E_Malloc, "file_name", 1), -1);
+		return (free(nb), free_error(var, E_MALLOC, "file_name", 1), -1);
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (free(nb), free(file_name), perror("here_doc :"), -1);
 	eof = ft_strjoin(tmp->word, "\n");
 	if (!eof)
-		return (free(nb), free_error(var, E_Malloc, "eof", 1), -1);
+		return (free(nb), free_error(var, E_MALLOC, "eof", 1), -1);
 	loop_here_doc(eof, fd);
 	free(tmp->word);
 	tmp->word = file_name;

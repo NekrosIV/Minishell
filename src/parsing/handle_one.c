@@ -6,13 +6,13 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 16:56:12 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:11:09 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_pipe(t_var *var, int *i)
+void	handlE_PIPE(t_var *var, int *i)
 {
 	char	*str;
 	int		start;
@@ -21,9 +21,9 @@ void	handle_pipe(t_var *var, int *i)
 	(*i)++;
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
-		free_error(var, E_Malloc, "str", 1);
+		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, PIPE, str) == -1)
-		free_error(var, E_Malloc, "add_word", 1);
+		free_error(var, E_MALLOC, "add_word", 1);
 }
 
 void	handle_redir_in(t_var *var, int *i)
@@ -43,9 +43,9 @@ void	handle_redir_in(t_var *var, int *i)
 	(*i)++;
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
-		free_error(var, E_Malloc, "str", 1);
+		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, token, str) == -1)
-		free_error(var, E_Malloc, "add_word", 1);
+		free_error(var, E_MALLOC, "add_word", 1);
 }
 
 void	handle_redir_out(t_var *var, int *i)
@@ -65,9 +65,9 @@ void	handle_redir_out(t_var *var, int *i)
 	(*i)++;
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
-		free_error(var, E_Malloc, "str", 1);
+		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, token, str) == -1)
-		free_error(var, E_Malloc, "add_word", 1);
+		free_error(var, E_MALLOC, "add_word", 1);
 }
 
 void	handle_quotes(t_var *var, int *i)
@@ -83,18 +83,18 @@ void	handle_quotes(t_var *var, int *i)
 	{
 		var->error = true;
 		if (var->line[start] == '\'')
-			free_error(NULL, E_syntax, "\'", -99);
+			free_error(NULL, E_SYNTAX, "\'", -99);
 		else
-			free_error(NULL, E_syntax, "\"", -99);
+			free_error(NULL, E_SYNTAX, "\"", -99);
 	}
 	else
 	{
 		str = ft_strndup(var->line, *i, start + 1);
 		if (!str)
-			free_error(var, E_Malloc, "str", 1);
+			free_error(var, E_MALLOC, "str", 1);
 		(*i)++;
 		if (add_word(&var->lexer, QUOTE_CMD, str) == -1)
-			free_error(var, E_Malloc, "add_word", 1);
+			free_error(var, E_MALLOC, "add_word", 1);
 	}
 }
 
@@ -103,7 +103,7 @@ void	handle_token(t_var *var, int *tab, int i)
 	while (tab[i] != END)
 	{
 		if (tab[i] == PIPE)
-			handle_pipe(var, &i);
+			handlE_PIPE(var, &i);
 		else if (tab[i] == REDIR_IN)
 			handle_redir_in(var, &i);
 		else if (tab[i] == REDIR_OUT)

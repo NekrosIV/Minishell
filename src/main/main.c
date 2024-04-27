@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 16:27:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:10:27 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)av;
 	if (ac != 1)
-		free_error(NULL, E_args, NULL, 0);
+		free_error(NULL, E_ARGS, NULL, 0);
 	envs = NULL;
 	init_env(&envs, env);
 	exit_status = 0;

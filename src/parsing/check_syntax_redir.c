@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 17:14:34 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:10:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool	check_token(t_word *tmp, t_word *start, t_var *var)
 			return (free_error(var, E_REDIR, tmp->word, -1), -1);
 	}
 	if (tmp->token != CMD && tmp->token != QUOTE_CMD && tmp->token != DOL)
-		return (free_error(var, E_syntax, tmp->word, -2), -1);
+		return (free_error(var, E_SYNTAX, tmp->word, -2), -1);
 	return (0);
 }
 

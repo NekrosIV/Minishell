@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:17 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 16:56:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	handle_char(t_var *var, int *i, int *tab)
 		(*i)++;
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
-		free_error(var, E_Malloc, "str", 1);
+		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, CMD, str) == -1)
-		free_error(var, E_Malloc, "add_word", 1);
+		free_error(var, E_MALLOC, "add_word", 1);
 }
 
 void	handle_space(t_var *var, int *i)
@@ -36,9 +36,9 @@ void	handle_space(t_var *var, int *i)
 	(*i)++;
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
-		free_error(NULL, E_Malloc, "str", 1);
+		free_error(NULL, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, SPACES, str) == -1)
-		free_error(NULL, E_Malloc, "add_word", 1);
+		free_error(NULL, E_MALLOC, "add_word", 1);
 }
 
 void	handle_dol(t_var *var, int *i, int *tab)
@@ -62,9 +62,9 @@ void	handle_dol(t_var *var, int *i, int *tab)
 	{
 		str = ft_strndup(var->line, *i, start);
 		if (!str)
-			free_error(NULL, E_Malloc, "str", 1);
+			free_error(NULL, E_MALLOC, "str", 1);
 		if (add_word(&var->lexer, token, str) == -1)
-			free_error(NULL, E_Malloc, "add_word", 1);
+			free_error(NULL, E_MALLOC, "add_word", 1);
 	}
 }
 
@@ -74,7 +74,7 @@ void	handle_end(t_var *var)
 
 	str = ft_strdup("newline");
 	if (!str)
-		free_error(NULL, E_Malloc, "str", 1);
+		free_error(NULL, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, END, str) == -1)
-		free_error(NULL, E_Malloc, "add_word", 1);
+		free_error(NULL, E_MALLOC, "add_word", 1);
 }

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 18:56:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:11:09 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 		free_error(var, NULL, NULL, 0);
 	env = split_env(var->env);
 	if (!env)
-		free_error(var, E_Malloc, "env", 1);
+		free_error(var, E_MALLOC, "env", 1);
 	cmd = split_cmd(var);
 	if (!cmd)
-		free_error(var, E_Malloc, "cmd", 1);
+		free_error(var, E_MALLOC, "cmd", 1);
 	var->exit = true;
 	free_var(var);
 	if (cmd[0][0] == '\0')
@@ -111,5 +111,5 @@ void	exe_cmd(t_var *var)
 		tmp = tmp->next;
 	}
 	if (fork_loop(var, nb_pipe + 1) == -1)
-		free_error(NULL, E_pipe, NULL, -99);
+		free_error(NULL, E_PIPE, NULL, -99);
 }

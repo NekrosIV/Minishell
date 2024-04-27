@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:57:59 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 17:31:49 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*join_quoted_cmd(t_var *var)
 	len = len_quoted_cmd(var);
 	word = malloc(sizeof(char) * (len + 1));
 	if (!word)
-		free_error(var, E_Malloc, "tab joined quote", 1);
+		free_error(var, E_MALLOC, "tab joined quote", 1);
 	fill_tab(var, &word);
 	return (word);
 }

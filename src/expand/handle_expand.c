@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:29:35 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 17:30:09 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	handle_quoted_space(t_var *var, int *i, char *line)
 	(*i)++;
 	str = ft_strndup(line, *i, start);
 	if (!str)
-		free_error(NULL, E_Malloc, "str", 1);
+		free_error(NULL, E_MALLOC, "str", 1);
 	if (add_word(&var->quoted_cmds, SPACES, str) == -1)
-		free_error(NULL, E_Malloc, "add_word", 1);
+		free_error(NULL, E_MALLOC, "add_word", 1);
 }
 
 void	handle_quoted_char(t_var *var, int *i, int *tab, char *line)
@@ -36,9 +36,9 @@ void	handle_quoted_char(t_var *var, int *i, int *tab, char *line)
 		(*i)++;
 	str = ft_strndup(line, *i, start);
 	if (!str)
-		free_error(var, E_Malloc, "str", 1);
+		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->quoted_cmds, CMD, str) == -1)
-		free_error(var, E_Malloc, "add_word", 1);
+		free_error(var, E_MALLOC, "add_word", 1);
 }
 
 void	handle_quoted_dol(t_var *var, int *i, int *tab, char *line)
@@ -60,9 +60,9 @@ void	handle_quoted_dol(t_var *var, int *i, int *tab, char *line)
 		token = CHAR;
 	str = ft_strndup(line, *i, start);
 	if (!str)
-		free_error(NULL, E_Malloc, "str", 1);
+		free_error(NULL, E_MALLOC, "str", 1);
 	if (add_word(&var->quoted_cmds, token, str) == -1)
-		free_error(NULL, E_Malloc, "add_word", 1);
+		free_error(NULL, E_MALLOC, "add_word", 1);
 }
 
 void	handle_quoted_end(t_var *var)
@@ -71,9 +71,9 @@ void	handle_quoted_end(t_var *var)
 
 	str = ft_strdup("newline");
 	if (!str)
-		free_error(NULL, E_Malloc, "str", 1);
+		free_error(NULL, E_MALLOC, "str", 1);
 	if (add_word(&var->quoted_cmds, END, str) == -1)
-		free_error(NULL, E_Malloc, "add_word", 1);
+		free_error(NULL, E_MALLOC, "add_word", 1);
 }
 
 void	handle_quoted_token(t_var *var, int *tab, int i, char *line)
