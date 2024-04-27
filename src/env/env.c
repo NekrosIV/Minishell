@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:02:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/17 13:54:38 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/27 16:28:25 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,30 @@ void	add_node_env(t_env **envs, char *str)
 	}
 }
 
+char	**split_env(t_env *env)
+{
+	char	**result;
+	int		i;
+
+	result = malloc(sizeof(char *) * (count_node_env(env) + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (env)
+	{
+		result[i] = ft_strdup(env->line);
+		if (!result[i])
+			return (free_split(result), NULL);
+		i++;
+		env = env->next;
+	}
+	result[i] = NULL;
+	return (result);
+}
+
 void	init_env(t_env **envs, char **env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!env || !env[0])

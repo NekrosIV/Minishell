@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_last_node.c                                    :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/13 13:33:58 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/16 15:41:14 by pscala           ###   ########.fr       */
+/*   Created: 2024/04/27 16:25:15 by kasingh           #+#    #+#             */
+/*   Updated: 2024/04/27 16:25:31 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_word	*get_last_tword(t_word *word)
+void	check_exit(t_var *var)
 {
-	if (!word)
-		return (NULL);
-	while (word->next)
-		word = word->next;
-	return (word);
-}
-
-t_env	*get_last_tenv(t_env *env)
-{
-	if (!env)
-		return (NULL);
-	while (env->next)
-		env = env->next;
-	return (env);
+	if (!var->line || !ft_strncmp(var->line, "exit", 4))
+	{
+		if (var->line)
+			ft_putstr_fd("exit\n", 2);
+		free_error(var, NULL, NULL, 0);
+	}
 }

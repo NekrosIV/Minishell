@@ -5,11 +5,44 @@ CC = cc
 CFLAGS = -g3 #-Wall -Wextra -Werror 
 LIBFTDIR = ./libft
 
-SRCS = ./src/main.c ./src/parsing.c ./src/utils.c ./src/get_last_node.c ./src/env.c \
-	   ./src/free.c ./src/check_syntax.c ./src/before_exec.c ./src/split_cmd.c ./src/exec.c \
-	   ./src/expand.c
-BONUS_SRCS = 
+# Dossiers sources
+SRCDIR = src
+BUILTINS_DIR = $(SRCDIR)/builtins
+ENV_DIR = $(SRCDIR)/env
+EXEC_DIR = $(SRCDIR)/exec
+EXPAND_DIR = $(SRCDIR)/expand
+FREE_AND_EXIT_DIR = $(SRCDIR)/free_and_exit
+MAIN_DIR = $(SRCDIR)/main
+PARSING_DIR = $(SRCDIR)/parsing
+UTILS_DIR = $(SRCDIR)
+
+# Fichiers sources
+SRCS = $(ENV_DIR)/env_utils.c \
+      $(ENV_DIR)/env.c \
+      $(EXEC_DIR)/before_exec.c \
+      $(EXEC_DIR)/dup.c \
+      $(EXEC_DIR)/exec_utils_two.c \
+      $(EXEC_DIR)/exec_utils.c \
+      $(EXEC_DIR)/exec.c \
+      $(EXEC_DIR)/split_cmd.c \
+      $(EXPAND_DIR)/expand_utils.c \
+      $(EXPAND_DIR)/expand.c \
+      $(EXPAND_DIR)/handle_expand.c \
+      $(FREE_AND_EXIT_DIR)/exit.c \
+      $(FREE_AND_EXIT_DIR)/free.c \
+      $(MAIN_DIR)/main_utils.c \
+      $(MAIN_DIR)/main.c \
+      $(PARSING_DIR)/check_syntax_pipe.c \
+      $(PARSING_DIR)/check_syntax_redir.c \
+      $(PARSING_DIR)/check_syntax.c \
+      $(PARSING_DIR)/handle_one.c \
+      $(PARSING_DIR)/handle_two.c \
+      $(PARSING_DIR)/parsing_utils.c \
+      $(PARSING_DIR)/parsing.c \
+      $(UTILS_DIR)/utils.c
+
 OBJS = $(SRCS:.c=.o)
+BONUS_SRCS = 
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 
@@ -33,7 +66,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	@make -C $(LIBFTDIR)
 	@$(CC) $(CFLAGS) -I$(HEADERS) -o $@ $(OBJS) -L ${LIBFTDIR} -lft -lreadline
-	@printf "$(BLUE)\n\n\n"
+	@printf "$(YELLOW)\n\n\n"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢟⣛⣭⣵⣶⣶⣬⣭⣭⣭⣝⡛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣫⣵⣾⣿⣿⣿⣿⣿⣿⣿⡿⣏⢻⣟⢿⣷⣬⡙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
 	@echo "⣿⣿⣿⣿⣿⣿⡿⢫⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣜⡜⣿⣆⢿⡜⣿⣎⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
@@ -75,7 +108,7 @@ bonus :  ${BONUS_NAME}
 ${BONUS_NAME} : $(BONUS_OBJS)
 	@make -C $(LIBFTDIR)
 	@$(CC) $(CFLAGS) -I$(HEADERS) -o ${BONUS_NAME} $(BONUS_OBJS) -L ${LIBFTDIR} -lft
-	@printf "$(BLUE)\n\n\n"
+	@printf "$(YELLOW)\n\n\n"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⢟⣛⣭⣵⣶⣶⣬⣭⣭⣭⣝⡛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
 	@echo "⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⣫⣵⣾⣿⣿⣿⣿⣿⣿⣿⡿⣏⢻⣟⢿⣷⣬⡙⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"
 	@echo "⣿⣿⣿⣿⣿⣿⡿⢫⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣜⡜⣿⣆⢿⡜⣿⣎⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"

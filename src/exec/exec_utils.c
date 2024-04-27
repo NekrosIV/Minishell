@@ -1,16 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 15:26:21 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/25 17:13:55 by pscala           ###   ########.fr       */
+/*   Created: 2024/04/27 16:42:40 by kasingh           #+#    #+#             */
+/*   Updated: 2024/04/27 17:17:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	del_cmd(t_word **word)
+{
+	t_word	*tmp;
+
+	while ((*word)->token != PIPE && (*word)->token != END)
+	{
+		tmp = *word;
+		(*word) = (*word)->next;
+		del_tword(&tmp);
+	}
+	if ((*word)->token == PIPE)
+	{
+		tmp = *word;
+		(*word) = (*word)->next;
+		del_tword(&tmp);
+	}
+}
 
 void	error_msg(char *path, char **cmd, char **env)
 {
@@ -35,19 +53,10 @@ void	error_msg(char *path, char **cmd, char **env)
 	exit(127);
 }
 
-char	**get_cmd(char *cmd)
+void	close_fd(int fd, int i)
 {
-	char	**cmd_split;
-
-	cmd_split = ft_split(cmd, ' ');
-	if (!cmd_split || !cmd_split[0])
-	{
-		ft_putstr_fd("Command not found: ", 2);
-		ft_putendl_fd(cmd, 2);
-		free(cmd_split);
-		exit(127);
-	}
-	return (cmd_split);
+	if (i != 0)
+		close(fd);
 }
 
 char	*get_path(char **cmd, char **path)
@@ -79,29 +88,22 @@ char	*get_path(char **cmd, char **path)
 	return (free_split(path), free(slash_cmd), good_path);
 }
 
-void	exec(char **cmd, char **env)
+int	wait_for_child(pid_t pid)
 {
-	int		i;
-	char	*path;
-	char	**tmp_path;
+	int		status[2];
+	pid_t	r_waitpid;
 
-	tmp_path = NULL;
-	path = NULL;
-	i = 0;
-	if (access(cmd[0], F_OK) == 0)
-		path = ft_strdup(cmd[0]);
-	else if (env[i])
+	while (1)
 	{
-		while (env[i] && ft_strncmp(env[i], "PATH=", 5) != 0)
-			i++;
-		if (env[i])
-			tmp_path = ft_split(&env[i][5], ':');
-		if (!tmp_path)
-			error_msg(path, cmd, env);
-		path = get_path(cmd, tmp_path);
+		r_waitpid = waitpid(-1, &status[0], 0);
+		if (r_waitpid == -1)
+			break ;
+		if (r_waitpid == pid)
+			status[1] = status[0];
 	}
-	if (!path)
-		error_msg(path, cmd, env);
-	execve(path, cmd, env);
-	error_msg(path, cmd, env);
+	if (WIFEXITED(status[1]))
+		return (WEXITSTATUS(status[1]));
+	else if (WIFSIGNALED(status[1]))
+		return (WTERMSIG(status[1]) + 128);
+	return (0);
 }

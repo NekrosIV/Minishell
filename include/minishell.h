@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/26 18:21:23 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 18:52:46 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,71 +86,178 @@ typedef struct s_var
 	t_env			*env;
 }					t_var;
 
-/* ************************************************************************** */
 /*                            FUNCTION PROTOTYPES                             */
+
+/* ************************************************************************** */
+/*                                    MAIN                                    */
 /* ************************************************************************** */
 
 /* ********************************* MAIN.C ********************************* */
 
 // int					main(int ac, char **av, char **env);
 
-/* ******************************** PARSING.C ******************************** */
+/* ****************************** MAIN_UTILS.C ****************************** */
 
-void				parsing(t_var *var);
+t_var				*init_var(t_env **envs, int exit_statut);
+
+/* ************************************************************************** */
+/*                                      ENV                                   */
+/* ************************************************************************** */
+
+/* ********************************* ENV.C ********************************* */
+
+void				add_node_env(t_env **envs, char *str);
+char				**split_env(t_env *env);
+void				init_env(t_env **envs, char **env);
+
+/* ****************************** ENV_UTILS.C ******************************* */
+
+t_env				*get_last_tenv(t_env *env);
+int					count_node_env(t_env *env);
+
+/* ************************************************************************** */
+/*                                   PARSING                                  */
+/* ************************************************************************** */
+
+/* ******************************** PARSING.C ******************************* */
+
 int					add_word(t_word **word, int token, char *str);
+// void				init_tab_token_2(char *line, int *tab, int i);
+int					*init_tab_token(char *line, int i);
+void				parsing(t_var *var);
 
-/* ***************************** CHECK_SYNSTAX.C ***************************** */
+/* ****************************** HANDLE_ONE.C ****************************** */
+
+void				handle_pipe(t_var *var, int *i);
+void				handle_redir_in(t_var *var, int *i);
+void				handle_redir_out(t_var *var, int *i);
+void				handle_quotes(t_var *var, int *i);
+void				handle_token(t_var *var, int *tab, int i);
+
+/* ****************************** HANDLE_TWO.C ****************************** */
+
+void				handle_char(t_var *var, int *i, int *tab);
+void				handle_space(t_var *var, int *i);
+void				handle_dol(t_var *var, int *i, int *tab);
+void				handle_end(t_var *var);
+
+/* ****************************** CHECK_SYNTAX.C **************************** */
 
 void				check_syntax(t_var *var);
-void				del_tword(t_word **word);
 
-/* ********************************* UTILS.C ******************************** */
+/* *************************** CHECK_SYNTAX_PIPE.C ************************** */
 
-void				init_var(t_var *var, t_env **envs, int exit_status);
-char				*ft_strndup(char *line, int i, int start);
-void				print_list(t_word *word);
-void				count_node(t_word *word);
-void				print_list_env(t_env *env);
-int					node_cmp_token(t_word *lexer, int token);
-int					count_node_token(t_word *lexer, int token);
-int					count_node_env(t_env *env);
-char				**split_env(t_env *env);
-void				del_cmd(t_word **word);
-void				close_fd(int fd, int i);
+int					check_pipe(t_word *tmp, bool dir);
+int					check_syntax_pipe(t_word *lexer, t_var *var);
 
-/* ******************************** GLNODE.C ******************************** */
+/* *************************** CHECK_SYNTAX_REDIR.C ************************* */
 
+bool				check_token(t_word *tmp, t_word *start, t_var *var);
+t_word				*trim_rout(t_word *start, t_var *var);
+t_word				*check_and_trim(t_word *start, t_var *var);
+int					check_syntax_redir(t_var *var);
+
+/* ***************************** PARSING_UTILS.C **************************** */
+
+char				*ft_strndup(char *line, int end, int start);
 t_word				*get_last_tword(t_word *word);
-t_env				*get_last_tenv(t_env *env);
+void				del_tword(t_word **word);
+void				trim_tword(t_word **start, t_word **end);
+t_word				*skip_space(t_word *tmp);
 
-/* ********************************* TEST.C ********************************* */
+/* ************************************************************************** */
+/*                                   EXPAND                                   */
+/* ************************************************************************** */
 
-/* ********************************* ENV.C ********************************** */
+/* ******************************** EXPAND.C ******************************** */
 
-void				init_env(t_env **envs, char **env);
-void				add_node_env(t_env **envs, char *str);
+void				replace_dol(t_word *tmp, char *str);
+void				find_and_replace(t_word *tmp, t_var *var);
+void				expand_quoted_cmds(t_var *var);
+void				init_quoted_cmd(t_word *tmp, t_var *var);
+void				expand(t_var *var);
+
+/* ****************************** HANDLE_EXPAND.C **************************** */
+
+void				handle_quoted_space(t_var *var, int *i, char *line);
+void				handle_quoted_char(t_var *var, int *i, int *tab,
+						char *line);
+void				handle_quoted_dol(t_var *var, int *i, int *tab, char *line);
+void				handle_quoted_end(t_var *var);
+void				handle_quoted_token(t_var *var, int *tab, int i,
+						char *line);
+
+/* ****************************** EXPAND_UTILS.C ***************************** */
+
+int					len_quoted_cmd(t_var *var);
+char				*join_quoted_cmd(t_var *var);
+void				fill_tab(t_var *var, char **word);
+
+/* ************************************************************************** */
+/*                                   EXECUTE                                  */
+/* ************************************************************************** */
+
+/* ****************************** BEFOR_EXEX.C ****************************** */
+
+void				loop_here_doc(char *eof, int fd);
+int					here_doc(t_word *tmp, t_var *var);
+void				do_here_doc(t_var *var);
+void				before_exe(t_var *var);
+
+/* ********************************* EXEX.C ********************************* */
+
+void				exec(char **cmd, char **env);
+void				child(int c_fd, int pipe_fd[2], int i, t_var *var);
+int					fork_loop(t_var *var, int nb_cmd);
+void				exe_cmd(t_var *var);
+
+/* ********************************** DUP.C ********************************* */
+
+void				do_dup_in(int pipe_fd[2], int c_fd, int flag[3],
+						t_word *tmp);
+void				do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp);
+void				do_dup(int c_fd, int pipe_fd[2], int i, t_var *var);
+
+/* ******************************** SPLIT_CMD.C ****************************** */
+
+int					count_cmd(t_word *node);
+int					ft_strlen_node(t_word *word);
+char				*ft_strjoin_node(t_word *word);
+t_word				*next_word(t_word *word);
+char				**split_cmd(t_var *var);
+
+/* ******************************** EXEX_UTILS.C ***************************** */
+
+void				del_cmd(t_word **word);
+void				error_msg(char *path, char **cmd, char **env);
+void				close_fd(int fd, int i);
+char				*get_path(char **cmd, char **path);
+int					wait_for_child(pid_t pid);
+
+/* ****************************** EXEX_UTILS_TWO.C *************************** */
+
+int					node_cmp_token(t_word *lexer, int token);
+
+/* ************************************************************************** */
+/*                                 FREE_AND_EXIT                              */
+/* ************************************************************************** */
 
 /* ********************************* FREE.C ********************************* */
-void				free_var(t_var *var);
-void				free_list_env(t_env **env);
+
 void				free_list_lexer(t_word **lexer);
+void				free_list_env(t_env **env);
+void				free_var(t_var *var);
 void				free_error(t_var *var, char *error, char *fautif, int ff);
 void				free_split(char **tab);
 
-/* ******************************** BEFORE_EXEC.C ***************************** */
+/* ********************************* EXIT.C ********************************* */
 
-void				before_exe(t_var *var);
+void				check_exit(t_var *var);
 
-/* *********************************** EXEC.C ******************************** */
-void				exec(char **cmd, char **env);
+/* ************************************************************************** */
 
-/* ****************************** SPLIT_CMD.C ****************************** */
-
-char				**split_cmd(t_var *var);
-int					count_cmd(t_word *node);
-
-/* ******************************** EXPAND.C ******************************** */
-void				expand(t_var *var);
-void				find_and_replace(t_word *tmp, t_var *var);
+void				count_node(t_word *word);
+void				print_list(t_word *word);
+void				print_list_env(t_env *env);
 
 #endif

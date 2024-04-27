@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/25 17:32:29 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/27 16:27:03 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,9 @@ int	main(int ac, char **av, char **env)
 	exit_status = 0;
 	while (1)
 	{
-		var = malloc(sizeof(t_var));
-		if (!var)
-		{
-			free_list_env(&envs);
-			free_error(NULL, E_Malloc, "var", 1);
-		}
-		init_var(var, &envs, exit_status);
-		// ft_printf("minirt> ");
+		var = init_var(&envs, exit_status);
 		var->line = readline("minirt> ");
-		// var->line = get_next_line(0);
-		if (!var->line || !ft_strncmp(var->line, "exit", 4))
-		{
-			if (var->line)
-				ft_putstr_fd("exit\n", 2);
-			free_error(var, NULL, NULL, 0);
-		}
-		parsing(var);
+		(check_exit(var), parsing(var));
 		if (var->error == false)
 			before_exe(var);
 		exit_status = var->status;
