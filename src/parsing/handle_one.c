@@ -6,13 +6,13 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:11:09 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 19:17:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handlE_PIPE(t_var *var, int *i)
+void	handle_pipe(t_var *var, int *i)
 {
 	char	*str;
 	int		start;
@@ -103,7 +103,7 @@ void	handle_token(t_var *var, int *tab, int i)
 	while (tab[i] != END)
 	{
 		if (tab[i] == PIPE)
-			handlE_PIPE(var, &i);
+			handle_pipe(var, &i);
 		else if (tab[i] == REDIR_IN)
 			handle_redir_in(var, &i);
 		else if (tab[i] == REDIR_OUT)
