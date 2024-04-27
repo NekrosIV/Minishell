@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:11:09 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 20:34:26 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	exec(cmd, env);
 }
 
+void	handle_fork_error(pid_t pid, int pipe_fd[2], int c_fd, int i)
+{
+	close(pipe_fd[0]);
+	close_fd(c_fd, i);
+	close(pipe_fd[1]);
+}
+
 int	fork_loop(t_var *var, int nb_cmd)
 {
 	int		i;
@@ -84,8 +91,7 @@ int	fork_loop(t_var *var, int nb_cmd)
 			return (close_fd(c_fd, i), -1);
 		pid = fork();
 		if (pid == -1)
-			return (close(pipe_fd[0]), close_fd(c_fd, i), close(pipe_fd[1]),
-				-1);
+			return (handle_fork_error(pid, pipe_fd, c_fd, i), -1);
 		if (pid == 0)
 			child(c_fd, pipe_fd, i, var);
 		close(pipe_fd[1]);

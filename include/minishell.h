@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:13:46 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/27 20:33:21 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void				parsing(t_var *var);
 
 /* ****************************** HANDLE_ONE.C ****************************** */
 
-void				handlE_PIPE(t_var *var, int *i);
+void				handle_pipe(t_var *var, int *i);
 void				handle_redir_in(t_var *var, int *i);
 void				handle_redir_out(t_var *var, int *i);
 void				handle_quotes(t_var *var, int *i);
@@ -177,7 +177,7 @@ void				expand_quoted_cmds(t_var *var);
 void				init_quoted_cmd(t_word *tmp, t_var *var);
 void				expand(t_var *var);
 
-/* ****************************** HANDLE_EXPAND.C **************************** */
+/******************************* HANDLE_EXPAND.C *****************************/
 
 void				handle_quoted_space(t_var *var, int *i, char *line);
 void				handle_quoted_char(t_var *var, int *i, int *tab,
@@ -187,38 +187,45 @@ void				handle_quoted_end(t_var *var);
 void				handle_quoted_token(t_var *var, int *tab, int i,
 						char *line);
 
-/* ****************************** EXPAND_UTILS.C ***************************** */
+/******************************* EXPAND_UTILS.C ******************************/
 
 int					len_quoted_cmd(t_var *var);
 char				*join_quoted_cmd(t_var *var);
 void				fill_tab(t_var *var, char **word);
 
-/* ************************************************************************** */
-/*                                   EXECUTE                                  */
-/* ************************************************************************** */
+/****************************************************************************/
+/*                                  EXECUTE                                 */
+/****************************************************************************/
 
-/* ****************************** BEFOR_EXEX.C ****************************** */
+/******************************* BEFOR_EXEX.C *******************************/
 
 void				loop_here_doc(char *eof, int fd);
 int					here_doc(t_word *tmp, t_var *var);
 void				do_here_doc(t_var *var);
 void				before_exe(t_var *var);
 
-/* ********************************* EXEX.C ********************************* */
+/********************************** EXEX.C **********************************/
 
 void				exec(char **cmd, char **env);
 void				child(int c_fd, int pipe_fd[2], int i, t_var *var);
+void				handle_fork_error(pid_t pid, int pipe_fd[2], int c_fd,
+						int i);
 int					fork_loop(t_var *var, int nb_cmd);
 void				exe_cmd(t_var *var);
 
-/* ********************************** DUP.C ********************************* */
+/*********************************** DUP.C **********************************/
 
 void				do_dup_in(int pipe_fd[2], int c_fd, int flag[3],
 						t_word *tmp);
+void				do_dup_in2(int pipe_fd[2], int c_fd, int flag[3],
+						t_word *tmp);
+
 void				do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp);
+void				do_dup_out2(int pipe_fd[2], int flag[3], t_word *tmp);
+
 void				do_dup(int c_fd, int pipe_fd[2], int i, t_var *var);
 
-/* ******************************** SPLIT_CMD.C ****************************** */
+/********************************* SPLIT_CMD.C *******************************/
 
 int					count_cmd(t_word *node);
 int					ft_strlen_node(t_word *word);
@@ -226,7 +233,7 @@ char				*ft_strjoin_node(t_word *word);
 t_word				*next_word(t_word *word);
 char				**split_cmd(t_var *var);
 
-/* ******************************** EXEX_UTILS.C ***************************** */
+/********************************* EXEX_UTILS.C ******************************/
 
 void				del_cmd(t_word **word);
 void				error_msg(char *path, char **cmd, char **env);
@@ -234,15 +241,15 @@ void				close_fd(int fd, int i);
 char				*get_path(char **cmd, char **path);
 int					wait_for_child(pid_t pid);
 
-/* ****************************** EXEX_UTILS_TWO.C *************************** */
+/******************************* EXEX_UTILS_TWO.C ****************************/
 
 int					node_cmp_token(t_word *lexer, int token);
 
-/* ************************************************************************** */
-/*                                 FREE_AND_EXIT                              */
-/* ************************************************************************** */
+/****************************************************************************/
+/*                                FREE_AND_EXIT                             */
+/****************************************************************************/
 
-/* ********************************* FREE.C ********************************* */
+/********************************** FREE.C **********************************/
 
 void				free_list_lexer(t_word **lexer);
 void				free_list_env(t_env **env);
@@ -250,11 +257,11 @@ void				free_var(t_var *var);
 void				free_error(t_var *var, char *error, char *fautif, int ff);
 void				free_split(char **tab);
 
-/* ********************************* EXIT.C ********************************* */
+/********************************** EXIT.C **********************************/
 
 void				check_exit(t_var *var);
 
-/* ************************************************************************** */
+/****************************************************************************/
 
 void				count_node(t_word *word);
 void				print_list(t_word *word);
