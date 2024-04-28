@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 20:34:26 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/28 18:49:34 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	free_var(var);
 	if (cmd[0][0] == '\0')
 	{
-		ft_putstr_fd("command not found: ", 2);
-		ft_putendl_fd(cmd[0], 2);
+		ft_putstr_fd(cmd[0], 2);
+		ft_putendl_fd(": command not found", 2);
 		free_split(env);
 		free_split(cmd);
 		exit(127);

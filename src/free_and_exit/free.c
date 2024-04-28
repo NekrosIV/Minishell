@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/25 18:40:17 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/28 12:38:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	free_error(t_var *var, char *error, char *fautif, int ff)
 	if (fautif)
 	{
 		ft_putstr_fd(RED, 2);
-		ft_putstr_fd("\'", 2);
+		ft_putstr_fd("`", 2);
 		ft_putstr_fd(fautif, 2);
 		ft_putstr_fd("\'\n", 2);
 		ft_putstr_fd(RESET, 2);

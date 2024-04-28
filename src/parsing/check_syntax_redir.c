@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:10:57 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/28 17:38:03 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_word	*trim_rout(t_word *start, t_var *var)
 {
 	t_word	*tmp;
 
-	tmp = skip_space(start->next->next);
+	tmp = skip_token(start->next->next, SPACES);
 	if (check_token(tmp, start, var))
 		return (NULL);
 	trim_tword(&start, &tmp);
@@ -49,7 +49,7 @@ t_word	*check_and_trim(t_word *start, t_var *var)
 	}
 	else
 	{
-		tmp = skip_space(start->next);
+		tmp = skip_token(start->next, SPACES);
 		if (check_token(tmp, start, var))
 			return (NULL);
 		trim_tword(&start, &tmp);

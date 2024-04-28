@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 20:33:21 by pscala           ###   ########.fr       */
+/*   Updated: 2024/04/28 18:03:53 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ char				*ft_strndup(char *line, int end, int start);
 t_word				*get_last_tword(t_word *word);
 void				del_tword(t_word **word);
 void				trim_tword(t_word **start, t_word **end);
-t_word				*skip_space(t_word *tmp);
+t_word				*skip_token(t_word *tmp, int token);
 
 /* ************************************************************************** */
 /*                                   EXPAND                                   */

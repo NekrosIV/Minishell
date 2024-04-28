@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:13:36 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/28 12:39:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	*init_tab_token(char *line, int i)
 			tab[i] = PIPE;
 		else if (line[i] == '<')
 			tab[i] = REDIR_IN;
+		else if (line[i] == '>')
+			tab[i] = REDIR_OUT;
 		else
 			init_tab_token_2(line, tab, i);
 		i++;
@@ -86,9 +88,9 @@ void	parsing(t_var *var)
 	free(tab);
 	if (var->error == false)
 		check_syntax(var);
-	if (var->error == false)
-	{
-		count_node(var->lexer);
-		print_list(var->lexer);
-	}
+	// if (var->error == false)
+	// {
+	// 	count_node(var->lexer);
+	// 	print_list(var->lexer);
+	// }
 }
