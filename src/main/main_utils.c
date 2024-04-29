@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/29 13:05:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ t_var	*init_var(t_env **envs, int exit_statut)
 		free_list_env(envs);
 		free_error(NULL, E_MALLOC, "var", 1);
 	}
+	if (isatty(0))
+		var->prompt = PROMPT;
+	else
+		var->prompt = "";
 	var->exit = false;
 	var->error = false;
 	var->line = NULL;

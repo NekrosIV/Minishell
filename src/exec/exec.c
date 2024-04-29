@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/28 18:49:34 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/29 19:10:38 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	exec(char **cmd, char **env)
 	tmp_path = NULL;
 	path = NULL;
 	i = 0;
-	if (access(cmd[0], F_OK) == 0)
+	if (ft_strchr(cmd[0], '/') != NULL && access(cmd[0], F_OK) == 0)
 		path = ft_strdup(cmd[0]);
-	else if (env[i])
+	else if (ft_strchr(cmd[0], '/') == NULL && env[i])
 	{
 		while (env[i] && ft_strncmp(env[i], "PATH=", 5) != 0)
 			i++;

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:42:40 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/28 18:49:21 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/29 18:57:04 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,26 @@ void	del_cmd(t_word **word)
 
 void	error_msg(char *path, char **cmd, char **env)
 {
+	int	status;
+
+	status = 1;
 	ft_putstr_fd(cmd[0], 2);
-	if (!path && ft_strchr(cmd[0], '/') != NULL)
-		ft_putendl_fd(": No such file or directory", 2);
-	else if (!path)
-		ft_putendl_fd(": command not found", 2);
-	else if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
+	if (ft_strchr(cmd[0], '/') != NULL)
 	{
-		ft_putstr_fd(cmd[0], 2);
-		ft_putendl_fd(": Permission denied", 2);
-		free_split(cmd);
-		free_split(env);
-		free(path);
-		exit(126);
+		if (access(cmd[0], F_OK) == -1)
+			(ft_putendl_fd(": No such file or directory", 2), status = 127);
+		else if (access(cmd[0], X_OK | R_OK) == -1)
+			(ft_putendl_fd(": Permission denied", 2), status = 126);
 	}
-	if (path)
-		free(path);
-	free_split(cmd);
-	free_split(env);
-	exit(127);
+	else
+	{
+		if (!path)
+			(ft_putendl_fd(": command not found", 2), status = 127);
+		else if (access(path, X_OK) == -1)
+			(ft_putendl_fd(": Permission denied", 2), status = 126);
+	}
+	(free(path), free_split(cmd), free_split(env));
+	exit(status);
 }
 
 void	close_fd(int fd, int i)

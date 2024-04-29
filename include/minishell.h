@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/28 18:03:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/29 15:57:29 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 /* ************************************************************************** */
 # define RED "\033[38;5;160m"
 # define RESET "\033[00m"
-# define PROMPT "minishell$ "
+# define PROMPT "minirt>"
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
 # define E_SYNTAX "syntax error near unexpected token "
@@ -81,6 +81,7 @@ typedef struct s_var
 	bool			exit;
 	bool			error;
 	int				status;
+	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
 	t_env			*env;
