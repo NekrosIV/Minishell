@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/29 15:57:29 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/29 23:43:08 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/stat.h>
 # include <unistd.h>
 # include <wait.h>
 
@@ -237,14 +238,15 @@ char				**split_cmd(t_var *var);
 /********************************* EXEX_UTILS.C ******************************/
 
 void				del_cmd(t_word **word);
+int					is_dir(char *cmd);
 void				error_msg(char *path, char **cmd, char **env);
-void				close_fd(int fd, int i);
 char				*get_path(char **cmd, char **path);
 int					wait_for_child(pid_t pid);
 
 /******************************* EXEX_UTILS_TWO.C ****************************/
 
 int					node_cmp_token(t_word *lexer, int token);
+void				close_fd(int fd, int i);
 
 /****************************************************************************/
 /*                                FREE_AND_EXIT                             */

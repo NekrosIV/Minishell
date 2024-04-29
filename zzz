@@ -1,28 +1,28 @@
-hola que tal
+salut cava BG
 Makefile
 echo
 echo -n
-echo Hola
-echoHola
-echo-nHola
-echo -n Hola
-echo "-n" Hola
-echo -nHola
-echo Hola -n
-echo Hola Que Tal
-echo         Hola
-echo    Hola     Que    Tal
-echo      \n hola
+echo salut
+echosalut
+echo-nsalut
+echo -n salut
+echo "-n" salut
+echo -nsalut
+echo salut -n
+echo salut cava BG
+echo         salut
+echo    salut     cava    BG
+echo      \n salut
 echo "         " | cat -e
 echo           | cat -e
-""''echo hola""'''' que""'' tal""''
+""''echo salut""'''' cava""'' BG""''
 echo -n -n
-echo -n -n Hola Que
+echo -n -n salut cava
 echo -p
 echo -nnnnn
 echo -n -nnn -nnnn
 echo -n-nnn -nnnn
-echo -n -nnn hola -nnnn
+echo -n -nnn salut -nnnn
 echo -n -nnn-nnnn
 echo --------n
 echo -nnn --------n
@@ -46,8 +46,8 @@ echo $HOME%
 echo $UID$HOME
 echo Le path de mon HOME est $HOME
 echo $USER$var\$USER$USER\$USERtest$USER
-echo $hola*
-echo -nnnn $hola
+echo $salut*
+echo -nnnn $salut
 echo > <
 echo | |
 EechoE
@@ -56,16 +56,16 @@ EechoE
 <echo<
 >>echo>>
 |echo|
-|echo -n hola
+|echo -n salut
 echo *
 echo '*'
 echo D*
 echo *Z
-echo *t hola
+echo *t salut
 echo *t
 echo $*
-echo hola*hola *
-echo $hola*
+echo salut*salut *
+echo $salut*
 echo $HOME*
 echo $""
 echo "$"""
@@ -87,32 +87,32 @@ echo $'HO''ME'
 echo $'HOME'
 echo "$"HOME
 echo $=HOME
-echo $"HOLA"
-echo $'HOLA'
-echo $DONTEXIST Hola
-echo "hola"
-echo 'hola'
-echo ''hola''
-echo ''h'o'la''
-echo "''h'o'la''"
-echo "'"h'o'la"'"
-echo"'hola'"
-echo "'hola'"
-echo '"hola"'
+echo $"salut"
+echo $'salut'
+echo $DONTEXIST salut
+echo "salut"
+echo 'salut'
+echo ''salut''
+echo ''sa'l'ut''
+echo "''sa'l'ut''"
+echo "'"sa'l'ut"'"
+echo"'salut'"
+echo "'salut'"
+echo '"salut"'
 echo '''ho"''''l"a'''
-echo hola""""""""""""
-echo hola"''''''''''"
-echo hola''''''''''''
-echo hola'""""""""""'
-e"cho hola"
-e'cho hola'
-echo "hola     " | cat -e
-echo ""hola
-echo "" hola
-echo ""             hola
-echo ""hola
-echo "" hola
-echo hola""bonjour
+echo salut""""""""""""
+echo salut"''''''''''"
+echo salut''''''''''''
+echo salut'""""""""""'
+e"cho salut"
+e'cho salut'
+echo "salut     " | cat -e
+echo ""salut
+echo "" salut
+echo ""             salut
+echo ""salut
+echo "" salut
+echo salut""bonjour
 "e"'c'ho 'b'"o"nj"o"'u'r
 ""e"'c'ho 'b'"o"nj"o"'u'r"
 echo "$DONTEXIST"Makefile

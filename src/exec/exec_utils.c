@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:42:40 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/29 18:57:04 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/29 23:42:17 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,27 @@ void	del_cmd(t_word **word)
 		del_tword(&tmp);
 	}
 }
+int	is_dir(char *cmd)
+{
+	struct stat	statbuf;
+
+	if (lstat(cmd, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
+}
 
 void	error_msg(char *path, char **cmd, char **env)
 {
-	int	status;
+	int			status;
+	struct stat	statbuf;
 
 	status = 1;
 	ft_putstr_fd(cmd[0], 2);
 	if (ft_strchr(cmd[0], '/') != NULL)
 	{
-		if (access(cmd[0], F_OK) == -1)
+		if (is_dir(cmd[0]))
+			(ft_putendl_fd(": Is a directory", 2), status = 126);
+		else if (access(cmd[0], F_OK) == -1)
 			(ft_putendl_fd(": No such file or directory", 2), status = 127);
 		else if (access(cmd[0], X_OK | R_OK) == -1)
 			(ft_putendl_fd(": Permission denied", 2), status = 126);
@@ -52,12 +63,6 @@ void	error_msg(char *path, char **cmd, char **env)
 	}
 	(free(path), free_split(cmd), free_split(env));
 	exit(status);
-}
-
-void	close_fd(int fd, int i)
-{
-	if (i != 0)
-		close(fd);
 }
 
 char	*get_path(char **cmd, char **path)
