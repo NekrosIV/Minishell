@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/29 13:05:08 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 20:33:01 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	main(int ac, char **av, char **env)
 	t_var	*var;
 	t_env	*envs;
 	int		exit_status;
-	
 
 	(void)av;
 	if (ac != 1)

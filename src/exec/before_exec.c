@@ -6,19 +6,20 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 19:25:06 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	loop_here_doc(char *eof, int fd)
+void	loop_here_doc(char *eof, int fd, char *end_of_line)
 {
 	char	*line;
 
 	while (1)
 	{
-		ft_putstr_fd("here_doc> ", 1);
+		if (isatty(0))
+			ft_putstr_fd("here_doc> ", 1);
 		line = get_next_line(0);
 		if (!line || ft_strncmp(line, eof, ft_strlen(line)) == 0)
 		{
@@ -26,7 +27,7 @@ void	loop_here_doc(char *eof, int fd)
 			{
 				ft_putstr_fd("\nhere-document delimited ", 2);
 				ft_putstr_fd("by end-of-file (wanted `", 2);
-				ft_putstr_fd(eof, 2);
+				ft_putstr_fd(end_of_line, 2);
 				ft_putendl_fd("')", 2);
 			}
 			free(line);
@@ -57,7 +58,7 @@ int	here_doc(t_word *tmp, t_var *var)
 	eof = ft_strjoin(tmp->word, "\n");
 	if (!eof)
 		return (free(nb), free_error(var, E_MALLOC, "eof", 1), -1);
-	loop_here_doc(eof, fd);
+	loop_here_doc(eof, fd, tmp->word);
 	free(tmp->word);
 	tmp->word = file_name;
 	return (free(eof), free(nb), close(fd), 1);

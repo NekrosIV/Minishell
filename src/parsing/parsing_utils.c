@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:57:26 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/28 12:29:25 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 20:09:31 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,11 @@ t_word	*skip_token(t_word *tmp, int token)
 			break ;
 	}
 	return (tmp);
+}
+
+int	ft_isgoodchar(char c)
+{
+	if (c == '_' || c == '?' || ft_isalnum(c))
+		return (1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:47:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	init_quoted_cmd(t_word *tmp, t_var *var)
 	{
 		if (tmp->word[i] == '$')
 			tab[i] = DOL;
-		else if (tmp->word[i] == ' ')
+		else if (!ft_isgoodchar(tmp->word[i]))
 			tab[i] = SPACES;
 		else
 			tab[i] = CHAR;
@@ -86,14 +86,24 @@ void	init_quoted_cmd(t_word *tmp, t_var *var)
 void	expand(t_var *var)
 {
 	t_word	*tmp;
+	t_word	*tmp2;
 
 	tmp = var->lexer;
+	tmp2 = NULL;
 	while (tmp)
 	{
 		if (tmp->token == DOL)
 			find_and_replace(tmp, var);
-		else if (tmp->token == QUOTE_CMD && ft_strchr(tmp->word, '$'))
+		else if (tmp->token == DOUBLE_QUOTE && ft_strchr(tmp->word, '$'))
 			init_quoted_cmd(tmp, var);
+		if (tmp->token == DOL)
+		{
+			tmp2 = tmp->next;
+			del_tword(&tmp);
+			tmp = tmp2;
+			if (!tmp->prev)
+				var->lexer = tmp;
+		}
 		tmp = tmp->next;
 	}
 }

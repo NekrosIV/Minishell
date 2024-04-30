@@ -6,11 +6,86 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/28 17:38:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 18:44:11 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_strlen_tword(t_word *tmp)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
+		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL)
+	{
+		j = 0;
+		while (tmp->word[j])
+		{
+			i++;
+			j++;
+		}
+		tmp = tmp->next;
+	}
+	return (i);
+}
+
+char	*ft_strjoin_tword(t_word *tmp)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	str = malloc(sizeof(char) * ft_strlen_tword(tmp) + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
+		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL)
+	{
+		j = 0;
+		while (tmp->word[j])
+		{
+			str[i] = tmp->word[j];
+			i++;
+			j++;
+		}
+		tmp = tmp->next;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+void	join_if_need(t_word *head)
+{
+	t_word	*end;
+	char	*str;
+	t_word	*start;
+	int		i;
+	t_word	*temp;
+
+	end = head;
+	i = 0;
+	start = head->next;
+	while (end->token == CMD || end->token == DOUBLE_QUOTE
+		|| end->token == SINGLE_QUOTE || end->token == DOL)
+		(end = end->next, i++);
+	if (i <= 1)
+		return ;
+	str = ft_strjoin_tword(head);
+	if (!str)
+		free_error(NULL, E_MALLOC, "str", 1);
+	free(head->word);
+	head->word = str;
+	while (start != end)
+	{
+		temp = start->next;
+		del_tword(&start);
+		start = temp;
+	}
+}
 
 bool	check_token(t_word *tmp, t_word *start, t_var *var)
 {
@@ -20,7 +95,9 @@ bool	check_token(t_word *tmp, t_word *start, t_var *var)
 		if (tmp->token == DOL)
 			return (free_error(var, E_REDIR, tmp->word, -1), -1);
 	}
-	if (tmp->token != CMD && tmp->token != QUOTE_CMD && tmp->token != DOL)
+	join_if_need(tmp);
+	if (tmp->token != CMD && tmp->token != DOUBLE_QUOTE
+		&& tmp->token != SINGLE_QUOTE && tmp->token != DOL)
 		return (free_error(var, E_SYNTAX, tmp->word, -2), -1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/29 23:43:08 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 19:16:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ t_word				*get_last_tword(t_word *word);
 void				del_tword(t_word **word);
 void				trim_tword(t_word **start, t_word **end);
 t_word				*skip_token(t_word *tmp, int token);
+int					ft_isgoodchar(char c);
 
 /* ************************************************************************** */
 /*                                   EXPAND                                   */
@@ -201,7 +202,7 @@ void				fill_tab(t_var *var, char **word);
 
 /******************************* BEFOR_EXEX.C *******************************/
 
-void				loop_here_doc(char *eof, int fd);
+void				loop_here_doc(char *eof, int fd, char *end_of_line);
 int					here_doc(t_word *tmp, t_var *var);
 void				do_here_doc(t_var *var);
 void				before_exe(t_var *var);

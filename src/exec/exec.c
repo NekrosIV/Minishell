@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/29 19:10:38 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:39:54 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,17 @@ void	exec(char **cmd, char **env)
 	execve(path, cmd, env);
 	error_msg(path, cmd, env);
 }
+void	print_cmd(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		printf("cmd[%d]: %s\n", i, cmd[i]);
+		i++;
+	}
+}
 
 void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
@@ -45,8 +56,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	char	**cmd;
 
 	do_dup(c_fd, pipe_fd, i, var);
-	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer,
-			QUOTE_CMD) == 0)
+	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer, SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
 		free_error(var, NULL, NULL, 0);
 	env = split_env(var->env);
 	if (!env)

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:17 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:09:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 15:55:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	handle_dol(t_var *var, int *i, int *tab)
 	start = *i;
 	(*i)++;
 	token = -1;
-	if (tab[start + 1] == CHAR)
+	if (tab[start + 1] == CHAR && ft_isgoodchar(var->line[(*i)]) == 1)
 	{
-		while (tab[(*i)] == CHAR)
+		while (tab[(*i)] == CHAR && ft_isgoodchar(var->line[(*i)]) == 1)
 			(*i)++;
 		token = DOL;
 	}

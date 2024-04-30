@@ -1,3 +1,32 @@
+\n
+                                     
+                                                                 
+:
+!
+>
+<
+>>
+<<
+<>
+>>>>>
+>>>>>>>>>>>>>>>
+<<<<<
+<<<<<<<<<<<<<<<<
+> > > >
+>> >> >> >>
+>>>> >> >> >>
+/
+//
+/.
+/./../../../../..
+///////
+|
+| hola
+| | |
+||
+|||||
+|||||||||||||
+>>|><
 salut cava BG
 Makefile
 echo
@@ -128,3 +157,6 @@ $HOMEdskjhfkdshfsd
 '$HOMEdskjhfkdshfsd'
 $DONTEXIST
 $LESS$VAR
+echo hola <<< bonjour
+echo hola <<<< bonjour
+echo hola <<<<< bonjour

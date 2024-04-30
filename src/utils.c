@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 17:25:31 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:44:50 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ void	print_list(t_word *word)
 			printf("token: CMD\n");
 		else if (word->token == SPACES)
 			printf("token: SPACE\n");
-		else if (word->token == QUOTE_CMD)
-			printf("token: QUOTE_CMD\n");
+		else if (word->token == SINGLE_QUOTE)
+			printf("token: SINGLE_QUOTE\n");
+		else if (word->token == DOUBLE_QUOTE)
+			printf("token: DOULBLE_QUOTE\n");
 		else if (word->token == DOL)
 			printf("token: DOL\n");
 		else if (word->token == END)

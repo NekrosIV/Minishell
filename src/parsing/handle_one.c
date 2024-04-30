@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/27 19:17:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/04/30 16:35:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	handle_quotes(t_var *var, int *i)
 {
 	int		start;
 	char	*str;
+	int		token;
 
 	start = *i;
 	(*i)++;
@@ -89,11 +90,15 @@ void	handle_quotes(t_var *var, int *i)
 	}
 	else
 	{
+		if(var->line[start] == '\'')
+			token = SINGLE_QUOTE;
+		else
+			token = DOUBLE_QUOTE;
 		str = ft_strndup(var->line, *i, start + 1);
 		if (!str)
 			free_error(var, E_MALLOC, "str", 1);
 		(*i)++;
-		if (add_word(&var->lexer, QUOTE_CMD, str) == -1)
+		if (add_word(&var->lexer, token, str) == -1)
 			free_error(var, E_MALLOC, "add_word", 1);
 	}
 }

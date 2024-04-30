@@ -11,6 +11,8 @@ mkdir -p $BASH_DIR
 mkdir -p tests
 echo -e "YO BG" | $MINISHELL > ./tests/prompt.test 2> /dev/null
 PROMPT=$(awk 'NR==1 {sub(/YO BG.*$/, ""); print}' ./tests/prompt.test)
+NB_SUCESSES=0
+TOTALE=0
 
 # Commandes pour retirer les couleurs et les espaces
 REMOVE_COLORS="sed 's/\x1B\[[0-9;]*[JKmsu]//g'"
@@ -29,7 +31,7 @@ BOLD='\033[1m'
 #Vérifier si 'valgrind' est passé en argument
 if [ "$1" = "valgrind" ]; then
     USE_VALGRIND=1
-    VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --log-file=./tests/valgrind_output.test --suppressions=readline.supp "
+    VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --verbose --log-file=./tests/valgrind_output.test --suppressions=readline.supp "
 else
     USE_VALGRIND=0
 fi
@@ -41,29 +43,37 @@ adjust_redirection() {
     local dir=$2
     local new_command=""
     local file=0
+    local temp=$IFS
+    local i=1;
+    local total=$(echo "$command" | wc -l)
 
-    # Lire chaque mot dans la commande
+    IFS="   "
     for word in $command; do
         if [[ "$word" == ">" ]]; then
-            new_command+="$word "
+            new_command+="$word"
             file=1
         elif [[ "$word" == ">>" ]]; then
-            new_command+="$word "
+            new_command+="$word"
             file=1
         elif [[ $file -eq 1 ]]; then
-            new_command+="$dir/$word "
+            new_command+="$dir/$word"
             file=0
         else
-            new_command+="$word "
+            new_command+="$word"
+        fi
+        i=$(($i + 1))
+        if [[ ! $i -eq $total ]]; then
+            new_command+=" "
         fi
     done
+    IFS=$temp
     echo "$new_command"
 }
 
 
 print_result() {
     local len=$((${#command} + 9))  # 9 caractères pour "TEST : "
-    local total_len=80
+    local total_len=75
     local padding=$(($total_len - $len))
 
     if [ -z "$out_diff" ] && [ "$err_diff" = "no_error" ] &&
@@ -71,6 +81,7 @@ print_result() {
        [ "$minishell_status" -eq "$bash_status" ] &&
        [ "$minishell_files" = "$bash_files" ]; then
         printf "\r${BOLD}${GREEN}TEST : %s %-${padding}s[OK]${RESET}\n" "$command"
+        NB_SUCESSES=$(($NB_SUCESSES + 1))
     else
         printf "\r${BOLD}${RED}TEST : %s %-${padding}s[KO]${RESET}\n" "$command"
         print_details
@@ -93,6 +104,7 @@ print_details() {
 # Fonction pour exécuter une commande dans votre Minishell et Bash, puis comparer les résultats
 run_test() {
     command=$1
+    TOTALE=$(($TOTALE + 1))
     echo -n "Test: $command ... "
     local minishell_command=$(adjust_redirection "$command" "$MINISHELL_DIR")
     local bash_command=$(adjust_redirection "$command" "$BASH_DIR")
@@ -142,12 +154,14 @@ run_test() {
 # Tests
 echo "Running tests..."
 
-IFS=""
 
-while read -r LINE
+while IFS= read -r LINE
 do
-    run_test $LINE
+    run_test "$LINE"
 done < zzz
+# LINE=$(< tessst)
+# run_test "$LINE"
+printf "%d/%d\n" $NB_SUCESSES $TOTALE
 
 
 
