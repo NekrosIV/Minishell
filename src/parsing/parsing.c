@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/30 16:47:49 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/01 12:35:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	add_word(t_word **word, int token, char *str)
 
 void	init_tab_token_2(char *line, int *tab, int i)
 {
-	if (line[i] == ' ')
+	if (line[i] == ' ' || line[i] == '\t')
 		tab[i] = SPACES;
 	else if (line[i] == '\'')
 		tab[i] = SINGLE_QUOTE;

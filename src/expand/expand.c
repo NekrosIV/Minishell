@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/30 16:47:44 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/01 12:30:58 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	expand(t_var *var)
 			if (!tmp->prev)
 				var->lexer = tmp;
 		}
-		tmp = tmp->next;
+		else
+			tmp = tmp->next;
 	}
 }

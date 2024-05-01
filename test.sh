@@ -135,7 +135,7 @@ run_test() {
     tail -n +2  ./tests/minishell_full.test > ./tests/minishell_out.test
 
     # Comparer les sorties et les erreurs
-    out_diff=$(diff ./tests/minishell_out.test ./tests/bash_out.test)
+    out_diff=$(diff <(sed 's|minishell_output/||g' ./tests/minishell_out.test) <(sed 's|bash_output/||g' ./tests/bash_out.test))
     if [ "$bash_error_filtered" = "$minishell_error_filtered" ]; then
         err_diff="no_error"
     else
@@ -154,16 +154,34 @@ run_test() {
 # Tests
 echo "Running tests..."
 
+# while IFS= read -r LINE
+# do
+#     echo "$LINE"
+# done < testt.sh
 
-while IFS= read -r LINE
-do
-    run_test "$LINE"
-done < zzz
-# LINE=$(< tessst)
-# run_test "$LINE"
+end_of_file=0
+
+while [[ $end_of_file == 0 ]] ;
+           do 
+                tmp=$IFS
+                IFS=
+                read -r line
+                while [[ $end_of_file == 0 ]] && [[ $line != \#* ]] && [[ $line != "" ]] ;
+			                do
+				                INPUT+="$line$NL"
+				                read -r line
+				                end_of_file=$?
+				                ((line_count++))
+			                done
+                IFS=$tmp
+                run_test "$INPUT"
+            done < testt.sh
+
+# LINE=$(< testt.sh)
+# run_test "/bin/echo -n test1              test2"
 printf "%d/%d\n" $NB_SUCESSES $TOTALE
 
 
 
 # Nettoyage
-rm -rf tests $MINISHELL_DIR $BASH_DIR
+# rm -rf tests $MINISHELL_DIR $BASH_DIR

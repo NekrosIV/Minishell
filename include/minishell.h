@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/30 19:16:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/01 11:18:47 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 /* ************************************************************************** */
 # define RED "\033[38;5;160m"
 # define RESET "\033[00m"
-# define PROMPT "minirt>"
+# define PROMPT "minirt> "
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
 # define E_SYNTAX "syntax error near unexpected token "
