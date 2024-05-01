@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/01 11:18:47 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/01 16:41:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,13 +218,11 @@ void				exe_cmd(t_var *var);
 
 /*********************************** DUP.C **********************************/
 
-void				do_dup_in(int pipe_fd[2], int c_fd, int flag[3],
+int					do_dup_in2(int pipe_fd[2], int c_fd, t_word *tmp);
+int					do_dup_in(int pipe_fd[2], int c_fd, int flag[3],
 						t_word *tmp);
-void				do_dup_in2(int pipe_fd[2], int c_fd, int flag[3],
-						t_word *tmp);
-
-void				do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp);
-void				do_dup_out2(int pipe_fd[2], int flag[3], t_word *tmp);
+int					do_dup_out2(int pipe_fd[2], t_word *tmp);
+int					do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp);
 
 void				do_dup(int c_fd, int pipe_fd[2], int i, t_var *var);
 

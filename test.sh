@@ -31,7 +31,7 @@ BOLD='\033[1m'
 #Vérifier si 'valgrind' est passé en argument
 if [ "$1" = "valgrind" ]; then
     USE_VALGRIND=1
-    VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --verbose --log-file=./tests/valgrind_output.test --suppressions=readline.supp "
+    VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --log-file=./tests/valgrind_output.test --suppressions=readline.supp "
 else
     USE_VALGRIND=0
 fi
@@ -48,31 +48,50 @@ adjust_redirection() {
     local total=$(echo "$command" | wc -l)
 
     IFS="   "
-    for word in $command; do
-        if [[ "$word" == ">" ]]; then
-            new_command+="$word"
-            file=1
-        elif [[ "$word" == ">>" ]]; then
-            new_command+="$word"
-            file=1
-        elif [[ $file -eq 1 ]]; then
-            new_command+="$dir/$word"
-            file=0
+for word in $command; do
+    if [[ "$word" =~ ^([<>]{1,2})(.*)$ ]]; then
+        # Extraire les redirections et les noms de fichiers accolés
+        redirect="${BASH_REMATCH[1]}"  # Capture la redirection (>, >>, <)
+        filename="${BASH_REMATCH[2]}"  # Capture le nom de fichier suivant directement
+        if [[ -n "$filename" ]]; then  # Si un nom de fichier est attaché à la redirection
+            if [[ "$filename" == /* || "$redirect" == "<<" ]]; then
+                new_command+="$redirect$filename "
+            elif [[ "$filename" == \"* ]]; then
+                # Si le nom de fichier commence par un guillemet
+                new_command+="${redirect}\"$dir/${filename:1} "
+            else
+                new_command+="$redirect$dir/$filename "
+            fi
         else
-            new_command+="$word"
+            new_command+="$redirect "  # Ajoute juste la redirection, attend le prochain mot pour le fichier
+            if [[ "$redirect" != "<<" ]]; then
+                file=1
+            fi
         fi
-        i=$(($i + 1))
-        if [[ ! $i -eq $total ]]; then
-            new_command+=" "
+    elif [[ $file -eq 1 ]]; then
+        # Vérifier si le chemin est déjà absolu ou commence par un guillemet
+        if [[ "$word" == /* ]]; then
+            new_command+="$word "  # Ajouter le chemin absolu sans modification
+        elif [[ "$word" == \"* ]]; then
+            new_command+="\"$dir/${word:1} "  # Ajouter le dir après le guillemet ouvrant
+        else
+            new_command+="$dir/$word "  # Ajouter le chemin préfixé par $dir
         fi
-    done
-    IFS=$temp
-    echo "$new_command"
+        file=0  # Désactiver le flag après avoir ajouté le fichier
+    else
+        new_command+="$word "  # Ajouter le mot normal à la commande
+    fi
+    ((i++))
+done
+
+new_command="${new_command% }"  # Enlever l'espace final s'il y en a un
+IFS=$temp
+echo "$new_command"
 }
 
 
 print_result() {
-    local len=$((${#command} + 9))  # 9 caractères pour "TEST : "
+    local len=$((${#minishell_command} + 9))  # 9 caractères pour "TEST : "
     local total_len=75
     local padding=$(($total_len - $len))
 
@@ -80,10 +99,10 @@ print_result() {
        [ -z "$valgrind_check_fd" ] && [ -z "$valgrind_check_leak" ] &&
        [ "$minishell_status" -eq "$bash_status" ] &&
        [ "$minishell_files" = "$bash_files" ]; then
-        printf "\r${BOLD}${GREEN}TEST : %s %-${padding}s[OK]${RESET}\n" "$command"
+        printf "\r${BOLD}${GREEN}TEST : %s %-${padding}s[OK]${RESET}\n" "$minishell_command"
         NB_SUCESSES=$(($NB_SUCESSES + 1))
     else
-        printf "\r${BOLD}${RED}TEST : %s %-${padding}s[KO]${RESET}\n" "$command"
+        printf "\r${BOLD}${RED}TEST : %s %-${padding}s[KO]${RESET}\n" "$minishell_command"
         print_details
     fi
     
@@ -105,9 +124,9 @@ print_details() {
 run_test() {
     command=$1
     TOTALE=$(($TOTALE + 1))
-    echo -n "Test: $command ... "
     local minishell_command=$(adjust_redirection "$command" "$MINISHELL_DIR")
     local bash_command=$(adjust_redirection "$command" "$BASH_DIR")
+    echo -n "Test: $minishell_command ... "
     if [ $USE_VALGRIND -eq 1 ]; then
         # Exécuter la commande dans Minishell avec Valgrind et récupérer le statut
         echo -e "$minishell_command" | $VALGRIND_COMMAND $MINISHELL > ./tests/minishell_full.test 2> ./tests/minishell_err.test
@@ -148,40 +167,40 @@ run_test() {
 
     # Vérifier les résultats et imprimer le statut approprié
     print_result
-    rm -rf $MINISHELL_DIR/* $BASH_DIR/*
+    # rm -rf $MINISHELL_DIR/* $BASH_DIR/*
 }
 
 # Tests
 echo "Running tests..."
 
-# while IFS= read -r LINE
-# do
-#     echo "$LINE"
-# done < testt.sh
+while IFS= read -r LINE
+do
+    run_test "$LINE"
+done < zzz
 
 end_of_file=0
 
-while [[ $end_of_file == 0 ]] ;
-           do 
-                tmp=$IFS
-                IFS=
-                read -r line
-                while [[ $end_of_file == 0 ]] && [[ $line != \#* ]] && [[ $line != "" ]] ;
-			                do
-				                INPUT+="$line$NL"
-				                read -r line
-				                end_of_file=$?
-				                ((line_count++))
-			                done
-                IFS=$tmp
-                run_test "$INPUT"
-            done < testt.sh
+# while [[ $end_of_file == 0 ]] ;
+#            do 
+#                 tmp=$IFS
+#                 IFS=
+#                 read -r line
+#                 while [[ $end_of_file == 0 ]] && [[ $line != \#* ]] && [[ $line != "" ]] ;
+# 			                do
+# 				                INPUT+="$line$NL"
+# 				                read -r line
+# 				                end_of_file=$?
+# 				                ((line_count++))
+# 			                done
+#                 IFS=$tmp
+#                 run_test "$INPUT"
+#             done < testt.sh
 
-# LINE=$(< testt.sh)
-# run_test "/bin/echo -n test1              test2"
+LINE=$(< eof.sh)
+run_test "$LINE"
 printf "%d/%d\n" $NB_SUCESSES $TOTALE
 
 
 
 # Nettoyage
-# rm -rf tests $MINISHELL_DIR $BASH_DIR
+rm -rf tests $MINISHELL_DIR $BASH_DIR
