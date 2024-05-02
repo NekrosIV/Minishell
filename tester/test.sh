@@ -2,7 +2,7 @@
 
 
 # Chemin vers votre Minishell
-MINISHELL="./minishell"
+MINISHELL="../minishell"
 MINISHELL_DIR="minishell_output"
 BASH_DIR="bash_output"
 # Création des dossiers pour stocker les fichiers créés par Minishell et Bash
@@ -86,23 +86,30 @@ done
 
 new_command="${new_command% }"  # Enlever l'espace final s'il y en a un
 IFS=$temp
+
+if [[ "$dir" == "$MINISHELL_DIR" ]]; then
+    echo "$new_command" >> vm.txt
+fi
 echo "$new_command"
+
 }
 
 
 print_result() {
-    local len=$((${#minishell_command} + 9))  # 9 caractères pour "TEST : "
+
+    local len=$((${#command} + 9))  # 9 caractères pour "TEST : "
     local total_len=75
     local padding=$(($total_len - $len))
 
+    # Positionner le curseur correctement pour l'affichage du résultat
     if [ -z "$out_diff" ] && [ "$err_diff" = "no_error" ] &&
        [ -z "$valgrind_check_fd" ] && [ -z "$valgrind_check_leak" ] &&
        [ "$minishell_status" -eq "$bash_status" ] &&
        [ "$minishell_files" = "$bash_files" ]; then
-        printf "\r${BOLD}${GREEN}TEST : %s %-${padding}s[OK]${RESET}\n" "$minishell_command"
+        printf "\r${BOLD}${GREEN}TEST[%d] : %s %-${padding}s[OK]${RESET}\n" "$TOTALE" "$command"
         NB_SUCESSES=$(($NB_SUCESSES + 1))
     else
-        printf "\r${BOLD}${RED}TEST : %s %-${padding}s[KO]${RESET}\n" "$minishell_command"
+        printf "\r${BOLD}${RED}TEST[%d] : %s %-${padding}s[KO]${RESET}\n"  "$TOTALE"  "$command"
         print_details
     fi
     
@@ -124,9 +131,10 @@ print_details() {
 run_test() {
     command=$1
     TOTALE=$(($TOTALE + 1))
-    local minishell_command=$(adjust_redirection "$command" "$MINISHELL_DIR")
-    local bash_command=$(adjust_redirection "$command" "$BASH_DIR")
-    echo -n "Test: $minishell_command ... "
+    local minishell_command=$command
+    local bash_command=$(printf "%s" "$command" | sed "s|minishell_output/|$BASH_DIR/|g")
+
+    printf "Test[%d] : %s ... " "$TOTALE" "$command"
     if [ $USE_VALGRIND -eq 1 ]; then
         # Exécuter la commande dans Minishell avec Valgrind et récupérer le statut
         echo -e "$minishell_command" | $VALGRIND_COMMAND $MINISHELL > ./tests/minishell_full.test 2> ./tests/minishell_err.test
@@ -167,7 +175,6 @@ run_test() {
 
     # Vérifier les résultats et imprimer le statut approprié
     print_result
-    # rm -rf $MINISHELL_DIR/* $BASH_DIR/*
 }
 
 # Tests
@@ -176,28 +183,12 @@ echo "Running tests..."
 while IFS= read -r LINE
 do
     run_test "$LINE"
-done < zzz
-
-end_of_file=0
-
-# while [[ $end_of_file == 0 ]] ;
-#            do 
-#                 tmp=$IFS
-#                 IFS=
-#                 read -r line
-#                 while [[ $end_of_file == 0 ]] && [[ $line != \#* ]] && [[ $line != "" ]] ;
-# 			                do
-# 				                INPUT+="$line$NL"
-# 				                read -r line
-# 				                end_of_file=$?
-# 				                ((line_count++))
-# 			                done
-#                 IFS=$tmp
-#                 run_test "$INPUT"
-#             done < testt.sh
+done < vm.txt
 
 LINE=$(< eof.sh)
 run_test "$LINE"
+
+
 printf "%d/%d\n" $NB_SUCESSES $TOTALE
 
 

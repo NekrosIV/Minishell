@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/01 16:41:44 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/02 14:59:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef enum e_token
 	CMD,
 	QUOTE_CMD,
 	DOL,
+	TABULATION,
 	END
 }					t_token;
 
