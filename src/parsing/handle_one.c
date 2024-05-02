@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/02 15:10:00 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/02 16:58:25 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	handle_quotes(t_var *var, int *i)
 	}
 	else
 	{
-		if(var->line[start] == '\'')
+		if (var->line[start] == '\'')
 			token = SINGLE_QUOTE;
 		else
 			token = DOUBLE_QUOTE;
@@ -102,23 +102,6 @@ void	handle_quotes(t_var *var, int *i)
 			free_error(var, E_MALLOC, "add_word", 1);
 	}
 }
-
-void  handle_tabu(t_var *var, int *tab,int *i)
-{
-	int		start;
-	char	*str;
-
-	start = *i;
-	(*i)++;
-	while (tab[(*i)] != END && tab[(*i)] == TABULATION)
-		(*i)++;
-	str = ft_strndup(var->line, *i, start);
-	if (!str)
-		free_error(var, E_MALLOC, "str", 1);
-	if (add_word(&var->lexer, TABULATION, str) == -1)
-		free_error(var, E_MALLOC, "add_word", 1);
-}
-
 
 void	handle_token(t_var *var, int *tab, int i)
 {
@@ -132,10 +115,8 @@ void	handle_token(t_var *var, int *tab, int i)
 			handle_redir_out(var, &i);
 		else if (tab[i] == SINGLE_QUOTE || tab[i] == DOUBLE_QUOTE)
 			handle_quotes(var, &i);
-		else if (tab[i] == SPACES)
+		else if (tab[i] == SPACES || tab[i] == TABULATION)
 			handle_space(var, &i);
-		else if (tab[i] == TABULATION)
-			handle_tabu(var, tab,&i);
 		else if (tab[i] == DOL)
 			handle_dol(var, &i, tab);
 		else
