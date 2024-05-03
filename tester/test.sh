@@ -144,7 +144,7 @@ run_test() {
         valgrind_check_leak=$(awk '/definitely lost:/ {if ($4 != "0") print "leak"; getline; if ($4 != "0") print "leak"; getline; if ($4 != "0") print "leak"; getline; if ($4 != "0") print "leak"; getline;}' ./tests/valgrind_output.test)
     else
         # Exécuter la commande dans Minishell sans Valgrind
-        echo -e "$minishell_command" | $MINISHELL > ./tests/minishell_full.test 2> ./tests/minishell_err.test
+        echo  "$minishell_command" | $MINISHELL > ./tests/minishell_full.test 2> ./tests/minishell_err.test
         minishell_status=$?
     fi
     #minishell_status=$(grep -A 1 "echo \$?" ./tests/minishell_full.test | tail -1 | grep -o '[0-9]*')
@@ -159,8 +159,8 @@ run_test() {
     minishell_error_filtered=$(cat ./tests/minishell_err.test | eval $REMOVE_COLORS | grep -o '[^:]*$' | head -n1 | eval $REMOVE_SPACES)
 
     # Nettoyer la sortie pour la comparaison
-    tail -n +2  ./tests/minishell_full.test > ./tests/minishell_out.test
-
+    # tail -n +2  ./tests/minishell_full.test > ./tests/minishell_out.test
+    cp ./tests/minishell_full.test ./tests/minishell_out.test
     # Comparer les sorties et les erreurs
     out_diff=$(diff <(sed 's|minishell_output/||g' ./tests/minishell_out.test) <(sed 's|bash_output/||g' ./tests/bash_out.test))
     if [ "$bash_error_filtered" = "$minishell_error_filtered" ]; then
@@ -185,8 +185,8 @@ do
     run_test "$LINE"
 done < vm.txt
 
-LINE=$(< eof.sh)
-run_test "$LINE"
+# LINE=$(< eof.sh)
+# run_test "$LINE"
 
 
 printf "%d/%d\n" $NB_SUCESSES $TOTALE

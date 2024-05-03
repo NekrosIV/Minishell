@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/01 15:37:40 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/03 17:49:52 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	free_list_lexer(t_word **lexer)
 		{
 			// ft_putendl_fd(current->word, 2);
 			temp = current->next;
-			if (current->token == HERE_DOC)
-				unlink(current->word);
+			// if (current->token == HERE_DOC)
+			// 	unlink(current->word);
 			free(current->word);
 			free(current);
 			current = temp;

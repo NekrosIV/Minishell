@@ -141,7 +141,7 @@ cat <minishell_output/minishell.h>outfile
 cat <minishell_output/minishell.h|ls
 /bin/echo 42 > minishell_output/tmp_redir_out 42
 cat > minishell_output/tmp_redir_out
-/bin/echo "cat this text\\n" > minishell_output/tmp_redir_out
+/bin/echo "cat this text\n" > minishell_output/tmp_redir_out
 cat <minishell_output/tmp_redir_out
 cat | cat | ls
 cat < /dev/null

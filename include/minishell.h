@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/02 14:59:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/03 14:08:53 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_env
 
 typedef struct s_word
 {
+	bool			here_doc_expand;
 	int				token;
 	char			*word;
 	struct s_word	*prev;
@@ -101,6 +102,7 @@ typedef struct s_var
 
 /* ****************************** MAIN_UTILS.C ****************************** */
 
+void				get_line(t_var *var);
 t_var				*init_var(t_env **envs, int exit_statut);
 
 /* ************************************************************************** */
@@ -176,6 +178,7 @@ int					ft_isgoodchar(char c);
 /* ******************************** EXPAND.C ******************************** */
 
 void				replace_dol(t_word *tmp, char *str);
+char				*find_in_env(char *str, t_var *var);
 void				find_and_replace(t_word *tmp, t_var *var);
 void				expand_quoted_cmds(t_var *var);
 void				init_quoted_cmd(t_word *tmp, t_var *var);
@@ -203,7 +206,7 @@ void				fill_tab(t_var *var, char **word);
 
 /******************************* BEFOR_EXEX.C *******************************/
 
-void				loop_here_doc(char *eof, int fd, char *end_of_line);
+void				loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var);
 int					here_doc(t_word *tmp, t_var *var);
 void				do_here_doc(t_var *var);
 void				before_exe(t_var *var);

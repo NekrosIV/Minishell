@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/02 17:03:10 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/03 14:09:21 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	add_word(t_word **word, int token, char *str)
 	new_word = malloc(sizeof(t_word));
 	if (!new_word)
 		return (-1);
+	new_word->here_doc_expand = true;
 	new_word->word = str;
 	new_word->token = token;
 	new_word->next = NULL;

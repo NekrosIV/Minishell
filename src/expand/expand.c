@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/01 12:30:58 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/03 15:40:17 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,43 @@ void	replace_dol(t_word *tmp, char *str)
 		free_error(NULL, E_MALLOC, "find_and_replace", 1);
 	tmp->token = CMD;
 }
+char	*find_in_env(char *str, t_var *var)
+{
+	t_env	*envp;
+	int		len;
+	char	*result;
+
+	envp = var->env;
+	len = ft_strlen(str);
+	result = NULL;
+	while (envp)
+	{
+		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
+			- 1] == '=')
+		{
+			result = ft_strdup(&envp->line[len]);
+			if (!result)
+				free_error(var, E_MALLOC, "find_in_env", 1);
+		}
+		envp = envp->next;
+	}
+	return (result);
+}
 
 void	find_and_replace(t_word *tmp, t_var *var)
 {
 	t_env	*envp;
 	int		len;
+	char	*str;
 
 	envp = var->env;
-	len = ft_strlen(tmp->word);
 	if (ft_strncmp(tmp->word, "$?", 2) == 0)
 		replace_dol(tmp, ft_itoa(var->status));
 	else
 	{
-		while (envp)
-		{
-			if (ft_strncmp(&tmp->word[1], envp->line, len - 1) == 0
-				&& envp->line[len - 1] == '=')
-				replace_dol(tmp, ft_strdup(&envp->line[len]));
-			envp = envp->next;
-		}
+		str = find_in_env(tmp->word, var);
+		if (str)
+			replace_dol(tmp, str);
 	}
 }
 

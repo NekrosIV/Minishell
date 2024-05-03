@@ -6,16 +6,19 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/30 19:25:06 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/03 18:03:19 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	loop_here_doc(char *eof, int fd, char *end_of_line)
+void	loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var)
 {
 	char	*line;
+	char	*expanded_line;
+	char	*tmp_line;
 
+	(expanded_line = NULL, line = NULL, tmp_line = NULL);
 	while (1)
 	{
 		if (isatty(0))
@@ -27,11 +30,26 @@ void	loop_here_doc(char *eof, int fd, char *end_of_line)
 			{
 				ft_putstr_fd("\nhere-document delimited ", 2);
 				ft_putstr_fd("by end-of-file (wanted `", 2);
-				ft_putstr_fd(end_of_line, 2);
+				ft_putstr_fd(tmp->word, 2);
 				ft_putendl_fd("')", 2);
 			}
 			free(line);
 			break ;
+		}
+		if (tmp->here_doc_expand == true && ft_strchr(line, '$') != NULL)
+		{
+			tmp_line = ft_strtrim(line, "\n");
+			if (!tmp_line)
+				(free(line), free_error(var, E_MALLOC, "tmp_line", 1));
+			expanded_line = find_in_env(tmp_line, var);
+			(free(line), free(tmp_line));
+			if (!expanded_line)
+				line = ft_strdup("\n");
+			else
+				line = ft_strjoin(expanded_line, "\n");
+			if (!line)
+				(free(expanded_line), free_error(var, E_MALLOC, "line", 1));
+			free(expanded_line);
 		}
 		write(fd, line, ft_strlen(line));
 		free(line);
@@ -58,7 +76,7 @@ int	here_doc(t_word *tmp, t_var *var)
 	eof = ft_strjoin(tmp->word, "\n");
 	if (!eof)
 		return (free(nb), free_error(var, E_MALLOC, "eof", 1), -1);
-	loop_here_doc(eof, fd, tmp->word);
+	loop_here_doc(eof, fd, tmp, var);
 	free(tmp->word);
 	tmp->word = file_name;
 	return (free(eof), free(nb), close(fd), 1);
