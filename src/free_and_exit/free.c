@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/03 17:49:52 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/04 14:51:50 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	free_error(t_var *var, char *error, char *fautif, int ff)
 	if (ff >= 0 && var)
 		var->exit = true;
 	if (var && ff < 0)
-		var->status = 1 * -ff;
+		exit_status = 1 * -ff;
 	if (var && ff >= 0)
 		free_var(var);
 	if (error)

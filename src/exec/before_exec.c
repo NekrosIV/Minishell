@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/03 18:03:19 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/04 18:38:18 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void	loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var)
 		if (isatty(0))
 			ft_putstr_fd("here_doc> ", 1);
 		line = get_next_line(0);
+		if (exit_status == -999)
+		{
+			free(line);
+			break ;
+		}
 		if (!line || ft_strncmp(line, eof, ft_strlen(line)) == 0)
 		{
 			if (!line)
@@ -64,10 +69,11 @@ int	here_doc(t_word *tmp, t_var *var)
 	char		*file_name;
 	char		*nb;
 
+	exit_status = 0;
 	nb = ft_itoa(i++);
 	if (!nb)
 		return (free_error(var, E_MALLOC, "nb", 1), -1);
-	file_name = ft_strjoin("/tmp/here_doc_", nb);
+	file_name = ft_strjoin("here_doc_", nb);
 	if (!file_name)
 		return (free(nb), free_error(var, E_MALLOC, "file_name", 1), -1);
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -79,19 +85,43 @@ int	here_doc(t_word *tmp, t_var *var)
 	loop_here_doc(eof, fd, tmp, var);
 	free(tmp->word);
 	tmp->word = file_name;
-	return (free(eof), free(nb), close(fd), 1);
+	return (free(eof), free(nb), close(fd), exit_status);
+}
+void	sigint_handler_here_doc(int signum)
+{
+	(void)signum;
+	close(0);
+	exit_status = -999;
 }
 
 void	do_here_doc(t_var *var)
 {
 	t_word	*tmp;
+	pid_t	pid;
+	int		e_xit;
 
 	tmp = var->lexer;
+	e_xit = 0;
+	signal(SIGINT, &sigint_handler_child);
 	while (tmp && var->error == false)
 	{
 		if (tmp->token == HERE_DOC)
 		{
-			if (here_doc(tmp, var) == -1)
+			pid = fork();
+			if (pid == -1)
+				return (free_error(var, "fork failed", "do_here_doc", 1));
+			if (pid == 0)
+			{
+				signal(SIGINT, &sigint_handler_here_doc);
+				e_xit = here_doc(tmp, var);
+				if (e_xit == -999)
+					e_xit = 130;
+				var->exit = true;
+				free_var(var);
+				exit(e_xit);
+			}
+			exit_status = wait_for_child(pid);
+			if (exit_status != 0)
 				var->error = true;
 		}
 		tmp = tmp->next;
@@ -102,6 +132,7 @@ void	before_exe(t_var *var)
 {
 	if (node_cmp_token(var->lexer, HERE_DOC) == 1)
 		do_here_doc(var);
+	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
 		expand(var);
 	if (var->error == false)

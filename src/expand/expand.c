@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/03 15:40:17 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/04 14:51:22 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	find_and_replace(t_word *tmp, t_var *var)
 
 	envp = var->env;
 	if (ft_strncmp(tmp->word, "$?", 2) == 0)
-		replace_dol(tmp, ft_itoa(var->status));
+		replace_dol(tmp, ft_itoa(exit_status));
 	else
 	{
 		str = find_in_env(tmp->word, var);

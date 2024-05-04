@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/03 14:08:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/04 16:52:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -83,12 +84,14 @@ typedef struct s_var
 	char			**envp;
 	bool			exit;
 	bool			error;
-	int				status;
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
 	t_env			*env;
 }					t_var;
+
+/* ************************************************************************** */
+extern int			exit_status;
 
 /*                            FUNCTION PROTOTYPES                             */
 
@@ -266,6 +269,14 @@ void				free_split(char **tab);
 /********************************** EXIT.C **********************************/
 
 void				check_exit(t_var *var);
+
+/****************************************************************************/
+/*                                  SIGNAL                                  */
+/****************************************************************************/
+
+/********************************* SIGNAL.C *********************************/
+
+void				sigint_handler_child(int sig);
 
 /****************************************************************************/
 

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/30 16:39:54 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/04 14:51:03 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	fork_loop(t_var *var, int nb_cmd)
 		i++;
 		del_cmd(&var->lexer);
 	}
-	var->status = wait_for_child(pid);
+	exit_status = wait_for_child(pid);
 	return (close(pipe_fd[0]), 0);
 }
 
