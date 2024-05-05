@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 10:14:58 by kasingh           #+#    #+#             */
-/*   Updated: 2024/02/15 18:01:35 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 17:02:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,8 @@ char	*get_next_line(int fd)
 		return (0);
 	bytes_read = 1;
 	storage = NULL;
-	if (ft_strchr_gnl(buffer, '\n') != 0)
+	if (ft_strchr_gnl(buffer, '\n') != 0 && ft_strlen(ft_strchr_gnl(buffer,
+				'\n') + 1) > 0)
 	{
 		storage = ft_strdup_gnl(ft_strchr_gnl(buffer, '\n') + 1);
 		ft_new_strcpy(buffer);

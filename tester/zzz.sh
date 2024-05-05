@@ -1,1 +1,4 @@
-/bin/echo -n test1	 test2
+cat << $USER
+why
+not
+$USER

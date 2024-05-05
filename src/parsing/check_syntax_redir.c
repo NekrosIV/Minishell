@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/03 17:48:06 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:07:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ char	*ft_strjoin_tword(t_word *tmp, t_var *var, int token)
 			else if (tmp->token == DOUBLE_QUOTE)
 				init_quoted_cmd(tmp, var);
 		}
-		// if (token == HERE_DOC && (tmp->token == DOUBLE_QUOTE
-		// 		|| tmp->token == SINGLE_QUOTE))
-		// 	head->here_doc_expand = false;
+		if (token == HERE_DOC && (tmp->token == DOUBLE_QUOTE
+				|| tmp->token == SINGLE_QUOTE))
+			head->here_doc_expand = false;
 		if (tmp->token != DOL || token == HERE_DOC)
 		{
 			while (tmp->word[j])

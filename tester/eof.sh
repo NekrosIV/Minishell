@@ -1,5 +1,4 @@
-cat <<EOF
-POS
-KIKIK
-LOLOL
-EOF
+cat << $USER
+why
+not
+$USER

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/04 14:52:07 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 17:16:20 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ t_var	*init_var(t_env **envs, int exit_statut)
 	var->envp = NULL;
 	var->env = *envs;
 	var->quoted_cmds = NULL;
+	var->here_doc_count = 0;
 	return (var);
 }

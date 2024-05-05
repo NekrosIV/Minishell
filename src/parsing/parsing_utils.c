@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:57:26 by kasingh           #+#    #+#             */
-/*   Updated: 2024/04/30 20:09:31 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 15:56:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ void	del_tword(t_word **word)
 		prev->next = (*word);
 	}
 	(*word)->prev = prev;
-	if (temp->token == HERE_DOC && !ft_strncmp(temp->word, "<<", 2))
-		unlink(temp->word);
 	free(temp->word);
 	free(temp);
 }

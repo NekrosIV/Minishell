@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/04 14:51:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 17:37:38 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	char	**env;
 	char	**cmd;
 
+	signal(SIGQUIT, SIG_DFL);
 	do_dup(c_fd, pipe_fd, i, var);
-	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer, SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
+	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer,
+			SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
 		free_error(var, NULL, NULL, 0);
 	env = split_env(var->env);
 	if (!env)
@@ -110,7 +112,7 @@ int	fork_loop(t_var *var, int nb_cmd)
 		del_cmd(&var->lexer);
 	}
 	exit_status = wait_for_child(pid);
-	return (close(pipe_fd[0]), 0);
+	return (close(pipe_fd[0]), unlink_here_doc(var), 0);
 }
 
 void	exe_cmd(t_var *var)

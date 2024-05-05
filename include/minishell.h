@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/04 16:52:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:35:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_word
 
 typedef struct s_var
 {
+	int				here_doc_count;
 	char			*line;
 	char			**envp;
 	bool			exit;
@@ -210,7 +211,7 @@ void				fill_tab(t_var *var, char **word);
 /******************************* BEFOR_EXEX.C *******************************/
 
 void				loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var);
-int					here_doc(t_word *tmp, t_var *var);
+int					here_doc(t_word *tmp, t_var *var, char *file_name);
 void				do_here_doc(t_var *var);
 void				before_exe(t_var *var);
 
@@ -265,6 +266,7 @@ void				free_list_env(t_env **env);
 void				free_var(t_var *var);
 void				free_error(t_var *var, char *error, char *fautif, int ff);
 void				free_split(char **tab);
+void				unlink_here_doc(t_var *var);
 
 /********************************** EXIT.C **********************************/
 

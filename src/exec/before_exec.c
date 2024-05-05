@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/04 18:38:18 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:37:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,31 +61,21 @@ void	loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var)
 	}
 }
 
-int	here_doc(t_word *tmp, t_var *var)
+int	here_doc(t_word *tmp, t_var *var, char *file_name)
 {
-	char		*eof;
-	static int	i = 0;
-	int			fd;
-	char		*file_name;
-	char		*nb;
+	char	*eof;
+	int		fd;
 
 	exit_status = 0;
-	nb = ft_itoa(i++);
-	if (!nb)
-		return (free_error(var, E_MALLOC, "nb", 1), -1);
-	file_name = ft_strjoin("here_doc_", nb);
-	if (!file_name)
-		return (free(nb), free_error(var, E_MALLOC, "file_name", 1), -1);
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		return (free(nb), free(file_name), perror("here_doc :"), -1);
+		return (free(file_name), perror("here_doc :"), -1);
+	free(file_name);
 	eof = ft_strjoin(tmp->word, "\n");
 	if (!eof)
-		return (free(nb), free_error(var, E_MALLOC, "eof", 1), -1);
+		return (free_error(var, E_MALLOC, "eof", 1), -1);
 	loop_here_doc(eof, fd, tmp, var);
-	free(tmp->word);
-	tmp->word = file_name;
-	return (free(eof), free(nb), close(fd), exit_status);
+	return (free(eof), close(fd), exit_status);
 }
 void	sigint_handler_here_doc(int signum)
 {
@@ -94,35 +84,55 @@ void	sigint_handler_here_doc(int signum)
 	exit_status = -999;
 }
 
+void	fork_here_doc(t_var *var, t_word *tmp, char *file_name)
+{
+	pid_t	pid;
+	int		e_xit;
+
+	pid = fork();
+	if (pid == -1)
+		return (free_error(var, "fork failed", "do_here_doc", 1));
+	if (pid == 0)
+	{
+		signal(SIGINT, &sigint_handler_here_doc);
+		e_xit = here_doc(tmp, var, file_name);
+		if (e_xit == -999)
+			e_xit = 130;
+		var->exit = true;
+		free_var(var);
+		exit(e_xit);
+	}
+	free(tmp->word);
+	tmp->word = file_name;
+	exit_status = wait_for_child(pid);
+	if (exit_status != 0)
+	{
+		unlink(tmp->word);
+		var->error = true;
+	}
+}
+
 void	do_here_doc(t_var *var)
 {
 	t_word	*tmp;
 	pid_t	pid;
-	int		e_xit;
+	char	*nb;
+	char	*file_name;
 
 	tmp = var->lexer;
-	e_xit = 0;
 	signal(SIGINT, &sigint_handler_child);
 	while (tmp && var->error == false)
 	{
 		if (tmp->token == HERE_DOC)
 		{
-			pid = fork();
-			if (pid == -1)
-				return (free_error(var, "fork failed", "do_here_doc", 1));
-			if (pid == 0)
-			{
-				signal(SIGINT, &sigint_handler_here_doc);
-				e_xit = here_doc(tmp, var);
-				if (e_xit == -999)
-					e_xit = 130;
-				var->exit = true;
-				free_var(var);
-				exit(e_xit);
-			}
-			exit_status = wait_for_child(pid);
-			if (exit_status != 0)
-				var->error = true;
+			nb = ft_itoa(var->here_doc_count++);
+			if (!nb)
+				free_error(var, E_MALLOC, "nb", 1);
+			file_name = ft_strjoin("here_doc_", nb);
+			if (!file_name)
+				free_error(var, E_MALLOC, "file_name", 1);
+			free(nb);
+			fork_here_doc(var, tmp, file_name);
 		}
 		tmp = tmp->next;
 	}
