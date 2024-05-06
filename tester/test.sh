@@ -180,13 +180,13 @@ run_test() {
 # Tests
 echo "Running tests..."
 
-# while IFS= read -r LINE
-# do
-#     run_test "$LINE"
-# done < vm.txt
+while IFS= read -r LINE
+do
+    run_test "$LINE"
+done < vm.txt
 
-LINE=$(< eof.sh)
-run_test "$LINE"
+# LINE=$(< eof.sh)
+# run_test "$LINE"
 
 
 printf "%d/%d\n" $NB_SUCESSES $TOTALE

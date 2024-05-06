@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/05 16:37:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/06 16:28:40 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ void	before_exe(t_var *var)
 	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
 		expand(var);
+	print_list(var->lexer);
 	if (var->error == false)
 		exe_cmd(var);
 }

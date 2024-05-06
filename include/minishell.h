@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/05 16:35:55 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/06 17:12:00 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ typedef enum e_token
 	CMD,
 	QUOTE_CMD,
 	DOL,
-	TABULATION,
+	OR,
+	AND,
+	PARENT_OPEN,
+	PARENT_CLOSE,
 	END
 }					t_token;
 
@@ -131,7 +134,7 @@ int					count_node_env(t_env *env);
 /* ******************************** PARSING.C ******************************* */
 
 int					add_word(t_word **word, int token, char *str);
-void				init_tab_token_2(char *line, int *tab, int i);
+void				init_tab_token_2(char *line, int *tab, int *i);
 int					*init_tab_token(char *line, int i);
 void				parsing(t_var *var);
 

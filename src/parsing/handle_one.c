@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/02 16:58:25 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/06 15:53:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,44 @@ void	handle_quotes(t_var *var, int *i)
 	}
 }
 
+void	handle_or_and(t_var *var, int *i, int *tab)
+{
+	char	*str;
+	int		start;
+	int		token;
+
+	start = *i;
+	if (tab[start] == OR)
+		token = OR;
+	else
+		token = AND;
+	(*i) += 2;
+	str = ft_strndup(var->line, *i, start);
+	if (!str)
+		free_error(var, E_MALLOC, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(var, E_MALLOC, "add_word", 1);
+}
+
+void	handle_parent(t_var *var, int *i, int *tab)
+{
+	char	*str;
+	int		start;
+	int		token;
+
+	start = *i;
+	if (tab[start] == PARENT_OPEN)
+		token = PARENT_OPEN;
+	else
+		token = PARENT_CLOSE;
+	(*i)++;
+	str = ft_strndup(var->line, *i, start);
+	if (!str)
+		free_error(var, E_MALLOC, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(var, E_MALLOC, "add_word", 1);
+}
+
 void	handle_token(t_var *var, int *tab, int i)
 {
 	while (tab[i] != END)
@@ -115,10 +153,14 @@ void	handle_token(t_var *var, int *tab, int i)
 			handle_redir_out(var, &i);
 		else if (tab[i] == SINGLE_QUOTE || tab[i] == DOUBLE_QUOTE)
 			handle_quotes(var, &i);
-		else if (tab[i] == SPACES || tab[i] == TABULATION)
+		else if (tab[i] == SPACES)
 			handle_space(var, &i);
 		else if (tab[i] == DOL)
 			handle_dol(var, &i, tab);
+		else if (tab[i] == OR || tab[i] == AND)
+			handle_or_and(var, &i, tab);
+		else if (tab[i] == PARENT_OPEN || tab[i] == PARENT_CLOSE)
+			handle_parent(var, &i, tab);
 		else
 			handle_char(var, &i, tab);
 	}
