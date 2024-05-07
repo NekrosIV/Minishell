@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:46:34 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/27 17:14:31 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/07 16:13:04 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 
 void	check_syntax(t_var *var)
 {
-	if (check_syntax_pipe(var->lexer, var) == -1)
+	if (check_syntax_parenth(var->lexer, var) == -1)
+		var->error = true;
+	else if (check_syntax_or_and(var->lexer, var) == -1)
+		var->error = true;
+	else if (check_syntax_pipe(var->lexer, var) == -1)
 		var->error = true;
 	else if (check_syntax_redir(var) == -1)
 		var->error = true;

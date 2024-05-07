@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/06 17:12:00 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/07 16:12:39 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ typedef enum e_token
 	DOL,
 	OR,
 	AND,
-	PARENT_OPEN,
-	PARENT_CLOSE,
+	PARENTH_OPEN,
+	PARENTH_CLOSE,
 	END
 }					t_token;
 
@@ -168,6 +168,12 @@ bool				check_token(t_word *tmp, t_word *start, t_var *var);
 t_word				*trim_rout(t_word *start, t_var *var);
 t_word				*check_and_trim(t_word *start, t_var *var);
 int					check_syntax_redir(t_var *var);
+
+/* *************************** CHECK_SYNTAX_OR_AND.C ************************ */
+
+int					check_pipe(t_word *tmp, bool dir);
+int					check_syntax_or_and(t_word *lexer, t_var *var);
+int					check_syntax_parenth(t_word *lexer, t_var *var);
 
 /* ***************************** PARSING_UTILS.C **************************** */
 

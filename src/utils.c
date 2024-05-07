@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/06 15:55:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/07 13:37:13 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	print_list(t_word *word)
 			printf("token: AND\n");
 		else if (word->token == OR)
 			printf("token: OR\n");
-		else if (word->token == PARENT_OPEN)
-			printf("token: PARENT_OPEN\n");
-		else if (word->token == PARENT_CLOSE)
-			printf("token: PARENT_CLOSE\n");
+		else if (word->token == PARENTH_OPEN)
+			printf("token: PARENTH_OPEN\n");
+		else if (word->token == PARENTH_CLOSE)
+			printf("token: PARENTH_CLOSE\n");
 		else if (word->token == END)
 			printf("token: END\n");
 		word = word->next;

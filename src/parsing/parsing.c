@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/06 16:53:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/07 13:37:13 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ void	init_tab_token_2(char *line, int *tab, int *count)
 	else if (line[i] == '&' && line[i + 1] == '&')
 		(tab[i] = AND, i++);
 	else if (line[i] == '(')
-		tab[i] = PARENT_OPEN;
+		tab[i] = PARENTH_OPEN;
 	else if (line[i] == ')')
-		tab[i] = PARENT_CLOSE;
+		tab[i] = PARENTH_CLOSE;
 	else
 		tab[i] = CHAR;
 	*count = i;

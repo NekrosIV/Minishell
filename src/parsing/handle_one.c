@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/06 15:53:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/07 13:37:13 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,10 @@ void	handle_parent(t_var *var, int *i, int *tab)
 	int		token;
 
 	start = *i;
-	if (tab[start] == PARENT_OPEN)
-		token = PARENT_OPEN;
+	if (tab[start] == PARENTH_OPEN)
+		token = PARENTH_OPEN;
 	else
-		token = PARENT_CLOSE;
+		token = PARENTH_CLOSE;
 	(*i)++;
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
@@ -159,7 +159,7 @@ void	handle_token(t_var *var, int *tab, int i)
 			handle_dol(var, &i, tab);
 		else if (tab[i] == OR || tab[i] == AND)
 			handle_or_and(var, &i, tab);
-		else if (tab[i] == PARENT_OPEN || tab[i] == PARENT_CLOSE)
+		else if (tab[i] == PARENTH_OPEN || tab[i] == PARENTH_CLOSE)
 			handle_parent(var, &i, tab);
 		else
 			handle_char(var, &i, tab);

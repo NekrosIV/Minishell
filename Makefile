@@ -33,6 +33,7 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(MAIN_DIR)/main_utils.c \
       $(MAIN_DIR)/main.c \
       $(PARSING_DIR)/check_syntax_pipe.c \
+      $(PARSING_DIR)/check_syntax_bonus.c \
       $(PARSING_DIR)/check_syntax_redir.c \
       $(PARSING_DIR)/check_syntax.c \
       $(PARSING_DIR)/handle_one.c \
