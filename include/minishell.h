@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/07 16:12:39 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/09 21:12:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # define E_SYNTAX "syntax error near unexpected token "
 # define E_PIPE "Error: pipe failed\n"
 # define E_REDIR "ambiguous redirect : "
+# define E_EOF "unexpected EOF while looking for matching "
+# define E_S_EOF "syntax error : unexpected EOF\n"
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -84,10 +86,13 @@ typedef struct s_word
 typedef struct s_var
 {
 	int				here_doc_count;
+	pid_t			last_pid;
 	char			*line;
 	char			**envp;
 	bool			exit;
 	bool			error;
+	bool			execute_next;
+	bool			bonus_cmd;
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
@@ -174,6 +179,7 @@ int					check_syntax_redir(t_var *var);
 int					check_pipe(t_word *tmp, bool dir);
 int					check_syntax_or_and(t_word *lexer, t_var *var);
 int					check_syntax_parenth(t_word *lexer, t_var *var);
+t_word				*end_of_parenth(t_word *lexer);
 
 /* ***************************** PARSING_UTILS.C **************************** */
 

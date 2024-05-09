@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:10:54 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/08 18:35:36 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/09 19:44:34 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,14 @@ int	check_parenth_close(t_word *tmp, t_var *var)
 		else if (tmp->token == PARENTH_CLOSE)
 			count--;
 		if (count < 0)
-			return (free_error(var, E_SYNTAX, ")", -2), -1);
+			break ;
 		tmp = tmp->next;
 	}
 	if (count != 0)
-		return (free_error(var, E_SYNTAX, ")", -2), -1);
+	{
+		free_error(NULL, E_EOF, ")", -2);
+		return (free_error(NULL, E_S_EOF, NULL, -2), -1);
+	}
 	return (0);
 }
 
@@ -165,6 +168,8 @@ t_word	*end_of_parenth(t_word *lexer)
 	int		count;
 	t_word	*tmp;
 
+	if (lexer->token == PARENTH_CLOSE)
+		return (lexer);
 	count = 1;
 	tmp = lexer->next;
 	while (tmp)
@@ -211,27 +216,8 @@ int	check_out_pareth(t_word *lexer, t_var *var)
 		return (-1);
 	return (0);
 }
-
-int	check_in_parenth(t_word *lexer, t_var *var)
+int	check_in_parenth2(t_word *tmp, bool cmd, bool parenthsis)
 {
-	t_word	*tmp;
-	bool	parenthesis;
-
-	tmp = lexer->next;
-	parenthesis = false;
-	while (tmp)
-	{
-		if (tmp->token == SPACES || is_cmd(tmp->token))
-			tmp = tmp->next;
-		else
-			break ;
-	}
-	if (tmp->token == PARENTH_OPEN)
-		parenthesis = true;
-	else if (tmp != NULL && tmp->token != OR && tmp->token != AND
-		&& tmp->token != PARENTH_OPEN)
-		return (-1);
-	tmp = end_of_parenth(lexer);
 	tmp = tmp->prev;
 	while (tmp)
 	{
@@ -240,7 +226,9 @@ int	check_in_parenth(t_word *lexer, t_var *var)
 		else
 			break ;
 	}
-	if (tmp->token == PARENTH_CLOSE && parenthesis == true)
+	if (cmd == true && tmp->token == PARENTH_OPEN)
+		return (0);
+	else if (tmp->token == PARENTH_CLOSE && parenthsis == true)
 		return (-1);
 	else if (tmp != NULL && tmp->token != OR && tmp->token != AND
 		&& tmp->token != PARENTH_CLOSE)
@@ -248,21 +236,49 @@ int	check_in_parenth(t_word *lexer, t_var *var)
 	return (0);
 }
 
+int	check_in_parenth(t_word *lexer)
+{
+	t_word	*tmp;
+	bool	parenthesis;
+	bool	cmd;
+
+	cmd = false;
+	tmp = lexer->next;
+	parenthesis = false;
+	while (tmp)
+	{
+		if (tmp->token == SPACES || is_cmd(tmp->token))
+		{
+			if (is_cmd(tmp->token))
+				cmd = true;
+			tmp = tmp->next;
+		}
+		else
+			break ;
+	}
+	if (cmd == true && tmp->token == PARENTH_CLOSE)
+		cmd = true;
+	else if (tmp->token == PARENTH_OPEN)
+		parenthesis = true;
+	else if (tmp != NULL && tmp->token != OR && tmp->token != AND
+		&& tmp->token != PARENTH_OPEN)
+		return (-1);
+	return (check_in_parenth2(end_of_parenth(tmp), cmd, parenthesis));
+}
+
 int	check_syntax_parenth(t_word *lexer, t_var *var)
 {
 	if (check_parenth_close(lexer, var) == -1)
 		return (-1);
-	// if (is_good_arg_in_parenth(lexer, var) == -1)
-	// 	return (-1);
 	while (lexer)
 	{
 		if (lexer->token == PARENTH_OPEN)
 		{
-			if (check_out_pareth(lexer, var) == -1 || check_in_parenth(lexer,
-					var) == -1)
-				return (free_error(var, E_SYNTAX, "()", -2), -1);
+			if (check_out_pareth(lexer, var) == -1 || check_in_parenth(lexer) ==
+				-1)
+				return (free_error(var, E_SYNTAX, "(", -2), -1);
 		}
 		lexer = lexer->next;
 	}
-	return (0);
+	return (1);
 }

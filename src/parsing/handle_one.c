@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/07 13:37:13 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/09 13:09:15 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,10 @@ void	handle_quotes(t_var *var, int *i)
 	{
 		var->error = true;
 		if (var->line[start] == '\'')
-			free_error(NULL, E_SYNTAX, "\'", -99);
+			free_error(NULL, E_EOF, "\'", -2);
 		else
-			free_error(NULL, E_SYNTAX, "\"", -99);
+			free_error(NULL, E_EOF, "\"", -2);
+		free_error(NULL, E_S_EOF, NULL, -2);
 	}
 	else
 	{

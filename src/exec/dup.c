@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:47:17 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/06 16:42:55 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/09 16:13:42 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ void	do_dup(int c_fd, int pipe_fd[2], int i, t_var *var)
 	(tmp = var->lexer, flag[0] = 1, flag[1] = 1, flag[2] = i);
 	while (tmp->token != END && tmp->token != PIPE)
 	{
-		ft_putendl_fd(tmp->word, 2);
 		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
 		{
 			if (do_dup_in(pipe_fd, c_fd, flag, tmp) == -1)

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/06 16:28:40 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/09 18:54:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	fork_here_doc(t_var *var, t_word *tmp, char *file_name)
 void	do_here_doc(t_var *var)
 {
 	t_word	*tmp;
-	pid_t	pid;
 	char	*nb;
 	char	*file_name;
 
@@ -145,7 +144,6 @@ void	before_exe(t_var *var)
 	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
 		expand(var);
-	print_list(var->lexer);
 	if (var->error == false)
 		exe_cmd(var);
 }

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/07 13:37:13 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/09 16:42:26 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ void	count_node(t_word *word)
 
 void	print_list(t_word *word)
 {
+	if (!word)
+	{
+		printf("no word\n");
+		return ;
+	}
 	while (word)
 	{
 		printf("word: %s ", word->word);
