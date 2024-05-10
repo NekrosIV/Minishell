@@ -25,6 +25,7 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(EXEC_DIR)/exec_utils.c \
       $(EXEC_DIR)/exec.c \
       $(EXEC_DIR)/split_cmd.c \
+	  $(EXEC_DIR)/exec_bonus_cmd.c \
       $(EXPAND_DIR)/expand_utils.c \
       $(EXPAND_DIR)/expand.c \
       $(EXPAND_DIR)/handle_expand.c \

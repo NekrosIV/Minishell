@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/09 18:54:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/10 14:36:41 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ void	loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var)
 	char	*expanded_line;
 	char	*tmp_line;
 
-	(expanded_line = NULL, line = NULL, tmp_line = NULL);
+	expanded_line = NULL;
+	line = NULL;
+	tmp_line = NULL;
 	while (1)
 	{
 		if (isatty(0))

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/09 21:12:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/10 15:20:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_var	*init_var(t_env **envs, int exit_statut)
 	var->envp = NULL;
 	var->env = *envs;
 	var->quoted_cmds = NULL;
+	var->tmp = NULL;
 	var->here_doc_count = 0;
 	var->last_pid = 0;
 	return (var);

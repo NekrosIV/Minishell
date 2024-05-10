@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/09 21:12:23 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/10 15:36:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ typedef struct s_var
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
+	t_word			*tmp;
 	t_env			*env;
 }					t_var;
 
@@ -187,7 +188,7 @@ char				*ft_strndup(char *line, int end, int start);
 t_word				*get_last_tword(t_word *word);
 void				del_tword(t_word **word);
 void				trim_tword(t_word **start, t_word **end);
-t_word				*skip_token(t_word *tmp, int token);
+t_word				*skip_token(t_word *tmp, int token, bool dir);
 int					ft_isgoodchar(char c);
 
 /* ************************************************************************** */
@@ -234,10 +235,13 @@ void				before_exe(t_var *var);
 
 void				exec(char **cmd, char **env);
 void				child(int c_fd, int pipe_fd[2], int i, t_var *var);
-void				handle_fork_error(pid_t pid, int pipe_fd[2], int c_fd,
-						int i);
 int					fork_loop(t_var *var, int nb_cmd);
 void				exe_cmd(t_var *var);
+
+/********************************* EXEX_BONUS_CMD.C *************************/
+int					is_bonus_cmd(t_word *lexer);
+void				new_t_word(t_word **start, t_var **var);
+int					do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var);
 
 /*********************************** DUP.C **********************************/
 
@@ -269,6 +273,11 @@ int					wait_for_child(pid_t pid);
 
 int					node_cmp_token(t_word *lexer, int token);
 void				close_fd(int fd, int i);
+void				close_all_fd(int pipe_fd[2], int c_fd, int i,
+						bool close_fd_0);
+int					do_simple_cmd(int c_fd, int pipe_fd[2], int i, t_var *var);
+int					choose_how_to_exec(int c_fd, int pipe_fd[2], int i,
+						t_var *var);
 
 /****************************************************************************/
 /*                                FREE_AND_EXIT                             */

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:57:26 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/05 15:56:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/10 14:21:01 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,27 @@ void	trim_tword(t_word **start, t_word **end)
 	(*end)->token = token;
 }
 
-t_word	*skip_token(t_word *tmp, int token)
+t_word	*skip_token(t_word *tmp, int token, bool dir)
 {
-	while (tmp)
+	if (dir == true)
 	{
-		if (tmp->token == token)
-			tmp = tmp->next;
-		else
-			break ;
+		while (tmp)
+		{
+			if (tmp->token == token)
+				tmp = tmp->next;
+			else
+				break ;
+		}
+	}
+	else 
+	{
+		while (tmp)
+		{
+			if (tmp->token == token)
+				tmp = tmp->prev;
+			else
+				break ;
+		}
 	}
 	return (tmp);
 }

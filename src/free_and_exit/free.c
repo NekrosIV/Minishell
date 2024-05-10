@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/05 16:47:35 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/10 15:56:17 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	free_var(t_var *var)
 	if (var->exit == true)
 		free_list_env(&var->env);
 	free_list_lexer(&var->lexer);
+	if (var->tmp != NULL)
+		free_list_lexer(&var->tmp);
 	free(var->line);
 	free(var);
 }
