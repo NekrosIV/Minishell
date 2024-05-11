@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:42:40 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/05 17:42:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:40:41 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	del_cmd(t_word **word)
 		del_tword(&tmp);
 	}
 }
+
 int	is_dir(char *cmd)
 {
 	struct stat	statbuf;
@@ -40,8 +41,7 @@ int	is_dir(char *cmd)
 
 void	error_msg(char *path, char **cmd, char **env)
 {
-	int			status;
-	struct stat	statbuf;
+	int	status;
 
 	status = 1;
 	ft_putstr_fd(cmd[0], 2);

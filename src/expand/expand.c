@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/04 14:51:22 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:42:28 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	replace_dol(t_word *tmp, char *str)
 		free_error(NULL, E_MALLOC, "find_and_replace", 1);
 	tmp->token = CMD;
 }
+
 char	*find_in_env(char *str, t_var *var)
 {
 	t_env	*envp;
@@ -32,7 +33,7 @@ char	*find_in_env(char *str, t_var *var)
 	while (envp)
 	{
 		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
-			- 1] == '=')
+				- 1] == '=')
 		{
 			result = ft_strdup(&envp->line[len]);
 			if (!result)
@@ -46,30 +47,16 @@ char	*find_in_env(char *str, t_var *var)
 void	find_and_replace(t_word *tmp, t_var *var)
 {
 	t_env	*envp;
-	int		len;
 	char	*str;
 
 	envp = var->env;
 	if (ft_strncmp(tmp->word, "$?", 2) == 0)
-		replace_dol(tmp, ft_itoa(exit_status));
+		replace_dol(tmp, ft_itoa(g_exit_status));
 	else
 	{
 		str = find_in_env(tmp->word, var);
 		if (str)
 			replace_dol(tmp, str);
-	}
-}
-
-void	expand_quoted_cmds(t_var *var)
-{
-	t_word	*tmp;
-
-	tmp = var->quoted_cmds;
-	while (tmp)
-	{
-		if (tmp->token == DOL)
-			find_and_replace(tmp, var);
-		tmp = tmp->next;
 	}
 }
 

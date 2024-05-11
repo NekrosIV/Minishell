@@ -6,26 +6,11 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:17 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/02 17:02:22 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 13:43:52 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	handle_char(t_var *var, int *i, int *tab)
-{
-	int		start;
-	char	*str;
-
-	start = *i;
-	while (tab[(*i)] == CHAR)
-		(*i)++;
-	str = ft_strndup(var->line, *i, start);
-	if (!str)
-		free_error(var, E_MALLOC, "str", 1);
-	if (add_word(&var->lexer, CMD, str) == -1)
-		free_error(var, E_MALLOC, "add_word", 1);
-}
 
 void	handle_space(t_var *var, int *i)
 {
@@ -66,6 +51,44 @@ void	handle_dol(t_var *var, int *i, int *tab)
 		if (add_word(&var->lexer, token, str) == -1)
 			free_error(NULL, E_MALLOC, "add_word", 1);
 	}
+}
+
+void	handle_or_and(t_var *var, int *i, int *tab)
+{
+	char	*str;
+	int		start;
+	int		token;
+
+	start = *i;
+	if (tab[start] == OR)
+		token = OR;
+	else
+		token = AND;
+	(*i) += 2;
+	str = ft_strndup(var->line, *i, start);
+	if (!str)
+		free_error(var, E_MALLOC, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(var, E_MALLOC, "add_word", 1);
+}
+
+void	handle_parent(t_var *var, int *i, int *tab)
+{
+	char	*str;
+	int		start;
+	int		token;
+
+	start = *i;
+	if (tab[start] == PARENTH_OPEN)
+		token = PARENTH_OPEN;
+	else
+		token = PARENTH_CLOSE;
+	(*i)++;
+	str = ft_strndup(var->line, *i, start);
+	if (!str)
+		free_error(var, E_MALLOC, "str", 1);
+	if (add_word(&var->lexer, token, str) == -1)
+		free_error(var, E_MALLOC, "add_word", 1);
 }
 
 void	handle_end(t_var *var)

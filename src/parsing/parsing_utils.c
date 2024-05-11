@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:57:26 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 14:21:01 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 13:46:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,6 @@ void	del_tword(t_word **word)
 	free(temp);
 }
 
-void	trim_tword(t_word **start, t_word **end)
-{
-	t_word	*temp;
-	int		token;
-
-	token = (*start)->token;
-	while ((*start)->token != (*end)->token && (*start)->token != END)
-	{
-		temp = *start;
-		*start = (*start)->next;
-		del_tword(&temp);
-	}
-	(*end)->token = token;
-}
-
 t_word	*skip_token(t_word *tmp, int token, bool dir)
 {
 	if (dir == true)
@@ -88,7 +73,7 @@ t_word	*skip_token(t_word *tmp, int token, bool dir)
 				break ;
 		}
 	}
-	else 
+	else
 	{
 		while (tmp)
 		{

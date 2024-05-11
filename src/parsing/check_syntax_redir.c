@@ -6,31 +6,11 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 14:33:55 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:28:06 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_strlen_tword(t_word *tmp)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
-		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL)
-	{
-		j = 0;
-		while (tmp->word[j])
-		{
-			i++;
-			j++;
-		}
-		tmp = tmp->next;
-	}
-	return (i);
-}
 
 char	*ft_strjoin_tword(t_word *tmp, t_var *var, int token)
 {
@@ -48,24 +28,11 @@ char	*ft_strjoin_tword(t_word *tmp, t_var *var, int token)
 		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL)
 	{
 		j = 0;
-		if (token != HERE_DOC)
-		{
-			if (tmp->token == DOL)
-				find_and_replace(tmp, var);
-			else if (tmp->token == DOUBLE_QUOTE)
-				init_quoted_cmd(tmp, var);
-		}
-		if (token == HERE_DOC && (tmp->token == DOUBLE_QUOTE
-				|| tmp->token == SINGLE_QUOTE))
-			head->here_doc_expand = false;
+		handle_token_logic(tmp, var, token, head);
 		if (tmp->token != DOL || token == HERE_DOC)
 		{
 			while (tmp->word[j])
-			{
-				str[i] = tmp->word[j];
-				i++;
-				j++;
-			}
+				str[i++] = tmp->word[j++];
 		}
 		tmp = tmp->next;
 	}
@@ -78,28 +45,26 @@ void	join_if_need(t_word *head, t_var *var, int token)
 	t_word	*end;
 	char	*str;
 	t_word	*start;
-	int		i;
 	t_word	*temp;
 
-	end = head;
-	i = 0;
+	if (head->next == NULL)
+		return ;
+	end = head->next;
 	start = head->next;
 	while (end->token == CMD || end->token == DOUBLE_QUOTE
 		|| end->token == SINGLE_QUOTE || end->token == DOL)
-		(end = end->next, i++);
+		end = end->next;
 	if (token == HERE_DOC && (head->token == DOUBLE_QUOTE
 			|| head->token == SINGLE_QUOTE))
 		head->here_doc_expand = false;
-	if (i <= 1)
+	if (start == end)
 		return ;
 	str = ft_strjoin_tword(head, var, token);
-	free(head->word);
-	head->word = str;
+	(free(head->word), head->word = str);
 	while (start != end)
 	{
 		temp = start->next;
-		del_tword(&start);
-		start = temp;
+		(del_tword(&start), start = temp);
 	}
 }
 
@@ -116,17 +81,6 @@ bool	check_token(t_word *tmp, t_word *start, t_var *var)
 		&& tmp->token != SINGLE_QUOTE && tmp->token != DOL)
 		return (free_error(var, E_SYNTAX, tmp->word, -2), -1);
 	return (0);
-}
-
-t_word	*trim_rout(t_word *start, t_var *var)
-{
-	t_word	*tmp;
-
-	tmp = skip_token(start->next->next, SPACES, true);
-	if (check_token(tmp, start, var))
-		return (NULL);
-	trim_tword(&start, &tmp);
-	return (tmp);
 }
 
 t_word	*check_and_trim(t_word *start, t_var *var)

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:24:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 14:57:35 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 13:45:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	node_cmp_token(t_word *lexer, int token)
 	}
 	return (0);
 }
+
 void	close_fd(int fd, int i)
 {
 	if (i != 0)

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/09 21:17:19 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 13:46:26 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,32 @@ int	add_word(t_word **word, int token, char *str)
 	return (0);
 }
 
+void	handle_token(t_var *var, int *tab, int i)
+{
+	while (tab[i] != END)
+	{
+		if (tab[i] == PIPE)
+			handle_pipe(var, &i);
+		else if (tab[i] == REDIR_IN)
+			handle_redir_in(var, &i);
+		else if (tab[i] == REDIR_OUT)
+			handle_redir_out(var, &i);
+		else if (tab[i] == SINGLE_QUOTE || tab[i] == DOUBLE_QUOTE)
+			handle_quotes(var, &i, tab[i]);
+		else if (tab[i] == SPACES)
+			handle_space(var, &i);
+		else if (tab[i] == DOL)
+			handle_dol(var, &i, tab);
+		else if (tab[i] == OR || tab[i] == AND)
+			handle_or_and(var, &i, tab);
+		else if (tab[i] == PARENTH_OPEN || tab[i] == PARENTH_CLOSE)
+			handle_parent(var, &i, tab);
+		else
+			handle_char(var, &i, tab);
+	}
+	handle_end(var);
+}
+
 void	init_tab_token_2(char *line, int *tab, int *count)
 {
 	int	i;
@@ -51,9 +77,9 @@ void	init_tab_token_2(char *line, int *tab, int *count)
 	else if (line[i] == '$')
 		tab[i] = DOL;
 	else if (line[i] == '|' && line[i + 1] == '|')
-		(tab[i] = OR, i++);
+		tab[i++] = OR;
 	else if (line[i] == '&' && line[i + 1] == '&')
-		(tab[i] = AND, i++);
+		tab[i++] = AND;
 	else if (line[i] == '(')
 		tab[i] = PARENTH_OPEN;
 	else if (line[i] == ')')
@@ -101,10 +127,9 @@ void	parsing(t_var *var)
 	free(tab);
 	if (var->error == false)
 		check_syntax(var);
-	// if (var->error == false)
-	// {
-	// 	count_node(var->lexer);
-	// 	print_list(var->lexer);
-	// }
-	// var->error = true;
 }
+// if (var->error == false)
+// {
+// 	count_node(var->lexer);
+// 	print_list(var->lexer);
+// }

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 14:36:41 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:41:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,14 @@
 void	loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var)
 {
 	char	*line;
-	char	*expanded_line;
-	char	*tmp_line;
 
-	expanded_line = NULL;
 	line = NULL;
-	tmp_line = NULL;
 	while (1)
 	{
 		if (isatty(0))
 			ft_putstr_fd("here_doc> ", 1);
 		line = get_next_line(0);
-		if (exit_status == -999)
+		if (g_exit_status == -999)
 		{
 			free(line);
 			break ;
@@ -34,30 +30,12 @@ void	loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var)
 		if (!line || ft_strncmp(line, eof, ft_strlen(line)) == 0)
 		{
 			if (!line)
-			{
-				ft_putstr_fd("\nhere-document delimited ", 2);
-				ft_putstr_fd("by end-of-file (wanted `", 2);
-				ft_putstr_fd(tmp->word, 2);
-				ft_putendl_fd("')", 2);
-			}
+				free_error(NULL, E_HEREDOC, tmp->word, -1);
 			free(line);
 			break ;
 		}
 		if (tmp->here_doc_expand == true && ft_strchr(line, '$') != NULL)
-		{
-			tmp_line = ft_strtrim(line, "\n");
-			if (!tmp_line)
-				(free(line), free_error(var, E_MALLOC, "tmp_line", 1));
-			expanded_line = find_in_env(tmp_line, var);
-			(free(line), free(tmp_line));
-			if (!expanded_line)
-				line = ft_strdup("\n");
-			else
-				line = ft_strjoin(expanded_line, "\n");
-			if (!line)
-				(free(expanded_line), free_error(var, E_MALLOC, "line", 1));
-			free(expanded_line);
-		}
+			line = expand_here_doc_line(line, var);
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
@@ -68,7 +46,7 @@ int	here_doc(t_word *tmp, t_var *var, char *file_name)
 	char	*eof;
 	int		fd;
 
-	exit_status = 0;
+	g_exit_status = 0;
 	fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (free(file_name), perror("here_doc :"), -1);
@@ -77,13 +55,7 @@ int	here_doc(t_word *tmp, t_var *var, char *file_name)
 	if (!eof)
 		return (free_error(var, E_MALLOC, "eof", 1), -1);
 	loop_here_doc(eof, fd, tmp, var);
-	return (free(eof), close(fd), exit_status);
-}
-void	sigint_handler_here_doc(int signum)
-{
-	(void)signum;
-	close(0);
-	exit_status = -999;
+	return (free(eof), close(fd), g_exit_status);
 }
 
 void	fork_here_doc(t_var *var, t_word *tmp, char *file_name)
@@ -106,8 +78,8 @@ void	fork_here_doc(t_var *var, t_word *tmp, char *file_name)
 	}
 	free(tmp->word);
 	tmp->word = file_name;
-	exit_status = wait_for_child(pid);
-	if (exit_status != 0)
+	g_exit_status = wait_for_child(pid);
+	if (g_exit_status != 0)
 	{
 		unlink(tmp->word);
 		var->error = true;

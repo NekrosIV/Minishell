@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 15:20:44 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:42:47 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	get_line(t_var *var)
 	free(str);
 }
 
-t_var	*init_var(t_env **envs, int exit_statut)
+t_var	*init_var(t_env **envs)
 {
 	t_var	*var;
 

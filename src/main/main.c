@@ -6,18 +6,18 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/05 17:32:40 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:42:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		exit_status;
+int		g_exit_status;
 
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	exit_status = 130;
+	g_exit_status = 130;
 	rl_on_new_line();
 	ft_putendl_fd("", 1);
 	rl_replace_line("", 0);
@@ -36,6 +36,13 @@ void	set_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+void	sigint_handler_here_doc(int signum)
+{
+	(void)signum;
+	close(0);
+	g_exit_status = -999;
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_var	*var;
@@ -46,11 +53,11 @@ int	main(int ac, char **av, char **env)
 		free_error(NULL, E_ARGS, NULL, 0);
 	envs = NULL;
 	init_env(&envs, env);
-	exit_status = 0;
+	g_exit_status = 0;
 	while (1)
 	{
 		set_signals();
-		var = init_var(&envs, exit_status);
+		var = init_var(&envs);
 		get_line(var);
 		(check_exit(var), parsing(var));
 		if (var->error == false)

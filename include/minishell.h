@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 15:36:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 15:43:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
 # define E_SYNTAX "syntax error near unexpected token "
+# define E_HEREDOC "\nhere-document delimited by end-of-file wanted "
 # define E_PIPE "Error: pipe failed\n"
 # define E_REDIR "ambiguous redirect : "
 # define E_EOF "unexpected EOF while looking for matching "
@@ -101,7 +102,7 @@ typedef struct s_var
 }					t_var;
 
 /* ************************************************************************** */
-extern int			exit_status;
+extern int			g_exit_status;
 
 /*                            FUNCTION PROTOTYPES                             */
 
@@ -111,12 +112,16 @@ extern int			exit_status;
 
 /* ********************************* MAIN.C ********************************* */
 
+void				sigint_handler(int sig);
+void				sigint_handler_child(int sig);
+void				set_signals(void);
+void				sigint_handler_here_doc(int signum);
 // int					main(int ac, char **av, char **env);
 
 /* ****************************** MAIN_UTILS.C ****************************** */
 
 void				get_line(t_var *var);
-t_var				*init_var(t_env **envs, int exit_statut);
+t_var				*init_var(t_env **envs);
 
 /* ************************************************************************** */
 /*                                      ENV                                   */
@@ -140,6 +145,7 @@ int					count_node_env(t_env *env);
 /* ******************************** PARSING.C ******************************* */
 
 int					add_word(t_word **word, int token, char *str);
+void				handle_token(t_var *var, int *tab, int i);
 void				init_tab_token_2(char *line, int *tab, int *i);
 int					*init_tab_token(char *line, int i);
 void				parsing(t_var *var);
@@ -149,14 +155,15 @@ void				parsing(t_var *var);
 void				handle_pipe(t_var *var, int *i);
 void				handle_redir_in(t_var *var, int *i);
 void				handle_redir_out(t_var *var, int *i);
-void				handle_quotes(t_var *var, int *i);
-void				handle_token(t_var *var, int *tab, int i);
+void				handle_quotes(t_var *var, int *i, int token);
+void				handle_char(t_var *var, int *i, int *tab);
 
 /* ****************************** HANDLE_TWO.C ****************************** */
 
-void				handle_char(t_var *var, int *i, int *tab);
 void				handle_space(t_var *var, int *i);
 void				handle_dol(t_var *var, int *i, int *tab);
+void				handle_or_and(t_var *var, int *i, int *tab);
+void				handle_parent(t_var *var, int *i, int *tab);
 void				handle_end(t_var *var);
 
 /* ****************************** CHECK_SYNTAX.C **************************** */
@@ -171,7 +178,6 @@ int					check_syntax_pipe(t_word *lexer, t_var *var);
 /* *************************** CHECK_SYNTAX_REDIR.C ************************* */
 
 bool				check_token(t_word *tmp, t_word *start, t_var *var);
-t_word				*trim_rout(t_word *start, t_var *var);
 t_word				*check_and_trim(t_word *start, t_var *var);
 int					check_syntax_redir(t_var *var);
 
@@ -182,12 +188,19 @@ int					check_syntax_or_and(t_word *lexer, t_var *var);
 int					check_syntax_parenth(t_word *lexer, t_var *var);
 t_word				*end_of_parenth(t_word *lexer);
 
+/* ************************** CHECK_SYNTAX_UTILS.C ************************** */
+
+int					ft_strlen_tword(t_word *tmp);
+void				trim_tword(t_word **start, t_word **end);
+t_word				*trim_rout(t_word *start, t_var *var);
+void				handle_token_logic(t_word *tmp, t_var *var, int token,
+						t_word *head);
+
 /* ***************************** PARSING_UTILS.C **************************** */
 
 char				*ft_strndup(char *line, int end, int start);
 t_word				*get_last_tword(t_word *word);
 void				del_tword(t_word **word);
-void				trim_tword(t_word **start, t_word **end);
 t_word				*skip_token(t_word *tmp, int token, bool dir);
 int					ft_isgoodchar(char c);
 
@@ -200,7 +213,6 @@ int					ft_isgoodchar(char c);
 void				replace_dol(t_word *tmp, char *str);
 char				*find_in_env(char *str, t_var *var);
 void				find_and_replace(t_word *tmp, t_var *var);
-void				expand_quoted_cmds(t_var *var);
 void				init_quoted_cmd(t_word *tmp, t_var *var);
 void				expand(t_var *var);
 
@@ -219,6 +231,8 @@ void				handle_quoted_token(t_var *var, int *tab, int i,
 int					len_quoted_cmd(t_var *var);
 char				*join_quoted_cmd(t_var *var);
 void				fill_tab(t_var *var, char **word);
+void				expand_quoted_cmds(t_var *var);
+char				*expand_here_doc_line(char *line, t_var *var);
 
 /****************************************************************************/
 /*                                  EXECUTE                                 */
@@ -240,17 +254,20 @@ void				exe_cmd(t_var *var);
 
 /********************************* EXEX_BONUS_CMD.C *************************/
 int					is_bonus_cmd(t_word *lexer);
-void				new_t_word(t_word **start, t_var **var);
+void				new_t_word(t_word **start, t_word **lexer);
+bool				update_execution_state(t_word **start, t_word *tmp,
+						t_var *var, bool flag);
+t_word				*update_tmp(t_word *tmp, t_var *var);
 int					do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var);
 
 /*********************************** DUP.C **********************************/
 
-int					do_dup_in2(int pipe_fd[2], int c_fd, t_word *tmp);
-int					do_dup_in(int pipe_fd[2], int c_fd, int flag[3],
-						t_word *tmp);
-int					do_dup_out2(int pipe_fd[2], t_word *tmp);
-int					do_dup_out(int pipe_fd[2], int flag[3], t_word *tmp);
-
+void				do_dup_in2(int pipe_fd[2], int c_fd, t_var *var);
+void				do_dup_in(int pipe_fd[2], int flag[4], t_word *tmp,
+						t_var *var);
+void				do_dup_out2(int pipe_fd[2], t_word *tmp, t_var *var);
+void				do_dup_out(int pipe_fd[2], int flag[4], t_word *tmp,
+						t_var *var);
 void				do_dup(int c_fd, int pipe_fd[2], int i, t_var *var);
 
 /********************************* SPLIT_CMD.C *******************************/
@@ -290,6 +307,8 @@ void				free_list_env(t_env **env);
 void				free_var(t_var *var);
 void				free_error(t_var *var, char *error, char *fautif, int ff);
 void				free_split(char **tab);
+
+/********************************** FREE.C **********************************/
 void				unlink_here_doc(t_var *var);
 
 /********************************** EXIT.C **********************************/

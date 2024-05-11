@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/10 14:00:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/11 11:10:54 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	exec(char **cmd, char **env)
 	execve(path, cmd, env);
 	error_msg(path, cmd, env);
 }
+
 void	print_cmd(char **cmd)
 {
 	int	i;
@@ -102,7 +103,7 @@ int	fork_loop(t_var *var, int nb_cmd)
 			break ;
 	}
 	if (var->bonus_cmd == false)
-		exit_status = wait_for_child(var->last_pid);
+		g_exit_status = wait_for_child(var->last_pid);
 	return (close(pipe_fd[0]), unlink_here_doc(var), 0);
 }
 
