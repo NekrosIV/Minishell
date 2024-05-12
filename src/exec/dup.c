@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:47:17 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 15:39:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/12 17:03:08 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	do_dup_out(int pipe_fd[2], int flag[4], t_word *tmp, t_var *var)
 {
 	if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
 		do_dup_out2(pipe_fd, tmp, var);
-	else if (flag[1] != 0 && tmp->token != END)
+	else if (flag[1] != 0 && ft_strncmp(tmp->word, "newline", 7) != 0)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		{
