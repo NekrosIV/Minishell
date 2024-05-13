@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 14:29:12 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/13 14:53:12 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	new_t_word(t_word **start, t_word **lexer)
 		tmp = end->next;
 	(*lexer)->prev = NULL;
 	end->next = NULL;
-	end->token = END;
+	if (end->token != PIPE)
+		end->token = END;
 	if (tmp != NULL)
 		free_list_lexer(&tmp);
 }

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 15:43:02 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/13 17:26:19 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,18 @@
 /* ************************************************************************** */
 /*                            DEFINE ALL CONSTANT                             */
 /* ************************************************************************** */
+
+# define GREEN "\033[38;5;76m"
 # define RED "\033[38;5;160m"
+# define YELLOW "\033[38;5;226m"
+# define ORANGE "\033[38;5;202m"
+# define PURPLE "\033[38;5;213m"
+# define LBLUE "\033[38;5;51m"
+# define BLUE "\033[38;5;117m"
+# define INDI "\033[38;5;99m"
+# define BOLD "\033[1m"
 # define RESET "\033[00m"
-# define PROMPT "minirt> "
+
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
 # define E_SYNTAX "syntax error near unexpected token "
@@ -94,6 +103,7 @@ typedef struct s_var
 	bool			error;
 	bool			execute_next;
 	bool			bonus_cmd;
+	bool			use_ls_alias;
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
@@ -121,7 +131,7 @@ void				sigint_handler_here_doc(int signum);
 /* ****************************** MAIN_UTILS.C ****************************** */
 
 void				get_line(t_var *var);
-t_var				*init_var(t_env **envs);
+t_var				*init_var(t_env **envs, bool allias_ls);
 
 /* ************************************************************************** */
 /*                                      ENV                                   */

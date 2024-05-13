@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:02:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/04/27 16:28:25 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/13 16:46:28 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,33 @@ char	**split_env(t_env *env)
 	result[i] = NULL;
 	return (result);
 }
+void	add_pwd(t_env **envs)
+{
+	char	*pwd;
+	char	*line;
 
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		printf("Error: getcwd failed\n");
+		exit(1);
+	}
+	line = ft_strjoin("PWD=", pwd);
+	if (!line)
+	{
+		printf("Error: ft_strjoin failed\n");
+		exit(1);
+	}
+	add_node_env(envs, line);
+	free(pwd);add_node_env(envs, ft_strdup("ls=ls --color=tty"));
+}
 void	init_env(t_env **envs, char **env)
 {
 	int	i;
 
 	i = 0;
 	if (!env || !env[0])
-		envs = NULL;
+		add_pwd(envs);
 	else
 	{
 		while (env[i])
