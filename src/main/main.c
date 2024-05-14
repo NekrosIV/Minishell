@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/13 17:45:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/14 15:58:35 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ void	sigint_handler(int sig)
 	(void)sig;
 	g_exit_status = 130;
 	rl_on_new_line();
+	print_exit_status(get_terminal_width());
 	ft_putendl_fd("", 1);
 	rl_replace_line("", 0);
+	rl_reset_line_state();
 	rl_redisplay();
 }
 
@@ -66,6 +68,7 @@ int	main(int ac, char **av, char **env)
 			before_exe(var);
 		allias_ls = var->use_ls_alias;
 		free_var(var);
+		print_exit_status(get_terminal_width());
 	}
 	return (0);
 }

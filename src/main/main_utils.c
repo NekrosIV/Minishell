@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/13 18:16:36 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/14 16:02:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*get_prompt(t_var *var)
 	char	*pwd;
 
 	pwd = get_pwd(var);
-	prompt = ft_strjoin("╭─[" BOLD GREEN "minirt" RESET "] - [" BOLD BLUE, pwd);
+	prompt = ft_strjoin("╭─["  GREEN "minirt" RESET "] - ["  BLUE, pwd);
 	if (!prompt)
 		free_error(var, E_MALLOC, "prompt", 1);
 	tmp = ft_strjoin(prompt, RESET "]\n╰──");
@@ -51,7 +51,7 @@ char	*get_prompt(t_var *var)
 	if (g_exit_status == 0)
 		prompt = ft_strjoin(tmp, RESET "➤ ");
 	else
-		prompt = ft_strjoin(tmp, BOLD RED "➤ " RESET);
+		prompt = ft_strjoin(tmp,  RED "➤ " RESET);
 	free(tmp);
 	free(pwd);
 	return (prompt);

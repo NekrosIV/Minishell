@@ -6,14 +6,14 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 11:42:50 by kasingh           #+#    #+#             */
-/*   Updated: 2023/11/17 10:13:58 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/14 15:19:21 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-static int	ft_count_digit(int n)
+int	ft_count_digit(int n)
 {
 	int	count;
 

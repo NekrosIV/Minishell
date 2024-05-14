@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 11:10:54 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/14 19:49:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,29 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	char	**env;
 	char	**cmd;
+	t_word	*tmp;
 
 	signal(SIGQUIT, SIG_DFL);
 	do_dup(c_fd, pipe_fd, i, var);
 	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer,
 			SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
 		free_error(var, NULL, NULL, 0);
+	if (var->lexer->token == PARENTH_OPEN)
+	{
+		tmp = end_of_parenth(var->lexer);
+		tmp->next->token = END;
+		tmp = var->lexer;
+		var->lexer = var->lexer->next;
+		var->lexer->prev = NULL;
+		tmp->next = NULL;
+		free_list_lexer(&tmp);
+		free_list_lexer(&tmp);
+		do_bonus_cmd(c_fd, pipe_fd, i, var);
+		close_all_fd(pipe_fd, c_fd, i, true);
+		var->exit = true;
+		free_var(var);
+		exit(g_exit_status);
+	}
 	env = split_env(var->env);
 	if (!env)
 		free_error(var, E_MALLOC, "env", 1);

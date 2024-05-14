@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/09 16:42:26 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/14 18:23:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,46 +34,47 @@ void	print_list(t_word *word)
 	}
 	while (word)
 	{
-		printf("word: %s ", word->word);
+		fprintf(stderr, "word: %s ", word->word);
 		if (word->token == PIPE)
-			printf("token: PIPE\n");
+			fprintf(stderr, "token: PIPE\n");
 		else if (word->token == REDIR_IN)
-			printf("token: REDIR_IN\n");
+			fprintf(stderr, "token: REDIR_IN\n");
 		else if (word->token == REDIR_OUT)
-			printf("token: REDIR_OUT\n");
+			fprintf(stderr, "token: REDIR_OUT\n");
 		else if (word->token == HERE_DOC)
-			printf("token: HERE_DOC\n");
+			fprintf(stderr, "token: HERE_DOC\n");
 		else if (word->token == REDIR_APPEND)
-			printf("token: REDIR_APPEND\n");
+			fprintf(stderr, "token: REDIR_APPEND\n");
 		else if (word->token == CMD)
-			printf("token: CMD\n");
+			fprintf(stderr, "token: CMD\n");
 		else if (word->token == SPACES)
-			printf("token: SPACE\n");
+			fprintf(stderr, "token: SPACE\n");
 		else if (word->token == SINGLE_QUOTE)
-			printf("token: SINGLE_QUOTE\n");
+			fprintf(stderr, "token: SINGLE_QUOTE\n");
 		else if (word->token == DOUBLE_QUOTE)
-			printf("token: DOULBLE_QUOTE\n");
+			fprintf(stderr, "token: DOULBLE_QUOTE\n");
 		else if (word->token == DOL)
-			printf("token: DOL\n");
+			fprintf(stderr, "token: DOL\n");
 		else if (word->token == AND)
-			printf("token: AND\n");
+			fprintf(stderr, "token: AND\n");
 		else if (word->token == OR)
-			printf("token: OR\n");
+			fprintf(stderr, "token: OR\n");
 		else if (word->token == PARENTH_OPEN)
-			printf("token: PARENTH_OPEN\n");
+			fprintf(stderr, "token: PARENTH_OPEN\n");
 		else if (word->token == PARENTH_CLOSE)
-			printf("token: PARENTH_CLOSE\n");
+			fprintf(stderr, "token: PARENTH_CLOSE\n");
 		else if (word->token == END)
-			printf("token: END\n");
+			fprintf(stderr, "token: END\n");
 		word = word->next;
 	}
+	fprintf(stderr, "\n");
 }
 
 void	print_list_env(t_env *env)
 {
 	while (env)
 	{
-		printf("%s\n", env->line);
+		fprintf(stderr, "%s\n", env->line);
 		env = env->next;
 	}
 }

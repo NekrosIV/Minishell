@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/13 17:26:19 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/14 17:20:15 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/ioctl.h>
 # include <sys/stat.h>
 # include <unistd.h>
 # include <wait.h>
@@ -33,16 +34,17 @@
 /*                            DEFINE ALL CONSTANT                             */
 /* ************************************************************************** */
 
-# define GREEN "\033[38;5;76m"
-# define RED "\033[38;5;160m"
-# define YELLOW "\033[38;5;226m"
-# define ORANGE "\033[38;5;202m"
-# define PURPLE "\033[38;5;213m"
-# define LBLUE "\033[38;5;51m"
+# define BLACK "\e[1;90m"
+# define RED "\e[1;91m"
+# define GREEN "\e[1;92m"
+# define YELLOW "\e[1;93m"
 # define BLUE "\033[38;5;117m"
-# define INDI "\033[38;5;99m"
-# define BOLD "\033[1m"
-# define RESET "\033[00m"
+# define PURPLE "\e[1;95m"
+# define CYAN "\e[1;96m"
+# define WHITE "\e[1;97m"
+# define RESET "\e[0m"
+# define BOLD "\e[1m"
+# define GREY "\e[1;30m"
 
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
@@ -264,7 +266,8 @@ void				exe_cmd(t_var *var);
 
 /********************************* EXEX_BONUS_CMD.C *************************/
 int					is_bonus_cmd(t_word *lexer);
-void				new_t_word(t_word **start, t_word **lexer);
+void				new_t_word(t_word **start, t_word **lexer, t_word **end);
+
 bool				update_execution_state(t_word **start, t_word *tmp,
 						t_var *var, bool flag);
 t_word				*update_tmp(t_word *tmp, t_var *var);
@@ -324,6 +327,8 @@ void				unlink_here_doc(t_var *var);
 /********************************** EXIT.C **********************************/
 
 void				check_exit(t_var *var);
+int					get_terminal_width(void);
+void				print_exit_status(int width);
 
 /****************************************************************************/
 /*                                  SIGNAL                                  */
