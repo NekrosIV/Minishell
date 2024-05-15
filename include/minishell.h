@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/14 17:20:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/15 17:26:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define WHITE "\e[1;97m"
 # define RESET "\e[0m"
 # define BOLD "\e[1m"
-# define GREY "\e[1;30m"
+# define GREY "\033[90m"
 
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
@@ -266,12 +266,15 @@ void				exe_cmd(t_var *var);
 
 /********************************* EXEX_BONUS_CMD.C *************************/
 int					is_bonus_cmd(t_word *lexer);
-void				new_t_word(t_word **start, t_word **lexer, t_word **end);
+void				new_lst(t_word **start, t_word **lexer, t_word *curent);
 
 bool				update_execution_state(t_word **start, t_word *tmp,
 						t_var *var, bool flag);
 t_word				*update_tmp(t_word *tmp, t_var *var);
 int					do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var);
+t_word				*find_token(t_word *lexer, int token);
+void				do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i,
+						t_var *var);
 
 /*********************************** DUP.C **********************************/
 
@@ -328,7 +331,7 @@ void				unlink_here_doc(t_var *var);
 
 void				check_exit(t_var *var);
 int					get_terminal_width(void);
-void				print_exit_status(int width);
+void				print_exit_status(int width, bool is_error);
 
 /****************************************************************************/
 /*                                  SIGNAL                                  */

@@ -19,14 +19,14 @@ REMOVE_COLORS="sed 's/\x1B\[[0-9;]*[JKmsu]//g'"
 REMOVE_SPACES="sed 's/^[ \t]*//g'"
 
 RESET="\033[0m"
-="\033[1m"
+BOLD="\033[1m"
 ULINE="\033[4m"
 RED="\033[31m"
 GREEN="\033[32m"
 YELLOW="\033[33m"
 BLUE="\033[34m"
 MAGENTA="\033[35m"
-='\033[1m' 
+
 
 #Vérifier si 'valgrind' est passé en argument
 if [ "$1" = "valgrind" ]; then
@@ -106,10 +106,10 @@ print_result() {
        [ -z "$valgrind_check_fd" ] && [ -z "$valgrind_check_leak" ] &&
        [ "$minishell_status" -eq "$bash_status" ] &&
        [ "$minishell_files" = "$bash_files" ]; then
-        printf "\r${}${GREEN}TEST[%d] : %s %-${padding}s[OK]${RESET}\n" "$TOTALE" "$command"
+        printf "\r${BOLD}${GREEN}TEST[%d] : %s %-${padding}s[OK]${RESET}\n" "$TOTALE" "$command"
         NB_SUCESSES=$(($NB_SUCESSES + 1))
     else
-        printf "\r${}${RED}TEST[%d] : %s %-${padding}s[KO]${RESET}\n"  "$TOTALE"  "$command"
+        printf "\r${BOLD}${RED}TEST[%d] : %s %-${padding}s[KO]${RESET}\n"  "$TOTALE"  "$command"
         print_details
     fi
     

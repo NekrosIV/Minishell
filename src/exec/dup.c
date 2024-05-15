@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:47:17 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/14 17:35:47 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/15 17:30:29 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,6 @@ void	do_dup(int c_fd, int pipe_fd[2], int i, t_var *var)
 	flag[1] = 1;
 	flag[2] = i;
 	flag[3] = c_fd;
-	if (tmp == NULL)
-	{
-		ft_printf("Error: lexer is NULL\n");
-		return ;
-	}
 	while (tmp && tmp->token != END && tmp->token != PIPE)
 	{
 		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
@@ -116,5 +111,4 @@ void	do_dup(int c_fd, int pipe_fd[2], int i, t_var *var)
 		tmp = tmp->next;
 	}
 	(do_dup_in(pipe_fd, flag, tmp, var), do_dup_out(pipe_fd, flag, tmp, var));
-	(close_fd(c_fd, i), close(pipe_fd[0]), close(pipe_fd[1]));
 }

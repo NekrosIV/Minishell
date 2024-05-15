@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:10:54 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 15:44:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:36:01 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,17 +178,17 @@ t_word	*end_of_parenth(t_word *lexer)
 int	check_out_pareth(t_word *lexer)
 {
 	t_word	*tmp;
-	bool	parenthesis;
 
-	parenthesis = false;
 	tmp = skip_token(lexer->prev, SPACES, false);
-	if (tmp != NULL && tmp->token != PIPE && tmp->token != OR
-		&& tmp->token != AND && tmp->token != PARENTH_OPEN)
+	if (tmp != NULL && (tmp->token == CMD || tmp->token == DOL
+			|| tmp->token == SINGLE_QUOTE || tmp->token == DOUBLE_QUOTE
+			|| tmp->token == PARENTH_CLOSE))
 		return (-1);
 	tmp = end_of_parenth(lexer);
 	tmp = skip_token(tmp->next, SPACES, true);
-	if (tmp->token != END && tmp->token != PIPE && tmp->token != OR
-		&& tmp->token != AND && tmp->token != PARENTH_CLOSE)
+	if (tmp != NULL && (tmp->token == CMD || tmp->token == DOL
+			|| tmp->token == SINGLE_QUOTE || tmp->token == DOUBLE_QUOTE
+			|| tmp->token == PARENTH_OPEN))
 		return (-1);
 	return (0);
 }

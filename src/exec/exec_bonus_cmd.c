@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/14 19:36:52 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/15 18:57:41 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +23,31 @@ int	is_bonus_cmd(t_word *lexer)
 	return (0);
 }
 
-void	new_t_word(t_word **start, t_word **lexer, t_word **end)
+void	new_lst(t_word **start, t_word **lexer, t_word *curent)
 {
 	t_word	*tmp;
+	t_word	*end;
 
 	tmp = NULL;
+	end = NULL;
+	if (curent->token == PARENTH_OPEN)
+		end = end_of_parenth(curent);
 	if ((*start)->prev != NULL)
 		tmp = *lexer;
 	*lexer = *start;
-	if (*end == NULL)
-		*end = *start;
-	while ((*end)->token != PIPE && (*end)->token != END && (*end)->token != OR
-		&& (*end)->token != AND)
-		(*end) = (*end)->next;
+	if (end == NULL)
+		end = *start;
+	while (end->token != PIPE && end->token != END && end->token != OR
+		&& end->token != AND)
+		end = end->next;
 	if ((*lexer)->prev != NULL)
-		(*lexer)->prev->next = (*end)->next;
+		(*lexer)->prev->next = end->next;
 	else
-		tmp = (*end)->next;
+		tmp = end->next;
 	(*lexer)->prev = NULL;
-	(*end)->next = NULL;
-	if ((*end)->token != PIPE)
-		(*end)->token = END;
-	// print_list(*lexer);
+	end->next = NULL;
+	if (end->token != PIPE)
+		end->token = END;
 	if (tmp != NULL)
 		free_list_lexer(&tmp);
 }
@@ -72,17 +75,44 @@ t_word	*update_tmp(t_word *tmp, t_var *var)
 	return (tmp);
 }
 
+t_word	*find_token(t_word *lexer, int token)
+{
+	while (lexer && lexer->token != token)
+		lexer = lexer->next;
+	return (lexer);
+}
+void	do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i, t_var *var)
+{
+	t_word	*tmp;
+
+	if (node_cmp_token(var->lexer, PARENTH_OPEN))
+	{
+		tmp = end_of_parenth(find_token(var->lexer, PARENTH_OPEN));
+		tmp->next->token = END;
+		tmp = var->lexer;
+		var->lexer = find_token(var->lexer, PARENTH_OPEN)->next;
+		var->lexer->prev->next = NULL;
+		var->lexer->prev = NULL;
+		free_list_lexer(&tmp);
+		do_bonus_cmd(c_fd, pipe_fd, i, var);
+		close_all_fd(pipe_fd, c_fd, i, true);
+		var->exit = true;
+		free_var(var);
+		exit(g_exit_status);
+	}
+}
+
 int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	pid_t	pid;
 	t_word	*tmp;
-	t_word	*start;
-	t_word	*end;
+	t_word	*head;
 	bool	flag;
 
 	tmp = var->lexer;
-	start = tmp;
+	head = tmp;
 	flag = true;
+	var->execute_next = true;
 	while (tmp != NULL)
 	{
 		if (var->execute_next && (tmp->token == CMD
@@ -92,21 +122,11 @@ int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 			if (pid == -1)
 				return (close_all_fd(pipe_fd, c_fd, i, true), -1);
 			if (pid == 0)
-			{
-				if (tmp->token == CMD)
-					end = NULL, new_t_word(&start, &var->lexer, &end);
-				else
-				{
-					end = end_of_parenth(tmp);
-					start = tmp;
-					new_t_word(&start, &var->lexer, &end);
-				}
-				child(c_fd, pipe_fd, i, var);
-			}
+				new_lst(&head, &var->lexer, tmp), child(c_fd, pipe_fd, i, var);
 			g_exit_status = wait_for_child(pid);
 			flag = false;
 		}
-		flag = update_execution_state(&start, tmp, var, flag);
+		flag = update_execution_state(&head, tmp, var, flag);
 		tmp = update_tmp(tmp, var);
 	}
 	return (0);
