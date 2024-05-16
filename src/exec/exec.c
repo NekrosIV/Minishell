@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/15 18:22:23 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/16 14:08:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	char	**cmd;
 
 	signal(SIGQUIT, SIG_DFL), do_dup(c_fd, pipe_fd, i, var);
-	print_list(var->lexer);
 	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer,
 			SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
 		free_error(var, NULL, NULL, 0);

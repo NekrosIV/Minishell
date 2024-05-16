@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/15 18:57:41 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/16 14:04:21 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,31 @@ void	do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i, t_var *var)
 	}
 }
 
+int	is_just_parent(t_word *tmp)
+{
+	if (tmp->token == PARENTH_OPEN)
+	{
+		tmp = end_of_parenth(tmp);
+		if (tmp->next != NULL)
+			tmp = skip_token(tmp->next, SPACES, true);
+		if (tmp->token == PIPE || (tmp->token == END && ft_strncmp(tmp->word,
+					"newline", 7) != 0))
+			return (1);
+	}
+	return (0);
+}
+
 int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
-	pid_t	pid;
-	t_word	*tmp;
-	t_word	*head;
-	bool	flag;
+	pid_t pid;
+	t_word *tmp;
+	t_word *head;
+	bool flag;
 
 	tmp = var->lexer;
 	head = tmp;
 	flag = true;
-	var->execute_next = true;
-	while (tmp != NULL)
+	while (tmp != NULL && tmp->token != END && tmp->token != PIPE)
 	{
 		if (var->execute_next && (tmp->token == CMD
 				|| tmp->token == PARENTH_OPEN) && flag == true)
@@ -122,8 +135,9 @@ int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 			if (pid == -1)
 				return (close_all_fd(pipe_fd, c_fd, i, true), -1);
 			if (pid == 0)
-				new_lst(&head, &var->lexer, tmp), child(c_fd, pipe_fd, i, var);
-			g_exit_status = wait_for_child(pid);
+				new_lst(&head, &var->lexer, tmp),child(c_fd, pipe_fd, i, var);
+			if (is_just_parent(tmp) == 0)
+				g_exit_status = wait_for_child(pid);
 			flag = false;
 		}
 		flag = update_execution_state(&head, tmp, var, flag);
