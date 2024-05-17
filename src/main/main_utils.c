@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/17 16:00:42 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 16:07:26 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char	*get_prompt_two(t_var *var, char *tmp2, char *git_branch)
 char	*get_prompt(t_var *var)
 {
 	char	*prompt;
-	char	*tmp;
 	char	*pwd;
 	char	*tmp2;
 	char	*git_branch;
