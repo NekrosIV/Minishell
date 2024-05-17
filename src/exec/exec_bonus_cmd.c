@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/16 14:04:21 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:09:13 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_word	*find_token(t_word *lexer, int token)
 		lexer = lexer->next;
 	return (lexer);
 }
+
 void	do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	t_word	*tmp;
@@ -102,7 +103,7 @@ void	do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i, t_var *var)
 	}
 }
 
-int	is_just_parent(t_word *tmp)
+void	need_to_wait(t_word *tmp, pid_t pid)
 {
 	if (tmp->token == PARENTH_OPEN)
 	{
@@ -111,17 +112,17 @@ int	is_just_parent(t_word *tmp)
 			tmp = skip_token(tmp->next, SPACES, true);
 		if (tmp->token == PIPE || (tmp->token == END && ft_strncmp(tmp->word,
 					"newline", 7) != 0))
-			return (1);
+			return ;
 	}
-	return (0);
+	g_exit_status = wait_for_child(pid);
 }
 
 int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
-	pid_t pid;
-	t_word *tmp;
-	t_word *head;
-	bool flag;
+	pid_t	pid;
+	t_word	*tmp;
+	t_word	*head;
+	bool	flag;
 
 	tmp = var->lexer;
 	head = tmp;
@@ -135,10 +136,9 @@ int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 			if (pid == -1)
 				return (close_all_fd(pipe_fd, c_fd, i, true), -1);
 			if (pid == 0)
-				new_lst(&head, &var->lexer, tmp),child(c_fd, pipe_fd, i, var);
-			if (is_just_parent(tmp) == 0)
-				g_exit_status = wait_for_child(pid);
-			flag = false;
+				(new_lst(&head, &var->lexer, tmp), child(c_fd, pipe_fd, i,
+						var));
+			(need_to_wait(tmp, pid), flag = false);
 		}
 		flag = update_execution_state(&head, tmp, var, flag);
 		tmp = update_tmp(tmp, var);

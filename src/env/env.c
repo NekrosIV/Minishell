@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 15:02:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/13 16:46:28 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 13:55:38 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char	**split_env(t_env *env)
 	result[i] = NULL;
 	return (result);
 }
+
 void	add_pwd(t_env **envs)
 {
 	char	*pwd;
@@ -77,8 +78,9 @@ void	add_pwd(t_env **envs)
 		exit(1);
 	}
 	add_node_env(envs, line);
-	free(pwd);add_node_env(envs, ft_strdup("ls=ls --color=tty"));
+	free(pwd);
 }
+
 void	init_env(t_env **envs, char **env)
 {
 	int	i;

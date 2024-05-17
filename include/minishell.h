@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/16 17:23:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 15:12:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ typedef struct s_var
 	bool			execute_next;
 	bool			bonus_cmd;
 	bool			use_ls_alias;
+	bool			uncommitted_changes;
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
@@ -132,6 +133,7 @@ void				sigint_handler_here_doc(int signum);
 
 /* ****************************** MAIN_UTILS.C ****************************** */
 
+char				*get_git_branch(t_var *var);
 void				get_line(t_var *var);
 t_var				*init_var(t_env **envs, bool allias_ls);
 

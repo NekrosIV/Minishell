@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/16 19:07:27 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 16:00:42 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,69 +28,36 @@ char	*get_pwd(t_var *var)
 		tmp = ft_strjoin("~", pwd + ft_strlen(home));
 		if (!tmp)
 			free_error(var, E_MALLOC, "tmp", 1);
-		free(pwd), free(home);
+		(free(pwd), free(home));
 		pwd = tmp;
 	}
 	return (pwd);
 }
 
-void	handle_stderror(bool do_it)
+char	*get_prompt_two(t_var *var, char *tmp2, char *git_branch)
 {
-	int			fd;
-	static int	old_fd = -1;
-
-	if (do_it == true)
-	{
-		old_fd = dup(STDERR_FILENO);
-		fd = open("/dev/null", O_RDONLY);
-		if (fd == -1)
-			return ;
-		if (dup2(fd, STDERR_FILENO) == -1)
-		{
-			perror("dup2(fd_in)"), close(fd);
-			return ;
-		}
-		close(fd);
-	}
-	else if (old_fd != -1)
-	{
-		if (dup2(old_fd, STDERR_FILENO) == -1)
-		{
-			perror("dup2(old_fd)");
-			return ;
-		}
-		close(old_fd);
-	}
-}
-
-char	*get_git_branch(t_var *var)
-{
-	int		fd;
-	char	*branch;
+	char	*prompt;
 	char	*tmp;
 
-	handle_stderror(true);
-	var->line = ft_strdup("git rev-parse --abbrev-ref HEAD > git_brach_name");
-	if (!var->line)
-		free_error(var, E_MALLOC, "var->line", 1);
-	parsing(var);
-	if (var->error == true)
-		return (free_list_lexer(&var->lexer), free(var->line), NULL);
-	before_exe(var);
-	if (var->error == true)
-		return (free_list_lexer(&var->lexer), free(var->line), NULL);
-	fd = open("git_brach_name", O_RDONLY);
-	if (fd == -1)
-		return (free_list_lexer(&var->lexer), free(var->line), NULL);
-	tmp = get_next_line(fd), close(fd), unlink("git_brach_name");
+	if (var->uncommitted_changes == true)
+		tmp = ft_strjoin(tmp2, RESET "]" RED "✘✘✘" RESET "\n╰──");
+	else if (var->uncommitted_changes == false && git_branch[0] != '\0')
+		tmp = ft_strjoin(tmp2, RESET "]" GREEN "✔✔✔" RESET "\n╰──");
+	else
+		tmp = ft_strjoin(tmp2, RESET "]\n╰──");
+	free(git_branch);
 	if (!tmp)
-		return (free_list_lexer(&var->lexer), free(var->line), NULL);
-	branch = ft_strtrim(tmp, "\n");
-	if (!branch)
-		return (free_list_lexer(&var->lexer), free(var->line), NULL);
-	handle_stderror(false), free(tmp);
-	return (free_list_lexer(&var->lexer), free(var->line), branch);
+		(free(tmp2), free_error(var, E_MALLOC, "tmp", 1));
+	if (g_exit_status == 0)
+		prompt = ft_strjoin(tmp, RESET "➤ ");
+	else
+		prompt = ft_strjoin(tmp, RED "➤ " RESET);
+	if (!prompt)
+		(free(tmp), free(tmp2), free_error(var, E_MALLOC, "prompt", 1));
+	(free(tmp), free(tmp2));
+	return (prompt);
 }
+
 char	*get_prompt(t_var *var)
 {
 	char	*prompt;
@@ -100,30 +67,21 @@ char	*get_prompt(t_var *var)
 	char	*git_branch;
 
 	tmp2 = NULL;
-	tmp2 = get_git_branch(var);
-	if (!tmp2)
-	{
-		git_branch = ft_strdup("");
-		g_exit_status = 0;
-	}
-	else
-		git_branch = ft_strjoin(RESET "] in [" BOLD CYAN, tmp2);
-	free(tmp2);
+	git_branch = get_git_branch(var);
+	if (!git_branch)
+		free_error(var, E_MALLOC, "git_branch", 1);
 	pwd = get_pwd(var);
+	if (!pwd)
+		(free(git_branch), free_error(var, E_MALLOC, "pwd", 1));
 	prompt = ft_strjoin("╭─[" GREEN "minirt" RESET "] in [" BLUE, pwd);
+	free(pwd);
 	if (!prompt)
-		free_error(var, E_MALLOC, "prompt", 1);
+		(free(git_branch), free_error(var, E_MALLOC, "prompt", 1));
 	tmp2 = ft_strjoin(prompt, git_branch);
-	tmp = ft_strjoin(tmp2, RESET "]\n╰──");
-	if (!tmp)
-		free_error(var, E_MALLOC, "tmp", 1);
-	free(prompt), free(tmp2), free(git_branch);
-	if (g_exit_status == 0)
-		prompt = ft_strjoin(tmp, RESET "➤ ");
-	else
-		prompt = ft_strjoin(tmp, RED "➤ " RESET);
-	free(tmp), free(pwd);
-	return (prompt);
+	if (!tmp2)
+		(free(git_branch), free(tmp2), free_error(var, E_MALLOC, "tmp2", 1));
+	free(prompt);
+	return (get_prompt_two(var, tmp2, git_branch));
 }
 
 void	get_line(t_var *var)
@@ -160,6 +118,7 @@ t_var	*init_var(t_env **envs, bool allias_ls)
 	var->exit = false;
 	var->error = false;
 	var->bonus_cmd = false;
+	var->uncommitted_changes = false;
 	var->use_ls_alias = allias_ls;
 	var->execute_next = true;
 	var->line = NULL;

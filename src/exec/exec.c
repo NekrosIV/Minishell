@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/16 14:08:23 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 13:57:20 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,10 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	char	**env;
 	char	**cmd;
 
-	signal(SIGQUIT, SIG_DFL), do_dup(c_fd, pipe_fd, i, var);
+	(signal(SIGQUIT, SIG_DFL), do_dup(c_fd, pipe_fd, i, var));
 	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer,
 			SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
-		free_error(var, NULL, NULL, 0);
+		(close_all_fd(pipe_fd, c_fd, i, true), free_error(var, NULL, NULL, 0));
 	do_cmd_in_parenth(c_fd, pipe_fd, i, var);
 	close_all_fd(pipe_fd, c_fd, i, true);
 	env = split_env(var->env);
@@ -74,7 +74,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	{
 		ft_putstr_fd(cmd[0], 2);
 		ft_putendl_fd(": command not found", 2);
-		free_split(env), free_split(cmd);
+		(free_split(env), free_split(cmd));
 		exit(127);
 	}
 	exec(cmd, env);

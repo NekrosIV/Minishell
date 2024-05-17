@@ -15,6 +15,7 @@ FREE_AND_EXIT_DIR = $(SRCDIR)/free_and_exit
 MAIN_DIR = $(SRCDIR)/main
 PARSING_DIR = $(SRCDIR)/parsing
 UTILS_DIR = $(SRCDIR)
+GIT_DIR = $(SRCDIR)/git
 
 # Fichiers sources
 SRCS = $(ENV_DIR)/env_utils.c \
@@ -32,6 +33,7 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(FREE_AND_EXIT_DIR)/exit.c \
       $(FREE_AND_EXIT_DIR)/free.c \
       $(FREE_AND_EXIT_DIR)/free_two.c \
+	  $(GIT_DIR)/get_git_branch.c \
       $(MAIN_DIR)/main_utils.c \
       $(MAIN_DIR)/main.c \
       $(PARSING_DIR)/check_syntax_pipe.c \

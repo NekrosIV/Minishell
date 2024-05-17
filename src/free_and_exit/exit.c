@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:25:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/15 16:24:21 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 14:34:41 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,10 @@ void	print_exit_status(int width, bool is_error)
 				strcpy(move_right_str, "\033[");
 				strcat(move_right_str, itoa_str);
 				strcat(move_right_str, "C");
-				free(itoa_str), ft_putstr_fd(move_right_str, 2);
+				(free(itoa_str), ft_putstr_fd(move_right_str, 2));
 			}
 		}
 		ft_putstr_fd(GREY "exit:" BOLD RED, 2);
-		ft_putnbr_fd(g_exit_status, 2), ft_putstr_fd("\n" RESET, 2);
+		(ft_putnbr_fd(g_exit_status, 2), ft_putstr_fd("\n" RESET, 2));
 	}
 }
