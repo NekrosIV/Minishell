@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/17 16:16:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/17 16:23:24 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,15 @@ char	*get_git_branch(t_var *var)
 	char	*tmp;
 	char	*tmp2;
 
-	tmp = get_git_info(var, "git rev-parse --abbrev-ref HEAD", "git_branch");
+	tmp = get_git_info(var, "git rev-parse --abbrev-ref HEAD",
+			"/tmp/git_branch");
 	if (!tmp)
 		return (ft_strdup(""));
 	tmp2 = ft_strjoin(RESET "] on [" BOLD CYAN, tmp);
 	if (!tmp2)
 		return (free(tmp), NULL);
 	free(tmp);
-	tmp = get_git_info(var, "git status --porcelain", "git_status");
-    printf("tmp: %s\n", tmp);
+	tmp = get_git_info(var, "git status --porcelain", "/tmp/git_status");
 	if (!tmp)
 		var->uncommitted_changes = false;
 	else
