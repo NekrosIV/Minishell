@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/18 16:42:58 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/18 16:44:59 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ char	*get_git_branch(t_var *var)
 		return (ft_strdup(""));
 	printf("g_exit_status: %d\n", g_exit_status);
 	tmp3 = get_git_info(var, "git status --porcelain", "git_status");
+	printf("tmp3: %s\n", tmp3);
 	if (!tmp3)
 		var->uncommitted_changes = false;
 	else
