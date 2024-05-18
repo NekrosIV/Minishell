@@ -1,4 +1,5 @@
 *.o
 *.a
 minishell
-*git
+git_status
+git_branch
