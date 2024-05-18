@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/17 15:12:10 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/18 16:02:35 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
 # define GREEN "\e[1;92m"
 # define YELLOW "\e[1;93m"
 # define BLUE "\033[38;5;117m"
-# define PURPLE "\e[1;95m"
-# define CYAN "\e[1;96m"
+# define PURPLE "\033[38;5;164m"
+# define CYAN "\033[38;5;51m"
 # define WHITE "\e[1;97m"
 # define RESET "\e[0m"
 # define BOLD "\e[1m"

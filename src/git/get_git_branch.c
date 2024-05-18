@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/17 16:23:24 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/18 16:42:58 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static char	*get_git_branch_two(int status, char *file_name)
 	if (fd == -1)
 		return (NULL);
 	line = get_next_line(fd);
-	close(fd);
 	unlink(file_name);
+	close(fd);
 	if (!line)
 		return (NULL);
 	tmp = ft_strtrim(line, "\n");
@@ -93,19 +93,23 @@ char	*get_git_branch(t_var *var)
 {
 	char	*tmp;
 	char	*tmp2;
+	char	*tmp3;
 
-	tmp = get_git_info(var, "git rev-parse --abbrev-ref HEAD",
-			"/tmp/git_branch");
+	tmp = get_git_info(var, "git rev-parse --abbrev-ref HEAD", "git_branch");
 	if (!tmp)
 		return (ft_strdup(""));
-	tmp2 = ft_strjoin(RESET "] on [" BOLD CYAN, tmp);
+	printf("g_exit_status: %d\n", g_exit_status);
+	tmp3 = get_git_info(var, "git status --porcelain", "git_status");
+	if (!tmp3)
+		var->uncommitted_changes = false;
+	else
+		(var->uncommitted_changes = true, free(tmp3));
+	if (!tmp3)
+		tmp2 = ft_strjoin(RESET "] on [" BOLD CYAN, tmp);
+	else
+		tmp2 = ft_strjoin(RESET "] on [" BOLD RED, tmp);
 	if (!tmp2)
 		return (free(tmp), NULL);
 	free(tmp);
-	tmp = get_git_info(var, "git status --porcelain", "/tmp/git_status");
-	if (!tmp)
-		var->uncommitted_changes = false;
-	else
-		(var->uncommitted_changes = true, free(tmp));
 	return (tmp2);
 }
