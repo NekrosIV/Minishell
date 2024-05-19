@@ -1,5 +1,7 @@
 *.o
 *.a
+a.out
+test.c
 minishell
 git_status
 git_branch
