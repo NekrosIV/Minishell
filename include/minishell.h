@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/18 16:02:35 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 18:32:25 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@
 # define RESET "\e[0m"
 # define BOLD "\e[1m"
 # define GREY "\033[90m"
+# define LILA "\033[38;5;147m"
+# define OCEAN_BLUE "\033[38;5;24m"
+# define TEAL "\033[38;5;44m"
+# define LIGHT_GREEN "\033[38;5;120m"
 
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
