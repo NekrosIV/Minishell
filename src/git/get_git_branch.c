@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 18:24:42 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 18:33:48 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static char	*get_git_branch_two(int status, char *file_name)
 	if (ft_strncmp(file_name, "git_status", 10) == 0)
 	{
 		bytes_read = read(fd, buffer, 10);
-		if (bytes_read == -1)
+		if (bytes_read == -1 || bytes_read == 0)
 			return (unlink(file_name), NULL);
 		return (unlink(file_name), "yes");
 	}
