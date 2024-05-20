@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/18 16:56:34 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 18:30:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,46 @@
 char	*get_pwd(t_var *var)
 {
 	char	*pwd;
-	char	*home;
 	char	*tmp;
+	int		i;
 
 	pwd = find_in_env("$PWD", var);
 	if (!pwd)
 		pwd = ft_strdup("");
-	home = find_in_env("$HOME", var);
-	if (home && ft_strncmp(pwd, home, ft_strlen(home)) == 0)
+	i = ft_strlen(pwd);
+	while (i > 0)
 	{
-		tmp = ft_strjoin("~", pwd + ft_strlen(home));
-		if (!tmp)
-			free_error(var, E_MALLOC, "tmp", 1);
-		(free(pwd), free(home));
-		pwd = tmp;
+		if (pwd[i] == '/')
+			break ;
+		i--;
 	}
+	tmp = ft_strdup(&pwd[++i]);
+	free(pwd);
+	pwd = tmp;
 	return (pwd);
 }
 
 char	*get_prompt_two(t_var *var, char *tmp2, char *git_branch)
 {
-	char	*prompt;
 	char	*tmp;
 
 	if (var->uncommitted_changes == true)
-		tmp = ft_strjoin(tmp2, RESET "]" RED "✘" RESET "\n╰──");
+		tmp = ft_strjoin(tmp2, ")" RESET RED "✘ " RESET);
 	else if (var->uncommitted_changes == false && git_branch[0] != '\0')
-		tmp = ft_strjoin(tmp2, RESET "]" GREEN "✔✔✔" RESET "\n╰──");
+		tmp = ft_strjoin(tmp2, ")" RESET LIGHT_GREEN "✔ " RESET);
 	else
-		tmp = ft_strjoin(tmp2, RESET "]\n╰──");
+		tmp = ft_strjoin(tmp2, ") " RESET);
 	free(git_branch);
 	if (!tmp)
 		(free(tmp2), free_error(var, E_MALLOC, "tmp", 1));
-	if (g_exit_status == 0)
-		prompt = ft_strjoin(tmp, RESET "➤ ");
-	else
-		prompt = ft_strjoin(tmp, RED "➤ " RESET);
-	if (!prompt)
-		(free(tmp), free(tmp2), free_error(var, E_MALLOC, "prompt", 1));
-	(free(tmp), free(tmp2));
-	return (prompt);
+	// if (g_exit_status == 0)
+	// 	prompt = ft_strjoin(tmp, RESET "➤ ");
+	// else
+	// 	prompt = ft_strjoin(tmp, RED "➤ " RESET);
+	// if (!prompt)
+	// 	(free(tmp), free(tmp2), free_error(var, E_MALLOC, "prompt", 1));
+	free(tmp2);
+	return (tmp);
 }
 
 char	*get_prompt(t_var *var)
@@ -72,8 +72,7 @@ char	*get_prompt(t_var *var)
 	pwd = get_pwd(var);
 	if (!pwd)
 		(free(git_branch), free_error(var, E_MALLOC, "pwd", 1));
-	prompt = ft_strjoin("╭─[" BOLD PURPLE "minirt" RESET "] in [" BOLD PURPLE,
-			pwd);
+	prompt = ft_strjoin(BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE, pwd);
 	free(pwd);
 	if (!prompt)
 		(free(git_branch), free_error(var, E_MALLOC, "prompt", 1));

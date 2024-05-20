@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 14:16:20 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 15:05:06 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,27 @@ void	print_cmd(char **cmd)
 	}
 }
 
+int	cmd_found(t_word *lexer)
+{
+	while (lexer)
+	{
+		if (lexer->token == CMD || lexer->token == DOUBLE_QUOTE
+			|| lexer->token == SINGLE_QUOTE)
+			return (1);
+		if (lexer->token == PIPE)
+			break ;
+		lexer = lexer->next;
+	}
+	return (0);
+}
+
 void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	char	**env;
 	char	**cmd;
 
 	(signal(SIGQUIT, SIG_DFL), do_dup(c_fd, pipe_fd, i, var));
-	if (node_cmp_token(var->lexer, CMD) == 0 && node_cmp_token(var->lexer,
-			SINGLE_QUOTE) == 0 && node_cmp_token(var->lexer, DOUBLE_QUOTE) == 0)
+	if (cmd_found(var->lexer) == 0)
 		(close_all_fd(pipe_fd, c_fd, i, true), free_error(var, NULL, NULL, 0));
 	do_cmd_in_parenth(c_fd, pipe_fd, i, var);
 	close_all_fd(pipe_fd, c_fd, i, true);
@@ -70,7 +83,6 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 		free_error(var, E_MALLOC, "cmd", 1);
 	var->exit = true;
 	free_var(var);
-	print_cmd(cmd);
 	if (cmd[0][0] == '\0')
 	{
 		ft_putstr_fd(cmd[0], 2);

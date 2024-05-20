@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/18 16:49:17 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 18:24:42 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,28 @@ static char	*get_git_branch_two(int status, char *file_name)
 	int		fd;
 	char	*tmp;
 	char	*line;
+	ssize_t	bytes_read;
+	char	buffer[20];
 
 	if (status != 0)
 		return (NULL);
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
 		return (NULL);
-	line = get_next_line(fd);
-	unlink(file_name);
-	close(fd);
+	if (ft_strncmp(file_name, "git_status", 10) == 0)
+	{
+		bytes_read = read(fd, buffer, 10);
+		if (bytes_read == -1)
+			return (unlink(file_name), NULL);
+		return (unlink(file_name), "yes");
+	}
+	(line = get_next_line(fd), unlink(file_name), close(fd));
 	if (!line)
 		return (NULL);
 	tmp = ft_strtrim(line, "\n");
 	if (!tmp)
 		return (free(line), NULL);
-	free(line);
-	return (tmp);
+	return (free(line), tmp);
 }
 
 char	*get_git_info(t_var *var, char *str, char *file_name)
@@ -95,18 +101,16 @@ char	*get_git_branch(t_var *var)
 	char	*tmp2;
 	char	*tmp3;
 
-	tmp = get_git_info(var, "git rev-parse --abbrev-ref HEAD", "git_branch");
+	tmp = get_git_info(var, "/usr/bin/git rev-parse --abbrev-ref HEAD",
+			"git_branch");
 	if (!tmp)
 		return (ft_strdup(""));
-	tmp3 = get_git_info(var, "git status --porcelain", "git_status");
+	tmp3 = get_git_info(var, "/usr/bin/git status --porcelain", "git_status");
 	if (!tmp3)
 		var->uncommitted_changes = false;
 	else
-		(var->uncommitted_changes = true, free(tmp3));
-	if (!tmp3)
-		tmp2 = ft_strjoin(RESET "] on [" BOLD CYAN, tmp);
-	else
-		tmp2 = ft_strjoin(RESET "] on [" BOLD RED, tmp);
+		var->uncommitted_changes = true;
+	tmp2 = ft_strjoin(RESET BOLD TEAL " git:(", tmp);
 	if (!tmp2)
 		return (free(tmp), NULL);
 	free(tmp);
