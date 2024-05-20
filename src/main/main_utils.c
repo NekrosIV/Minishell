@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 18:30:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 18:41:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ char	*get_prompt_two(t_var *var, char *tmp2, char *git_branch)
 	if (!tmp)
 		(free(tmp2), free_error(var, E_MALLOC, "tmp", 1));
 	// if (g_exit_status == 0)
-	// 	prompt = ft_strjoin(tmp, RESET "➤ ");
+	// 	prompt = ft_strjoin(tmp, RESET "➜ ");
 	// else
-	// 	prompt = ft_strjoin(tmp, RED "➤ " RESET);
+	// 	prompt = ft_strjoin(tmp, RED "➜ " RESET);
 	// if (!prompt)
 	// 	(free(tmp), free(tmp2), free_error(var, E_MALLOC, "prompt", 1));
 	free(tmp2);
@@ -72,15 +72,19 @@ char	*get_prompt(t_var *var)
 	pwd = get_pwd(var);
 	if (!pwd)
 		(free(git_branch), free_error(var, E_MALLOC, "pwd", 1));
-	prompt = ft_strjoin(BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE, pwd);
+	if (g_exit_status == 0)
+		prompt = ft_strjoin(GREEN "➜ " BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE,
+				pwd);
+	else
+		prompt = ft_strjoin(RED "➜ " BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE,
+				pwd);
 	free(pwd);
 	if (!prompt)
 		(free(git_branch), free_error(var, E_MALLOC, "prompt", 1));
 	tmp2 = ft_strjoin(prompt, git_branch);
 	if (!tmp2)
 		(free(git_branch), free(tmp2), free_error(var, E_MALLOC, "tmp2", 1));
-	free(prompt);
-	return (get_prompt_two(var, tmp2, git_branch));
+	return (free(prompt), get_prompt_two(var, tmp2, git_branch));
 }
 
 void	get_line(t_var *var)

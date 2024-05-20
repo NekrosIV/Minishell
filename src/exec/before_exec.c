@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 18:28:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 19:04:29 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ void	do_here_doc(t_var *var)
 
 void	before_exe(t_var *var)
 {
-	if (node_cmp_token(var->lexer, HERE_DOC) == 1)
+	if (var->lexer->token == END)
+		var->error = true;
+	if (var->error == false && node_cmp_token(var->lexer, HERE_DOC) == 1)
 		do_here_doc(var);
 	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
