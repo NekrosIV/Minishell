@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/13 17:27:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:10:31 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,15 @@ void	parsing(t_var *var)
 	int	*tab;
 
 	i = 0;
-	if (ft_strncmp(var->line, "use_ls_alias", 12) == 0)
-	{
-		if (var->use_ls_alias == true)
-			var->use_ls_alias = false;
-		else
-			var->use_ls_alias = true;
-		var->error = true;
-		return ;
-	}
+	// if (ft_strncmp(var->line, "use_ls_alias", 12) == 0)
+	// {
+	// 	if (var->use_ls_alias == true)
+	// 		var->use_ls_alias = false;
+	// 	else
+	// 		var->use_ls_alias = true;
+	// 	var->error = true;
+	// 	return ;
+	// }
 	tab = init_tab_token(var->line, i);
 	if (!tab)
 		free_error(var, E_MALLOC, "tab", 1);

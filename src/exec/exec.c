@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/17 13:57:20 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:16:20 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 		free_error(var, E_MALLOC, "cmd", 1);
 	var->exit = true;
 	free_var(var);
+	print_cmd(cmd);
 	if (cmd[0][0] == '\0')
 	{
 		ft_putstr_fd(cmd[0], 2);

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/13 17:28:19 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 14:10:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ void	handle_quotes(t_var *var, int *i, int token)
 void	handle_char(t_var *var, int *i, int *tab)
 {
 	int		start;
-	char	*alias;
 	char	*str;
 
+	// char	*alias;
 	start = *i;
 	while (tab[(*i)] == CHAR)
 		(*i)++;
@@ -113,14 +113,14 @@ void	handle_char(t_var *var, int *i, int *tab)
 		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->lexer, CMD, str) == -1)
 		free_error(var, E_MALLOC, "add_word", 1);
-	if (var->use_ls_alias == true && ft_strncmp(str, "ls", 2) == 0)
-	{
-		(*i)--;
-		handle_space(var, i);
-		alias = ft_strdup("--color=tty");
-		if (!alias)
-			free_error(var, E_MALLOC, "alias", 1);
-		if (add_word(&var->lexer, CMD, alias) == -1)
-			free_error(var, E_MALLOC, "add_word", 1);
-	}
+	// if (var->use_ls_alias == true && ft_strncmp(str, "ls", 2) == 0)
+	// {
+	// 	(*i)--;
+	// 	handle_space(var, i);
+	// 	alias = ft_strdup("--color=tty");
+	// 	if (!alias)
+	// 		free_error(var, E_MALLOC, "alias", 1);
+	// 	if (add_word(&var->lexer, CMD, alias) == -1)
+	// 		free_error(var, E_MALLOC, "add_word", 1);
+	// }
 }

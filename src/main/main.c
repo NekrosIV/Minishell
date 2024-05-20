@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/18 16:52:46 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/20 13:16:30 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	sigint_handler(int sig)
 	if (!isatty(0))
 		ft_putstr_fd("\n", 1);
 	rl_replace_line("", 0);
-	// rl_reset_line_state();
+	rl_reset_line_state();
 	rl_redisplay();
 }
 
