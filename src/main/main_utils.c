@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 18:41:57 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:21:15 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@ char	*get_prompt_two(t_var *var, char *tmp2, char *git_branch)
 	free(git_branch);
 	if (!tmp)
 		(free(tmp2), free_error(var, E_MALLOC, "tmp", 1));
-	// if (g_exit_status == 0)
-	// 	prompt = ft_strjoin(tmp, RESET "➜ ");
-	// else
-	// 	prompt = ft_strjoin(tmp, RED "➜ " RESET);
-	// if (!prompt)
-	// 	(free(tmp), free(tmp2), free_error(var, E_MALLOC, "prompt", 1));
 	free(tmp2);
 	return (tmp);
 }
@@ -108,7 +102,7 @@ void	get_line(t_var *var)
 	free(prompt);
 }
 
-t_var	*init_var(t_env **envs, bool allias_ls)
+t_var	*init_var(t_env **envs)
 {
 	t_var	*var;
 
@@ -122,7 +116,6 @@ t_var	*init_var(t_env **envs, bool allias_ls)
 	var->error = false;
 	var->bonus_cmd = false;
 	var->uncommitted_changes = false;
-	var->use_ls_alias = allias_ls;
 	var->execute_next = true;
 	var->line = NULL;
 	var->lexer = NULL;

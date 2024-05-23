@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 18:32:25 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:20:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 /* ************************************************************************** */
 
 # include "../libft/libft.h"
+# include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -80,6 +81,7 @@ typedef enum e_token
 	AND,
 	PARENTH_OPEN,
 	PARENTH_CLOSE,
+	WILDCARD,
 	END
 }					t_token;
 
@@ -109,7 +111,6 @@ typedef struct s_var
 	bool			error;
 	bool			execute_next;
 	bool			bonus_cmd;
-	bool			use_ls_alias;
 	bool			uncommitted_changes;
 	char			*prompt;
 	t_word			*lexer;
@@ -139,7 +140,7 @@ void				sigint_handler_here_doc(int signum);
 
 char				*get_git_branch(t_var *var);
 void				get_line(t_var *var);
-t_var				*init_var(t_env **envs, bool allias_ls);
+t_var				*init_var(t_env **envs);
 
 /* ************************************************************************** */
 /*                                      ENV                                   */
@@ -183,6 +184,10 @@ void				handle_dol(t_var *var, int *i, int *tab);
 void				handle_or_and(t_var *var, int *i, int *tab);
 void				handle_parent(t_var *var, int *i, int *tab);
 void				handle_end(t_var *var);
+
+/* ******************************* WILDCARD.C ******************************* */
+
+void				handle_wildcard(t_var *var, int *i, int *tab);
 
 /* ****************************** CHECK_SYNTAX.C **************************** */
 

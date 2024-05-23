@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 14:10:31 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:16:05 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	add_word(t_word **word, int token, char *str)
 
 void	handle_token(t_var *var, int *tab, int i)
 {
-	while (tab[i] != END)
+	while (tab[i] != END && var->error == false)
 	{
 		if (tab[i] == PIPE)
 			handle_pipe(var, &i);
@@ -59,6 +59,8 @@ void	handle_token(t_var *var, int *tab, int i)
 			handle_or_and(var, &i, tab);
 		else if (tab[i] == PARENTH_OPEN || tab[i] == PARENTH_CLOSE)
 			handle_parent(var, &i, tab);
+		else if (tab[i] == WILDCARD)
+			handle_wildcard(var, &i, tab);
 		else
 			handle_char(var, &i, tab);
 	}
@@ -84,6 +86,8 @@ void	init_tab_token_2(char *line, int *tab, int *count)
 		tab[i] = PARENTH_OPEN;
 	else if (line[i] == ')')
 		tab[i] = PARENTH_CLOSE;
+	else if (line[i] == '*')
+		tab[i] = WILDCARD;
 	else
 		tab[i] = CHAR;
 	*count = i;
@@ -120,15 +124,6 @@ void	parsing(t_var *var)
 	int	*tab;
 
 	i = 0;
-	// if (ft_strncmp(var->line, "use_ls_alias", 12) == 0)
-	// {
-	// 	if (var->use_ls_alias == true)
-	// 		var->use_ls_alias = false;
-	// 	else
-	// 		var->use_ls_alias = true;
-	// 	var->error = true;
-	// 	return ;
-	// }
 	tab = init_tab_token(var->line, i);
 	if (!tab)
 		free_error(var, E_MALLOC, "tab", 1);

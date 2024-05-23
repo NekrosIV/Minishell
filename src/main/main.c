@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 13:16:30 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:22:09 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_var	*var;
 	t_env	*envs;
-	bool	allias_ls;
 
 	(void)av;
-	allias_ls = true;
 	if (ac != 1)
 		free_error(NULL, E_ARGS, NULL, 0);
 	envs = NULL;
@@ -62,12 +60,11 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		set_signals();
-		var = init_var(&envs, allias_ls);
+		var = init_var(&envs);
 		get_line(var);
 		(check_exit(var), parsing(var));
 		if (var->error == false)
 			before_exe(var);
-		allias_ls = var->use_ls_alias;
 		free_var(var);
 		print_exit_status(get_terminal_width(), true);
 	}

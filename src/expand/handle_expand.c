@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:29:35 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/13 17:21:21 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/22 12:12:23 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	handle_quoted_space(t_var *var, int *i, char *line)
 void	handle_quoted_char(t_var *var, int *i, int *tab, char *line)
 {
 	int		start;
-	char	*alias;
 	char	*str;
 
 	start = *i;
@@ -40,15 +39,6 @@ void	handle_quoted_char(t_var *var, int *i, int *tab, char *line)
 		free_error(var, E_MALLOC, "str", 1);
 	if (add_word(&var->quoted_cmds, CMD, str) == -1)
 		free_error(var, E_MALLOC, "add_word", 1);
-	if (ft_strncmp(str, "ls", 2) == 0)
-	{
-		handle_space(var, 0);
-		alias = ft_strdup("--color=auto");
-		if (!alias)
-			free_error(var, E_MALLOC, "alias", 1);
-		if (add_word(&var->quoted_cmds, CMD, alias) == -1)
-			free_error(var, E_MALLOC, "add_word", 1);
-	}
 }
 
 void	handle_quoted_dol(t_var *var, int *i, int *tab, char *line)
