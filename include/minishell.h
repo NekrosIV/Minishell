@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/23 13:20:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 18:11:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@
 /*                            DEFINE ALL CONSTANT                             */
 /* ************************************************************************** */
 
-# define BLACK "\e[1;90m"
-# define RED "\e[1;91m"
-# define GREEN "\e[1;92m"
-# define YELLOW "\e[1;93m"
-# define BLUE "\033[38;5;117m"
-# define PURPLE "\033[38;5;164m"
-# define CYAN "\033[38;5;51m"
-# define WHITE "\e[1;97m"
-# define RESET "\e[0m"
-# define BOLD "\e[1m"
-# define GREY "\033[90m"
-# define LILA "\033[38;5;147m"
-# define OCEAN_BLUE "\033[38;5;24m"
-# define TEAL "\033[38;5;44m"
-# define LIGHT_GREEN "\033[38;5;120m"
+# define BLACK "\1\e[1;90m\2"
+# define RED "\1\e[1;91m\2"
+# define GREEN "\1\e[1;92m\2"
+# define YELLOW "\1\e[1;93m\2"
+# define BLUE "\1\033[38;5;117m\2"
+# define PURPLE "\1\033[38;5;164m\2"
+# define CYAN "\1\033[38;5;51m\2"
+# define WHITE "\1\e[1;97m\2"
+# define RESET "\1\e[0m\2"
+# define BOLD "\1\e[1m\2"
+# define GREY "\033[90m\2"
+# define LILA "\1\033[38;5;147m\2"
+# define OCEAN_BLUE "\1\033[38;5;24m\2"
+# define TEAL "\1\033[38;5;44m\2"
+# define LIGHT_GREEN "\1\033[38;5;120m\2"
 
 # define E_MALLOC "Error: malloc failed : "
 # define E_ARGS "Error: too many arguments\n"
@@ -203,6 +203,8 @@ int					check_syntax_pipe(t_word *lexer, t_var *var);
 bool				check_token(t_word *tmp, t_word *start, t_var *var);
 t_word				*check_and_trim(t_word *start, t_var *var);
 int					check_syntax_redir(t_var *var);
+void				join_if_need(t_word *head, t_var *var, int token);
+char				*ft_strjoin_tword(t_word *tmp, t_var *var, int token);
 
 /* *************************** CHECK_SYNTAX_OR_AND.C ************************ */
 

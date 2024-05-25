@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 19:04:29 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 18:05:28 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,15 +111,61 @@ void	do_here_doc(t_var *var)
 	}
 }
 
+void	join_node2(t_word *head, t_var *var)
+{
+	t_word	*end;
+	char	*str;
+	t_word	*start;
+	t_word	*temp;
+
+	if (head->next == NULL)
+		return ;
+	end = head->next;
+	start = head->next;
+	while (end->token == CMD || end->token == DOUBLE_QUOTE
+		|| end->token == SINGLE_QUOTE)
+		end = end->next;
+	if (start == end)
+		return ;
+	str = ft_strjoin_tword(head, var, -1);
+	(free(head->word), head->word = str);
+	while (start != end)
+	{
+		temp = start->next;
+		(del_tword(&start), start = temp);
+	}
+}
+
+void	join_node(t_var *var)
+{
+	t_word	*tmp;
+
+	tmp = var->lexer;
+	while (tmp->token != END)
+	{
+		if (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
+			|| tmp->token == SINGLE_QUOTE)
+			join_node2(tmp, var);
+		tmp = tmp->next;
+	}
+}
+
 void	before_exe(t_var *var)
 {
-	if (var->lexer->token == END)
+	t_word	*tmp;
+
+	tmp = var->lexer;
+	tmp = skip_token(tmp, SPACES, true);
+	if (tmp->token == END)
 		var->error = true;
 	if (var->error == false && node_cmp_token(var->lexer, HERE_DOC) == 1)
 		do_here_doc(var);
 	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
 		expand(var);
+	if (var->error == false)
+		join_node(var);
+	print_list(var->lexer);
 	if (var->error == false)
 		exe_cmd(var);
 }

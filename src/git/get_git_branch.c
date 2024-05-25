@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 18:33:48 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 16:15:58 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static char	*get_git_branch_two(int status, char *file_name)
 	{
 		bytes_read = read(fd, buffer, 10);
 		if (bytes_read == -1 || bytes_read == 0)
-			return (unlink(file_name), NULL);
-		return (unlink(file_name), "yes");
+			return (unlink(file_name), close(fd), NULL);
+		return (unlink(file_name), close(fd), "yes");
 	}
 	(line = get_next_line(fd), unlink(file_name), close(fd));
 	if (!line)
@@ -101,6 +101,7 @@ char	*get_git_branch(t_var *var)
 	char	*tmp2;
 	char	*tmp3;
 
+	tmp = NULL;
 	tmp = get_git_info(var, "/usr/bin/git rev-parse --abbrev-ref HEAD",
 			"git_branch");
 	if (!tmp)

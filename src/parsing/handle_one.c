@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:53:20 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/23 15:05:24 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 14:05:10 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,6 @@ void	handle_char(t_var *var, int *i, int *tab)
 	start = *i;
 	while (tab[(*i)] == CHAR)
 		(*i)++;
-	if (tab[(*i)] == WILDCARD)
-	{
-		*i = start;
-		handle_wildcard(var, i, tab);
-		return ;
-	}
 	str = ft_strndup(var->line, *i, start);
 	if (!str)
 		free_error(var, E_MALLOC, "str", 1);

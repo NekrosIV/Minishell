@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:20:36 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 13:29:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 14:12:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ t_word	*trim_rout(t_word *start, t_var *var)
 
 void	handle_token_logic(t_word *tmp, t_var *var, int token, t_word *head)
 {
+	if (token == -1)
+		return ;
 	if (token != HERE_DOC)
 	{
 		if (tmp->token == DOL)

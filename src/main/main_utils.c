@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/22 12:21:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 18:12:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_prompt_two(t_var *var, char *tmp2, char *git_branch)
 	else if (var->uncommitted_changes == false && git_branch[0] != '\0')
 		tmp = ft_strjoin(tmp2, ")" RESET LIGHT_GREEN "✔ " RESET);
 	else
-		tmp = ft_strjoin(tmp2, ") " RESET);
+		tmp = ft_strjoin(tmp2, " " RESET);
 	free(git_branch);
 	if (!tmp)
 		(free(tmp2), free_error(var, E_MALLOC, "tmp", 1));

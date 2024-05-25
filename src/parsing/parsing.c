@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 17:19:10 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/23 13:16:05 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/25 16:36:18 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ void	handle_token(t_var *var, int *tab, int i)
 			handle_or_and(var, &i, tab);
 		else if (tab[i] == PARENTH_OPEN || tab[i] == PARENTH_CLOSE)
 			handle_parent(var, &i, tab);
-		else if (tab[i] == WILDCARD)
-			handle_wildcard(var, &i, tab);
 		else
 			handle_char(var, &i, tab);
 	}
@@ -86,8 +84,6 @@ void	init_tab_token_2(char *line, int *tab, int *count)
 		tab[i] = PARENTH_OPEN;
 	else if (line[i] == ')')
 		tab[i] = PARENTH_CLOSE;
-	else if (line[i] == '*')
-		tab[i] = WILDCARD;
 	else
 		tab[i] = CHAR;
 	*count = i;
