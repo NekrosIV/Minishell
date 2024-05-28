@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/11 15:28:06 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/28 12:02:57 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,14 @@ char	*ft_strjoin_tword(t_word *tmp, t_var *var, int token)
 		free_error(var, E_MALLOC, "str", 1);
 	i = 0;
 	while (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
-		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL)
+		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL
+		|| token == REDIR_APPEND || token == REDIR_IN || token == REDIR_OUT)
 	{
 		j = 0;
-		handle_token_logic(tmp, var, token, head);
-		if (tmp->token != DOL || token == HERE_DOC)
-		{
-			while (tmp->word[j])
-				str[i++] = tmp->word[j++];
-		}
+		while (tmp->word[j])
+			str[i++] = tmp->word[j++];
 		tmp = tmp->next;
+		token = -1;
 	}
 	str[i] = '\0';
 	return (str);
@@ -47,7 +45,7 @@ void	join_if_need(t_word *head, t_var *var, int token)
 	t_word	*start;
 	t_word	*temp;
 
-	if (head->next == NULL)
+	if (head->next == NULL || head->token != HERE_DOC)
 		return ;
 	end = head->next;
 	start = head->next;

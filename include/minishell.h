@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/25 18:11:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/28 14:06:54 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct s_env
 typedef struct s_word
 {
 	bool			here_doc_expand;
+	bool			in_quote;
 	int				token;
 	char			*word;
 	struct s_word	*prev;
@@ -187,7 +188,7 @@ void				handle_end(t_var *var);
 
 /* ******************************* WILDCARD.C ******************************* */
 
-void				handle_wildcard(t_var *var, int *i, int *tab);
+void				do_wildcard(t_var *var);
 
 /* ****************************** CHECK_SYNTAX.C **************************** */
 
@@ -209,6 +210,7 @@ char				*ft_strjoin_tword(t_word *tmp, t_var *var, int token);
 /* *************************** CHECK_SYNTAX_OR_AND.C ************************ */
 
 int					check_pipe(t_word *tmp, bool dir);
+int					is_cmd(int token);
 int					check_syntax_or_and(t_word *lexer, t_var *var);
 int					check_syntax_parenth(t_word *lexer, t_var *var);
 t_word				*end_of_parenth(t_word *lexer);

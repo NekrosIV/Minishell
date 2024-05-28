@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/25 18:05:28 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/28 12:31:11 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	join_node2(t_word *head, t_var *var)
 		end = end->next;
 	if (start == end)
 		return ;
-	str = ft_strjoin_tword(head, var, -1);
+	str = ft_strjoin_tword(head, var, head->token);
 	(free(head->word), head->word = str);
 	while (start != end)
 	{
@@ -144,7 +144,8 @@ void	join_node(t_var *var)
 	while (tmp->token != END)
 	{
 		if (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
-			|| tmp->token == SINGLE_QUOTE)
+			|| tmp->token == SINGLE_QUOTE || tmp->token == REDIR_IN
+			|| tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
 			join_node2(tmp, var);
 		tmp = tmp->next;
 	}
@@ -163,9 +164,11 @@ void	before_exe(t_var *var)
 	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
 		expand(var);
+	if(var->error == false)
+		do_wildcard(var);
+	print_list(var->lexer);
 	if (var->error == false)
 		join_node(var);
-	print_list(var->lexer);
 	if (var->error == false)
 		exe_cmd(var);
 }

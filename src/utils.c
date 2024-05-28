@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/14 18:23:55 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/28 12:19:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	print_list(t_word *word)
 	}
 	while (word)
 	{
+		if (word->in_quote == true)
+			fprintf(stderr, "IN QUOTE ");
 		fprintf(stderr, "word: %s ", word->word);
 		if (word->token == PIPE)
 			fprintf(stderr, "token: PIPE\n");

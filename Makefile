@@ -30,6 +30,7 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(EXPAND_DIR)/expand_utils.c \
       $(EXPAND_DIR)/expand.c \
       $(EXPAND_DIR)/handle_expand.c \
+      $(EXPAND_DIR)/wildcard.c \
       $(FREE_AND_EXIT_DIR)/exit.c \
       $(FREE_AND_EXIT_DIR)/free.c \
       $(FREE_AND_EXIT_DIR)/free_two.c \
@@ -43,7 +44,6 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(PARSING_DIR)/check_syntax.c \
       $(PARSING_DIR)/handle_one.c \
       $(PARSING_DIR)/handle_two.c \
-      $(PARSING_DIR)/wildcard.c \
       $(PARSING_DIR)/parsing_utils.c \
       $(PARSING_DIR)/parsing.c \
       $(UTILS_DIR)/utils.c
