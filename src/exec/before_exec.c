@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/28 12:31:11 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/29 19:20:34 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,9 @@ void	before_exe(t_var *var)
 	signal(SIGINT, &sigint_handler_child);
 	if (var->error == false)
 		expand(var);
-	if(var->error == false)
+	if (var->error == false)
 		do_wildcard(var);
-	print_list(var->lexer);
+	// print_list(var->lexer);
 	if (var->error == false)
 		join_node(var);
 	if (var->error == false)
