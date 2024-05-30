@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:25:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 17:14:15 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:51:38 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	print_exit_status(int width, bool is_error)
 				(free(itoa_str), ft_putstr_fd(move_right_str, 2));
 			}
 		}
-		ft_putstr_fd(GREY "exit:"  LILA, 2);
+		ft_putstr_fd(GREY "exit:" LILA, 2);
 		(ft_putnbr_fd(g_exit_status, 2), ft_putstr_fd("\n" RESET, 2));
 	}
 }

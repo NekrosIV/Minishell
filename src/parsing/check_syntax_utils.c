@@ -6,20 +6,21 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:20:36 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/25 14:12:57 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:25:06 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strlen_tword(t_word *tmp)
+int	ft_strlen_tword(t_word *tmp, int token)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	while (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
-		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL)
+		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL
+		|| token == REDIR_APPEND || token == REDIR_IN || token == REDIR_OUT)
 	{
 		j = 0;
 		while (tmp->word[j])
@@ -28,6 +29,7 @@ int	ft_strlen_tword(t_word *tmp)
 			j++;
 		}
 		tmp = tmp->next;
+		token = -1;
 	}
 	return (i);
 }

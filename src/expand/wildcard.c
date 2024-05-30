@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:48:39 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/29 19:35:13 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:43:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ t_word	*find_start_or_end(t_word *tmp, bool dir)
 		while (tmp->token != END)
 		{
 			if (is_cmd(tmp->token) == 0)
-			{
-				tmp = tmp->prev;
-				break ;
-			}
+				return (tmp->prev);
 			tmp = tmp->next;
 		}
 	}
@@ -33,29 +30,12 @@ t_word	*find_start_or_end(t_word *tmp, bool dir)
 		while (tmp)
 		{
 			if (is_cmd(tmp->token) == 0 || tmp->prev == NULL)
-			{
-				tmp = tmp->next;
-				break ;
-			}
+				return (tmp->next);
 			tmp = tmp->prev;
 		}
 	}
 	return (tmp);
 }
-
-// bool	is_simple_wildcard(char *str)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] != '*')
-// 			return (false);
-// 		i++;
-// 	}
-// 	return (true);
-// }
 
 int	*init_tab_wildcard(t_word *start, t_var *var)
 {
@@ -64,7 +44,7 @@ int	*init_tab_wildcard(t_word *start, t_var *var)
 	int	*tab;
 
 	i = 0;
-	tab = malloc(sizeof(int) * (ft_strlen_tword(start) + 1));
+	tab = malloc(sizeof(int) * (ft_strlen_tword(start, start->token) + 1));
 	if (!tab)
 		free_error(var, E_MALLOC, "str", 1);
 	while (start->token != END && is_cmd(start->token) == 1)
@@ -84,6 +64,7 @@ int	*init_tab_wildcard(t_word *start, t_var *var)
 	tab[i] = END;
 	return (tab);
 }
+
 void	del_this_shit(t_word **start, t_word **end)
 {
 	t_word	*tmp;
@@ -94,6 +75,7 @@ void	del_this_shit(t_word **start, t_word **end)
 		(del_tword(start), *start = tmp);
 	}
 }
+
 bool	is_expandable(char *file, char *pattern, int *tab)
 {
 	int	i;
@@ -198,6 +180,15 @@ int	expand_wildcard(t_word **start, char *pattern, int *tab, t_var *var)
 	}
 	return (i);
 }
+
+void	del_start(t_word **tmp, t_word **start, t_var *var)
+{
+	*start = *tmp;
+	*tmp = (*start)->next;
+	if ((*start)->prev == NULL)
+		var->lexer = *tmp;
+	del_tword(start);
+}
 void	do_wildcard(t_var *var)
 {
 	t_word	*tmp;
@@ -216,16 +207,11 @@ void	do_wildcard(t_var *var)
 			end = find_start_or_end(tmp, true);
 			tab = init_tab_wildcard(start, var);
 			pattern = ft_strjoin_tword(start, var, start->token);
-			printf("pattern = %s\n", pattern);
 			(free(start->word), start->word = pattern);
 			if (start != end)
 				del_this_shit(&start->next, &end);
 			if (expand_wildcard(&start, pattern, tab, var) > 0)
-			{
-				start = tmp;
-				tmp = start->next;
-				del_tword(&start);
-			}
+				del_start(&tmp, &start, var);
 			free(tab);
 		}
 		tmp = tmp->next;

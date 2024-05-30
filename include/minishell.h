@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/28 14:06:54 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:25:37 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ t_word				*end_of_parenth(t_word *lexer);
 
 /* ************************** CHECK_SYNTAX_UTILS.C ************************** */
 
-int					ft_strlen_tword(t_word *tmp);
+int					ft_strlen_tword(t_word *tmp, int token);
 void				trim_tword(t_word **start, t_word **end);
 t_word				*trim_rout(t_word *start, t_var *var);
 void				handle_token_logic(t_word *tmp, t_var *var, int token,

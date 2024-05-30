@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/29 17:08:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:26:06 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin_tword(t_word *tmp, t_var *var, int token)
 	t_word	*head;
 
 	head = tmp;
-	str = malloc(sizeof(char) * ft_strlen_tword(tmp) + 1);
+	str = malloc(sizeof(char) * ft_strlen_tword(tmp, token) + 1);
 	if (!str)
 		free_error(var, E_MALLOC, "str", 1);
 	i = 0;
