@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/22 12:22:09 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/31 12:07:25 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	sigint_handler(int sig)
 void	sigint_handler_child(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
 }
 
 void	set_signals(void)

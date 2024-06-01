@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 15:05:06 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:59:50 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	print_cmd(char **cmd)
 	}
 }
 
-int	cmd_found(t_word *lexer)
+t_word	*cmd_found(t_word *lexer)
 {
 	while (lexer)
 	{
 		if (lexer->token == CMD || lexer->token == DOUBLE_QUOTE
 			|| lexer->token == SINGLE_QUOTE)
-			return (1);
+			return (lexer);
 		if (lexer->token == PIPE)
 			break ;
 		lexer = lexer->next;
@@ -74,7 +74,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	if (cmd_found(var->lexer) == 0)
 		(close_all_fd(pipe_fd, c_fd, i, true), free_error(var, NULL, NULL, 0));
 	do_cmd_in_parenth(c_fd, pipe_fd, i, var);
-	close_all_fd(pipe_fd, c_fd, i, true);
+	(close_all_fd(pipe_fd, c_fd, i, true), var->in_fork = true);
 	env = split_env(var->env);
 	if (!env)
 		free_error(var, E_MALLOC, "env", 1);
@@ -133,6 +133,8 @@ void	exe_cmd(t_var *var)
 			nb_pipe++;
 		tmp = tmp->next;
 	}
-	if (fork_loop(var, nb_pipe + 1) == -1)
+	if (is_builtins(cmd_found(var->lexer)) != 0)
+		do_bultins(var);
+	else if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_PIPE, NULL, -99);
 }

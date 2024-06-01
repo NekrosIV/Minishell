@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/25 18:12:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:02:12 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ t_var	*init_var(t_env **envs)
 	var->error = false;
 	var->bonus_cmd = false;
 	var->uncommitted_changes = false;
+	var->in_fork = false;
 	var->execute_next = true;
 	var->line = NULL;
 	var->lexer = NULL;

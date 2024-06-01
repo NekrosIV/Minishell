@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:42:40 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/16 15:49:07 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/05/31 12:23:37 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ int	wait_for_child(pid_t pid)
 	{
 		if (WTERMSIG(status[1]) + 128 == 131)
 			ft_putstr_fd("Quit (core dumped)\n", 2);
+		else if (WTERMSIG(status[1]) + 128 == 130)
+			ft_putstr_fd("\n", 2);
 		return (WTERMSIG(status[1]) + 128);
 	}
 	return (0);

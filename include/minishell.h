@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/30 13:25:37 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:59:14 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include "../libft/libft.h"
 # include <dirent.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -113,6 +114,7 @@ typedef struct s_var
 	bool			execute_next;
 	bool			bonus_cmd;
 	bool			uncommitted_changes;
+	bool			in_fork;
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
@@ -276,6 +278,7 @@ void				before_exe(t_var *var);
 
 void				exec(char **cmd, char **env);
 void				child(int c_fd, int pipe_fd[2], int i, t_var *var);
+t_word				*cmd_found(t_word *lexer);
 int					fork_loop(t_var *var, int nb_cmd);
 void				exe_cmd(t_var *var);
 
@@ -348,6 +351,9 @@ void				check_exit(t_var *var);
 int					get_terminal_width(void);
 void				print_exit_status(int width, bool is_error);
 
+/**/
+int					do_bultins(t_var *var);
+int					is_builtins(t_word *tmp);
 /****************************************************************************/
 /*                                  SIGNAL                                  */
 /****************************************************************************/
