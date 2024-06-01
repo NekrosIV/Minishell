@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 14:59:14 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/01 17:49:49 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@
 # define E_REDIR "ambiguous redirect : "
 # define E_EOF "unexpected EOF while looking for matching "
 # define E_S_EOF "syntax error : unexpected EOF\n"
+# define E_DIR_ERROR "error retrieving current directory: "
+# define E_GETCWD_ERROR "getcwd: cannot access parent directories:"
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -106,6 +108,7 @@ typedef struct s_word
 typedef struct s_var
 {
 	int				here_doc_count;
+	int				(*tab_builtins[8])(char **, struct s_var *);
 	pid_t			last_pid;
 	char			*line;
 	char			**envp;
@@ -115,6 +118,7 @@ typedef struct s_var
 	bool			bonus_cmd;
 	bool			uncommitted_changes;
 	bool			in_fork;
+	bool			git;
 	char			*prompt;
 	t_word			*lexer;
 	t_word			*quoted_cmds;
@@ -354,6 +358,13 @@ void				print_exit_status(int width, bool is_error);
 /**/
 int					do_bultins(t_var *var);
 int					is_builtins(t_word *tmp);
+int					cd(char **cmd, t_var *var);
+int					pwd(char **cmd, t_var *var);
+int					export(char **cmd, t_var *var);
+int					unset(char **cmd, t_var *var);
+int					echo(char **cmd, t_var *var);
+int					env(char **cmd, t_var *var);
+int					exit_builtin(char **cmd, t_var *var);
 /****************************************************************************/
 /*                                  SIGNAL                                  */
 /****************************************************************************/

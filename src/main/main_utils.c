@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 14:02:12 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/01 17:47:31 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@ char	*get_pwd(t_var *var)
 	char	*tmp;
 	int		i;
 
-	pwd = find_in_env("$PWD", var);
+	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		pwd = ft_strdup("");
+	{
+		var->git = false;
+		pwd = ft_strdup("???");
+		if (!pwd)
+			return (NULL);
+		return (pwd);
+	}
 	i = ft_strlen(pwd);
 	while (i > 0)
 	{
@@ -60,12 +66,12 @@ char	*get_prompt(t_var *var)
 	char	*git_branch;
 
 	tmp2 = NULL;
-	git_branch = get_git_branch(var);
-	if (!git_branch)
-		free_error(var, E_MALLOC, "git_branch", 1);
 	pwd = get_pwd(var);
 	if (!pwd)
-		(free(git_branch), free_error(var, E_MALLOC, "pwd", 1));
+		free_error(var, E_MALLOC, "pwd", 1);
+	git_branch = get_git_branch(var);
+	if (!git_branch)
+		(free(pwd), free_error(var, E_MALLOC, "git_branch", 1));
 	if (g_exit_status == 0)
 		prompt = ft_strjoin(GREEN "➜ " BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE,
 				pwd);
@@ -102,6 +108,18 @@ void	get_line(t_var *var)
 	free(prompt);
 }
 
+void	init_tab_builtins(t_var **var)
+{
+	(*var)->tab_builtins[0] = 0;
+	(*var)->tab_builtins[1] = cd;
+	(*var)->tab_builtins[2] = pwd;
+	(*var)->tab_builtins[3] = export;
+	(*var)->tab_builtins[4] = unset;
+	(*var)->tab_builtins[5] = echo;
+	(*var)->tab_builtins[6] = env;
+	(*var)->tab_builtins[7] = exit_builtin;
+}
+
 t_var	*init_var(t_env **envs)
 {
 	t_var	*var;
@@ -117,6 +135,7 @@ t_var	*init_var(t_env **envs)
 	var->bonus_cmd = false;
 	var->uncommitted_changes = false;
 	var->in_fork = false;
+	var->git = true;
 	var->execute_next = true;
 	var->line = NULL;
 	var->lexer = NULL;
@@ -126,5 +145,6 @@ t_var	*init_var(t_env **envs)
 	var->tmp = NULL;
 	var->here_doc_count = 0;
 	var->last_pid = 0;
+	init_tab_builtins(&var);
 	return (var);
 }

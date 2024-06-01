@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 14:59:50 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/01 17:54:17 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	exe_cmd(t_var *var)
 		tmp = tmp->next;
 	}
 	if (is_builtins(cmd_found(var->lexer)) != 0)
-		do_bultins(var);
+		g_exit_status = do_bultins(var);
 	else if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_PIPE, NULL, -99);
 }

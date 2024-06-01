@@ -2,7 +2,7 @@ NAME = minishell
 BONUS_NAME = minishell_bonus
 LIBFTNAME = libft.a
 CC = cc
-CFLAGS = -g3 -Wall -Wextra -Werror 
+CFLAGS = -g3 #-Wall -Wextra -Werror 
 LIBFTDIR = ./libft
 
 # Dossiers sources
@@ -28,6 +28,13 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(EXEC_DIR)/split_cmd.c \
 	  $(EXEC_DIR)/exec_bonus_cmd.c \
 	  $(BUILTINS_DIR)/builtins_utils.c \
+	  $(BUILTINS_DIR)/cd.c \
+	  $(BUILTINS_DIR)/echo.c \
+	  $(BUILTINS_DIR)/unset.c \
+	  $(BUILTINS_DIR)/env.c \
+	  $(BUILTINS_DIR)/export.c \
+	  $(BUILTINS_DIR)/pwd.c \
+	  $(BUILTINS_DIR)/exit_builtin.c \
       $(EXPAND_DIR)/expand_utils.c \
       $(EXPAND_DIR)/expand.c \
       $(EXPAND_DIR)/handle_expand.c \
