@@ -6,11 +6,40 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 17:29:43 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/02 19:22:01 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	replace_env(t_var *var, char *str, char *new_env_value)
+{
+	t_env	*envp;
+	int		len;
+	char	*tmp;
+	
+	envp = var->env;
+	len = ft_strlen(str);
+	while (envp)
+	{
+		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
+				- 1] == '=')
+		{
+			str = ft_strjoin(str, "=");
+			if (!str)
+    			return (free_error(var, E_MALLOC, "replace_env", 1), -1);
+			tmp = ft_strjoin(str, new_env_value);
+			if (!tmp)
+    			return (free_error(var, E_MALLOC, "replace_env", 1), -1);
+			free(envp->line);
+			envp->line = tmp;
+			free(str);
+			return (0);
+		}
+		envp = envp->next;
+	}
+	return (-1);
+}
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
