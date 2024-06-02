@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 17:47:31 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/02 16:52:30 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,15 +126,13 @@ t_var	*init_var(t_env **envs)
 
 	var = malloc(sizeof(t_var));
 	if (!var)
-	{
-		free_list_env(envs);
-		free_error(NULL, E_MALLOC, "var", 1);
-	}
+		(free_list_env(envs), free_error(NULL, E_MALLOC, "var", 1));
 	var->exit = false;
 	var->error = false;
 	var->bonus_cmd = false;
 	var->uncommitted_changes = false;
 	var->in_fork = false;
+	var->in_parenth = false;
 	var->git = true;
 	var->execute_next = true;
 	var->line = NULL;

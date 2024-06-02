@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 17:29:43 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/02 17:46:35 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,59 @@ int	is_builtins(t_word *tmp)
 	return (0);
 }
 
+int	do_dup_in_builtins(t_word *tmp)
+{
+	int	fd_in;
+
+	fd_in = open(tmp->word, O_RDONLY);
+	if (fd_in == -1)
+	{
+		perror(tmp->word);
+		return (EXIT_FAILURE);
+	}
+	if (dup2(fd_in, STDIN_FILENO) == -1)
+	{
+		perror("dup2(fd_in)");
+		close(fd_in);
+		return (EXIT_FAILURE);
+	}
+	close(fd_in);
+	return (EXIT_SUCCESS);
+}
+
+int	do_dup_out_builtins(t_word *tmp)
+{
+	int	fd_out;
+
+	if (tmp->token == REDIR_OUT)
+		fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else
+		fd_out = open(tmp->word, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd_out == -1)
+	{
+		perror(tmp->word);
+		return (EXIT_FAILURE);
+	}
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+	{
+		perror("dup2(fd_out)");
+		close(fd_out);
+		return (EXIT_FAILURE);
+	}
+	close(fd_out);
+	return (EXIT_SUCCESS);
+}
+int	is_dir_in_cmd(t_word *tmp)
+{
+	while (is_cmd(tmp->token) || tmp->token == SPACES)
+	{
+		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC
+			|| tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
 int	do_bultins(t_var *var)
 {
 	char	**cmd;
@@ -64,22 +117,35 @@ int	do_bultins(t_var *var)
 	cmd = split_cmd(var);
 	if (!cmd)
 		free_error(var, E_MALLOC, "cmd", 1);
-	// if (var->in_fork == false)
-	// {
-	// 	old_fd_in = dup(STDIN_FILENO);
-	// 	if (old_fd_in == -1)
-	// 		free_error(var, "dup()", strerror(errno), 1);
-	// 	old_fd_out = dup(STDOUT_FILENO);
-	// 	if (old_fd_out == -1)
-	// 		free_error(var, "dup()", strerror(errno), 1);
-	// 	while (tmp->token != END)
-	// 	{
-	// 		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
-	// 		{
-	// 		}
-	// 	}
-	// }
+	if (var->in_fork == false && is_dir_in_cmd(tmp) == 1)
+	{
+		old_fd_in = dup(STDIN_FILENO);
+		if (old_fd_in == -1)
+			free_error(var, "dup()", strerror(errno), 1);
+		old_fd_out = dup(STDOUT_FILENO);
+		if (old_fd_out == -1)
+			free_error(var, "dup()", strerror(errno), 1);
+		while (is_cmd(tmp->token) == 1 || tmp->token == SPACES)
+		{
+			if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
+				do_dup_in_builtins(tmp);
+			else if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
+				do_dup_out_builtins(tmp);
+		}
+	}
 	status_exit = var->tab_builtins[is_builtins(cmd_found(var->lexer))](cmd,
 			var);
+	if (old_fd_in != 1 || old_fd_out != 1)
+	{
+		if (old_fd_in != -1 || old_fd_out != -1)
+		{
+			if (dup2(old_fd_in, STDIN_FILENO) == -1)
+				free_error(var, "dup2()", strerror(errno), 1);
+			if (dup2(old_fd_out, STDOUT_FILENO) == -1)
+				free_error(var, "dup2()", strerror(errno), 1);
+			close(old_fd_in);
+			close(old_fd_out);
+		}
+	}
 	return (status_exit);
 }

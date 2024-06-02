@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 18:11:34 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/02 16:53:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,18 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 		(close_all_fd(pipe_fd, c_fd, i, true), free_error(var, NULL, NULL, 0));
 	do_cmd_in_parenth(c_fd, pipe_fd, i, var);
 	(close_all_fd(pipe_fd, c_fd, i, true), var->in_fork = true);
+	var->exit = true;
 	if (is_builtins(cmd_found(var->lexer)) != 0)
-		exit(do_bultins(var));
+	{
+		(g_exit_status = do_bultins(var), free_var(var));
+		exit(g_exit_status);
+	}
 	env = split_env(var->env);
 	if (!env)
 		free_error(var, E_MALLOC, "env", 1);
 	cmd = split_cmd(var);
 	if (!cmd)
 		free_error(var, E_MALLOC, "cmd", 1);
-	var->exit = true;
 	free_var(var);
 	if (cmd[0][0] == '\0')
 		error_msg(NULL, cmd, env);
@@ -130,7 +133,8 @@ void	exe_cmd(t_var *var)
 			nb_pipe++;
 		tmp = tmp->next;
 	}
-	if (nb_pipe == 0 && is_builtins(cmd_found(var->lexer)) != 0)
+	if (nb_pipe == 0 && is_bonus_cmd(var->lexer) == 0
+		&& is_builtins(cmd_found(var->lexer)) != 0)
 		g_exit_status = do_bultins(var);
 	else if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_PIPE, NULL, -99);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:09 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/01 16:04:54 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/02 15:33:24 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	echo(char **cmd, t_var *var)
 {
+	if (var->in_fork == true)
+		printf("in fork ");
 	printf("echo\n");
 	return (0);
 }
