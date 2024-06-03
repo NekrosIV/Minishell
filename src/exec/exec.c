@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/02 16:53:44 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/03 16:49:20 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	fork_loop(t_var *var, int nb_cmd)
 	int	c_fd;
 
 	i = 0;
-	c_fd = 0;
+	c_fd = -1;
 	while (nb_cmd > i)
 	{
 		if (i != 0)
