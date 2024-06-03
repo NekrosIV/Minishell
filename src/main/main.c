@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:53:33 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/31 12:07:25 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/03 13:02:13 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(int ac, char **av, char **env)
 		(check_exit(var), parsing(var));
 		if (var->error == false)
 			before_exe(var);
+		envs = var->env;
 		free_var(var);
 		print_exit_status(get_terminal_width(), true);
 	}
