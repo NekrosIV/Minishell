@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:20 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/01 17:01:53 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/03 18:41:40 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ int	pwd(char **cmd, t_var *var)
 			-1);
 		return (1);
 	}
-	ft_putendl_fd(pwd, 1);
+	if (write(1, pwd, ft_strlen(pwd)) == -1)
+		return (perror("pwd():"), 1);
+	if (write(1, "\n", 1) == -1)
+		return (perror("pwd():"), 1);
 	return (free(pwd), 0);
 }
