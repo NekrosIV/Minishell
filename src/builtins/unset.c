@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/01 16:00:37 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/03 18:27:58 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	unset(char **cmd, t_var *var)
 {
-	// Implémentation de la fonction cd
+	if (var->in_fork == true || !cmd[1])
+		return (0);
 	return (0);
 }

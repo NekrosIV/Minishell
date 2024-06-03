@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:02 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/01 15:59:53 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/03 18:26:39 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	exit_builtin(char **cmd, t_var *var)
 {
-	// Implémentation de la fonction cd
+	if (var->in_fork == true)
+		return (0);
 	return (0);
 }
