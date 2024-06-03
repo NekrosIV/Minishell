@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/20 13:27:43 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/02 17:20:41 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	is_bonus_cmd(t_word *lexer)
 {
 	while (lexer->token != PIPE && lexer->token != END)
 	{
-		if (lexer->token == OR || lexer->token == AND)
+		if (lexer->token == OR || lexer->token == AND
+			|| lexer->token == PARENTH_OPEN)
 			return (1);
 		lexer = lexer->next;
 	}
@@ -88,6 +89,7 @@ void	do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i, t_var *var)
 
 	if (node_cmp_token(var->lexer, PARENTH_OPEN))
 	{
+		var->in_parenth = true;
 		tmp = end_of_parenth(find_token(var->lexer, PARENTH_OPEN));
 		tmp->next->token = END;
 		tmp = var->lexer;
@@ -116,31 +118,60 @@ void	need_to_wait(t_word *tmp, pid_t pid)
 	}
 	g_exit_status = wait_for_child(pid);
 }
+int	can_i_run_without_fork(t_var *var, t_word *tmp, t_word *head, int i)
+{
+	if (var->in_parenth == false && head->prev == NULL && i != 0)
+		return (0);
+	if (var->execute_next && is_cmd(tmp->token) == 1 && is_builtins(tmp) != 0)
+	{
+		while (is_cmd(tmp->token) == 1 || tmp->token == SPACES)
+			tmp = tmp->next;
+		if (tmp->token != PIPE)
+			return (1);
+	}
+	return (0);
+}
+
+void	run_without_fork(t_var *var, t_word **head)
+{
+	t_word	*tmp;
+
+	tmp = var->lexer;
+	var->lexer = *head;
+	g_exit_status = do_bultins(var);
+	var->lexer = tmp;
+}
+
+bool	run_in_fork(t_var *var, t_word *tmp, bool flag)
+{
+	return (var->execute_next && (is_cmd(tmp->token) == 1
+			|| tmp->token == PARENTH_OPEN) && flag == true);
+}
 
 int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 {
 	pid_t	pid;
 	t_word	*tmp;
-	t_word	*head;
+	t_word	*h;
 	bool	flag;
 
 	tmp = var->lexer;
-	head = tmp;
+	h = tmp;
 	flag = true;
 	while (tmp != NULL && tmp->token != END && tmp->token != PIPE)
 	{
-		if (var->execute_next && (tmp->token == CMD
-				|| tmp->token == PARENTH_OPEN) && flag == true)
+		if (can_i_run_without_fork(var, tmp, h, i) && flag == true)
+			(run_without_fork(var, &h), flag = false);
+		else if (run_in_fork(var, tmp, flag))
 		{
 			pid = fork();
 			if (pid == -1)
 				return (close_all_fd(pipe_fd, c_fd, i, true), -1);
 			if (pid == 0)
-				(new_lst(&head, &var->lexer, tmp), child(c_fd, pipe_fd, i,
-						var));
+				(new_lst(&h, &var->lexer, tmp), child(c_fd, pipe_fd, i, var));
 			(need_to_wait(tmp, pid), flag = false);
 		}
-		flag = update_execution_state(&head, tmp, var, flag);
+		flag = update_execution_state(&h, tmp, var, flag);
 		tmp = update_tmp(tmp, var);
 	}
 	return (0);

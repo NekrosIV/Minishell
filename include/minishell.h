@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/02 16:07:50 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/03 12:51:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -31,7 +32,6 @@
 # include <sys/stat.h>
 # include <unistd.h>
 # include <wait.h>
-# include <limits.h>
 
 /* ************************************************************************** */
 /*                            DEFINE ALL CONSTANT                             */
@@ -119,6 +119,7 @@ typedef struct s_var
 	bool			bonus_cmd;
 	bool			uncommitted_changes;
 	bool			in_fork;
+	bool			in_parenth;
 	bool			git;
 	char			*prompt;
 	t_word			*lexer;

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:17:46 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/11 11:08:50 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/02 16:23:35 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	count_cmd(t_word *node)
 
 	i = 0;
 	flag = 1;
-	while (node->token != END && node->token != PIPE)
+	while (is_cmd(node->token) == 1 || node->token == SPACES)
 	{
 		if (node->token == CMD || node->token == DOUBLE_QUOTE
 			|| node->token == SINGLE_QUOTE)
@@ -105,7 +105,7 @@ char	**split_cmd(t_var *var)
 	cmd = malloc(sizeof(char *) * (count_cmd(word) + 1));
 	if (!cmd)
 		return (NULL);
-	while (word->token != END && word->token != PIPE)
+	while (is_cmd(word->token) == 1 || word->token == SPACES)
 	{
 		if (word->token == CMD || word->token == DOUBLE_QUOTE
 			|| word->token == SINGLE_QUOTE)
