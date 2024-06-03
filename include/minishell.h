@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/03 12:51:02 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/03 20:43:31 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,7 +357,7 @@ void				check_exit(t_var *var);
 int					get_terminal_width(void);
 void				print_exit_status(int width, bool is_error);
 
-/**/
+/********************************* BUILTINS *********************************/
 int					do_bultins(t_var *var);
 int					is_builtins(t_word *tmp);
 int					cd(char **cmd, t_var *var);
@@ -367,6 +367,11 @@ int					unset(char **cmd, t_var *var);
 int					echo(char **cmd, t_var *var);
 int					env(char **cmd, t_var *var);
 int					exit_builtin(char **cmd, t_var *var);
+int	replace_env(t_var *var, char *str, char *new_env_value);
+void	replace_in_env(char *env, t_var *var);
+int	ft_strcmp(const char *s1, const char *s2);
+
+
 /****************************************************************************/
 /*                                  SIGNAL                                  */
 /****************************************************************************/
