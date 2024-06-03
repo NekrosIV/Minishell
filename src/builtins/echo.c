@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:09 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/03 16:15:09 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/03 18:13:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	echo(char **cmd, t_var *var)
 	result = join_split(cmd + i, end_line);
 	if (!result)
 		(free_split(cmd), free_error(var, E_MALLOC, "echo():str", 1));
-	write(1, result, ft_strlen(result));
+	if (write(1, result, ft_strlen(result)) == -1)
+		return (perror("echo():"), free_split(cmd), 1);
 	return (free(result), 0);
 }
