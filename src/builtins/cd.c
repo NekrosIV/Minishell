@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:47:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/03 21:00:30 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/04 16:35:20 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,31 +37,29 @@ int	cd_home(char *path, t_var *var, char *env)
 	else
 		replace_in_env(env, var);
 	free(path);
-	return(0);
+	return (0);
 }
 
 int	cd(char **cmd, t_var *var)
 {
 	char	*path;
 
-	if (var->in_fork == true)
-		return (0);
 	if (!cmd[1])
 	{
 		path = find_in_env("$HOME", var);
 		return (cd_home(path, var, "$HOME"));
 	}
 	else if (cmd[2])
-		return(free_error(NULL, "cd: ", "too many arguments", -1), 1);
+		return (free_error(NULL, "cd: ", "too many arguments", -1), 1);
 	else if (ft_strcmp(cmd[1], "-") == 0)
-		{
-			print_list_env(var->env);
-			path = find_in_env("$OLDPWD", var);
-			ft_putstr_fd("path =", 1);
-			ft_putstr_fd(path, 1);
-			ft_putstr_fd("\n", 1);
-			return(cd_home(path, var, "$OLDPWD"));
-		}
+	{
+		print_list_env(var->env);
+		path = find_in_env("$OLDPWD", var);
+		ft_putstr_fd("path =", 1);
+		ft_putstr_fd(path, 1);
+		ft_putstr_fd("\n", 1);
+		return (cd_home(path, var, "$OLDPWD"));
+	}
 	else if (*cmd[1])
 	{
 		path = find_in_env(cmd[1], var);

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 13:34:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/30 13:51:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:24:42 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void	free_error(t_var *var, char *error, char *fautif, int ff)
 		ft_putstr_fd(error, 2);
 	if (fautif)
 	{
+		if (error[ft_strlen(error) - 1] != ' ')
+			ft_putstr_fd(" ", 2);
 		ft_putstr_fd(RED, 2);
 		ft_putstr_fd("`", 2);
 		ft_putstr_fd(fautif, 2);

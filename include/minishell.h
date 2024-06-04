@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/03 20:43:31 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/04 16:22:18 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,9 @@
 # define E_S_EOF "syntax error : unexpected EOF\n"
 # define E_DIR_ERROR "error retrieving current directory: "
 # define E_GETCWD_ERROR "getcwd: cannot access parent directories:"
+# define E_EXIT "exit: "
+# define E_EXIT_MANY "too many arguments"
+# define E_EXIT_NUM "numeric argument required"
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -367,10 +370,9 @@ int					unset(char **cmd, t_var *var);
 int					echo(char **cmd, t_var *var);
 int					env(char **cmd, t_var *var);
 int					exit_builtin(char **cmd, t_var *var);
-int	replace_env(t_var *var, char *str, char *new_env_value);
-void	replace_in_env(char *env, t_var *var);
-int	ft_strcmp(const char *s1, const char *s2);
-
+int					replace_env(t_var *var, char *str, char *new_env_value);
+void				replace_in_env(char *env, t_var *var);
+int					ft_strcmp(const char *s1, const char *s2);
 
 /****************************************************************************/
 /*                                  SIGNAL                                  */

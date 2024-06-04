@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/02 17:20:41 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:12:38 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	can_i_run_without_fork(t_var *var, t_word *tmp, t_word *head, int i)
 	return (0);
 }
 
-void	run_without_fork(t_var *var, t_word **head)
+void	run_without_fork(t_var *var, t_word **head, int c_fd, int pipe_fd[2])
 {
 	t_word	*tmp;
 
@@ -140,6 +140,13 @@ void	run_without_fork(t_var *var, t_word **head)
 	var->lexer = *head;
 	g_exit_status = do_bultins(var);
 	var->lexer = tmp;
+	if (var->exit == true)
+	{
+		if (c_fd >= 0)
+			close(c_fd);
+		close(pipe_fd[0]), close(pipe_fd[1]);
+		free_error(var, NULL, NULL, g_exit_status);
+	}
 }
 
 bool	run_in_fork(t_var *var, t_word *tmp, bool flag)
@@ -161,7 +168,7 @@ int	do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var)
 	while (tmp != NULL && tmp->token != END && tmp->token != PIPE)
 	{
 		if (can_i_run_without_fork(var, tmp, h, i) && flag == true)
-			(run_without_fork(var, &h), flag = false);
+			(run_without_fork(var, &h, c_fd, pipe_fd), flag = false);
 		else if (run_in_fork(var, tmp, flag))
 		{
 			pid = fork();

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/03 16:49:20 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:08:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,11 @@ void	exe_cmd(t_var *var)
 	}
 	if (nb_pipe == 0 && is_bonus_cmd(var->lexer) == 0
 		&& is_builtins(cmd_found(var->lexer)) != 0)
+	{
 		g_exit_status = do_bultins(var);
+		if (var->exit == true)
+			free_error(var, NULL, NULL, g_exit_status);
+	}
 	else if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_PIPE, NULL, -99);
 }

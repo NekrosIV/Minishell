@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/03 18:24:20 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:34:54 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	export(char **cmd, t_var *var)
 {
-	if (cmd[1] && var->in_fork == true)
-		return (0);
+	
 	return (0);
 }

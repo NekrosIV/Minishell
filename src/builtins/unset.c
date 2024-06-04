@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/03 18:27:58 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:35:01 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,5 @@
 
 int	unset(char **cmd, t_var *var)
 {
-	if (var->in_fork == true || !cmd[1])
-		return (0);
 	return (0);
 }
