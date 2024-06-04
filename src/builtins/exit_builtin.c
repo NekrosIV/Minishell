@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:02 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/04 16:20:16 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 17:35:47 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool	ft_strtoll(char *str, long long *exit)
 		value = value * 10 + d;
 		i++;
 	}
-	if (str[i] && !ft_isdigit(str[i]))
+	if ((str[i] && !ft_isdigit(str[i]) || str[0] == '\0'))
 		return (false);
 	if ((sign == -1 && value > (unsigned long long)LLONG_MAX + 1))
 		return (false);
