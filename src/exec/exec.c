@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 16:08:55 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 16:49:50 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void	exe_cmd(t_var *var)
 		&& is_builtins(cmd_found(var->lexer)) != 0)
 	{
 		g_exit_status = do_bultins(var);
+		unlink_here_doc(var);
 		if (var->exit == true)
 			free_error(var, NULL, NULL, g_exit_status);
 	}

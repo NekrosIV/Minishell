@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/03 20:43:32 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/04 17:04:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ int	replace_env(t_var *var, char *str, char *new_env_value)
 	t_env	*envp;
 	int		len;
 	char	*tmp;
-	char *str_tmp;
-	
+	char	*str_tmp;
+
 	envp = var->env;
 	len = ft_strlen(str);
 	str_tmp = ft_strjoin(str, "=");
 	if (!str_tmp)
-    	return (free_error(var, E_MALLOC, "replace_env", 1), 0);
+		return (free_error(var, E_MALLOC, "replace_env", 1), 0);
 	tmp = ft_strjoin(str_tmp, new_env_value);
 	if (!tmp)
-    	return (free(str_tmp), free_error(var, E_MALLOC, "replace_env", 1), 0);
+		return (free(str_tmp), free_error(var, E_MALLOC, "replace_env", 1), 0);
 	while (envp)
 	{
 		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
-				- 1] == '=')
+			- 1] == '=')
 		{
 			free(envp->line);
 			envp->line = tmp;
@@ -123,6 +123,8 @@ int	do_dup_out_builtins(t_word *tmp)
 
 int	do_dup_builtins(t_word *tmp, int *old_fd_in, int *old_fd_out)
 {
+	int	error;
+
 	(*old_fd_in) = dup(STDIN_FILENO);
 	if ((*old_fd_in) == -1)
 	{
@@ -138,9 +140,11 @@ int	do_dup_builtins(t_word *tmp, int *old_fd_in, int *old_fd_out)
 	while (is_cmd(tmp->token) == 1 || tmp->token == SPACES)
 	{
 		if (tmp->token == REDIR_IN || tmp->token == HERE_DOC)
-			do_dup_in_builtins(tmp);
+			error = do_dup_in_builtins(tmp);
 		else if (tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
-			do_dup_out_builtins(tmp);
+			error = do_dup_out_builtins(tmp);
+		if (error == 1)
+			return (EXIT_FAILURE);
 		tmp = tmp->next;
 	}
 	return (EXIT_SUCCESS);
@@ -196,7 +200,8 @@ int	do_bultins(t_var *var)
 	if (var->in_fork == false && is_dir_in_cmd(tmp) == 1)
 	{
 		if (do_dup_builtins(tmp, &old_fd_in, &old_fd_out) == 1)
-			return (free_split(cmd), EXIT_FAILURE);
+			return (restore_fds(old_fd_in, old_fd_out), free_split(cmd),
+				EXIT_FAILURE);
 	}
 	status_exit = var->tab_builtins[is_builtins(cmd_found(var->lexer))](cmd,
 			var);
