@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 17:04:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 18:24:46 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 int	is_builtins(t_word *tmp)
 {
-	if (tmp == 0)
+	if (tmp == 0 || tmp->token == REDIR_APPEND || tmp->token == REDIR_IN
+		|| tmp->token == REDIR_OUT)
 		return (0);
 	if (ft_strcmp("cd", tmp->word) == 0)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:25:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 16:13:49 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/04 18:10:30 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	check_exit(t_var *var)
 {
 	if (!var->line)
 	{
-		ft_putstr_fd("exit\n", 1);
+		if (isatty(0))
+			ft_putstr_fd("exit\n", 1);
 		free_error(var, NULL, NULL, g_exit_status);
 	}
 	add_history(var->line);
