@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:47:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/05 17:13:27 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/05 17:38:01 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_chdir(char *path, t_var *var, char *env)
 	if (!path)
 		return (free_error(NULL, "cd: ", env, -1), 1);
 	else if (chdir(path) == -1)
-		return (free(path), perror("chdir error"), 1);
+		return (perror("chdir error"), 1);
 	else
 		(replace_in_env(var));
 	return (0);
