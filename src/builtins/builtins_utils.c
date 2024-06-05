@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/05 16:18:32 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/05 16:33:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ int	replace_env(t_var *var, char *str, char *new_env_value)
 
 	envp = var->env;
 	len = ft_strlen(str);
-	str_tmp = ft_strjoin(str, "=");
+	str_tmp = ft_strjoin(&str[1], "=");
 	if (!str_tmp)
 		return (free_error(var, E_MALLOC, "replace_env", 1), 0);
 	tmp = ft_strjoin(str_tmp, new_env_value);
 	if (!tmp)
 		return (free(str_tmp), free_error(var, E_MALLOC, "replace_env", 1), 0);
+	free(str_tmp);
 	while (envp)
 	{
 		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
