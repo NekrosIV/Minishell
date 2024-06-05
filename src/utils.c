@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 18:19:02 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/29 18:09:59 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 14:14:05 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	print_list(t_word *word)
 		printf("no word\n");
 		return ;
 	}
-	while (word->token != END)
+	while (word)
 	{
 		if (word->in_quote == true)
 			fprintf(stderr, "IN QUOTE ");

@@ -6,33 +6,21 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:48:39 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/30 13:43:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 15:04:34 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_word	*find_start_or_end(t_word *tmp, bool dir)
+t_word	*find_start(t_word *tmp)
 {
-	if (dir == true)
+	if (tmp->prev == NULL)
+		return (tmp);
+	while (tmp)
 	{
-		while (tmp->token != END)
-		{
-			if (is_cmd(tmp->token) == 0)
-				return (tmp->prev);
-			tmp = tmp->next;
-		}
-	}
-	else
-	{
-		if (tmp->prev == NULL)
-			return (tmp);
-		while (tmp)
-		{
-			if (is_cmd(tmp->token) == 0 || tmp->prev == NULL)
-				return (tmp->next);
-			tmp = tmp->prev;
-		}
+		if (is_cmd(tmp->token) == 0 || tmp->prev == NULL)
+			return (tmp->next);
+		tmp = tmp->prev;
 	}
 	return (tmp);
 }
@@ -65,11 +53,11 @@ int	*init_tab_wildcard(t_word *start, t_var *var)
 	return (tab);
 }
 
-void	del_this_shit(t_word **start, t_word **end)
+void	del_this_shit(t_word **start)
 {
 	t_word	*tmp;
 
-	while ((*start) != (*end))
+	while (is_cmd((*start)->token) == 1)
 	{
 		tmp = (*start)->next;
 		(del_tword(start), *start = tmp);
@@ -127,50 +115,26 @@ void	join_t_word(t_word **start, t_word **new)
 	}
 	(*new)->next = tmp;
 }
-
-int	expand_wildcard(t_word **start, char *pattern, int *tab, t_var *var)
+int	expand_it(struct dirent *file, t_word **new, t_var *var)
 {
-	DIR				*dir;
-	struct dirent	*file;
-	t_word			*new;
-	int				i;
-	char			*str;
+	char	*str;
 
-	dir = opendir(".");
-	if (!dir)
-	{
-		perror(".");
-		var->error = true;
-		free_error(NULL, NULL, NULL, -1);
-		return (-1);
-	}
-	i = 0;
-	new = NULL;
-	while (dir)
-	{
-		file = readdir(dir);
-		if (!file)
-			break ;
-		if (file->d_name[0] != '.' || pattern[0] == '.')
-		{
-			if (is_expandable(file->d_name, pattern, tab) == true)
-			{
-				str = ft_strdup(file->d_name);
-				if (!str)
-					free_error(var, E_MALLOC, "file_name", 1);
-				if (add_word(&new, SINGLE_QUOTE, str) == -1)
-					free_error(var, E_MALLOC, "add_word", 1);
-				str = ft_strdup(" ");
-				if (!str)
-					free_error(var, E_MALLOC, "add_word", 1);
-				add_word(&new, SPACES, str);
-				i++;
-			}
-		}
-	}
-	closedir(dir);
+	str = ft_strdup(file->d_name);
+	if (!str)
+		free_error(var, E_MALLOC, "file_name", 1);
+	if (add_word(new, SINGLE_QUOTE, str) == -1)
+		free_error(var, E_MALLOC, "add_word", 1);
+	str = ft_strdup(" ");
+	if (!str)
+		free_error(var, E_MALLOC, "add_word", 1);
+	add_word(new, SPACES, str);
+	return (1);
+}
+
+int	join_and_check_err(int i, t_word **start, t_word **new, t_var *var)
+{
 	if (i > 0)
-		join_t_word(start, &new);
+		join_t_word(start, new);
 	if (i > 1 && ((*start)->token == REDIR_IN || (*start)->token == REDIR_OUT
 			|| (*start)->token == REDIR_APPEND))
 	{
@@ -179,6 +143,35 @@ int	expand_wildcard(t_word **start, char *pattern, int *tab, t_var *var)
 		return (-1);
 	}
 	return (i);
+}
+
+int	expand_wildcard(t_word **start, char *pattern, int *tab, t_var *var)
+{
+	DIR				*dir;
+	struct dirent	*file;
+	t_word			*new;
+	int				i;
+
+	dir = opendir(".");
+	if (!dir)
+	{
+		perror(".");
+		var->error = true;
+		return (free_error(NULL, NULL, NULL, -1), -1);
+	}
+	i = 0;
+	new = NULL;
+	while (dir)
+	{
+		file = readdir(dir);
+		if (!file)
+			break ;
+		if ((file->d_name[0] != '.' || pattern[0] == '.')
+			&& is_expandable(file->d_name, pattern, tab) == true)
+			i += expand_it(file, &new, var);
+	}
+	closedir(dir);
+	return (join_and_check_err(i, start, &new, var));
 }
 
 void	del_start(t_word **tmp, t_word **start, t_var *var)
@@ -193,7 +186,6 @@ void	do_wildcard(t_var *var)
 {
 	t_word	*tmp;
 	t_word	*start;
-	t_word	*end;
 	int		*tab;
 	char	*pattern;
 
@@ -202,14 +194,13 @@ void	do_wildcard(t_var *var)
 	{
 		if (tmp->in_quote == false && ft_strchr(tmp->word, '*') != NULL)
 		{
-			start = find_start_or_end(tmp, false);
+			start = find_start(tmp);
 			tmp = start;
-			end = find_start_or_end(tmp, true);
 			tab = init_tab_wildcard(start, var);
 			pattern = ft_strjoin_tword(start, var, start->token);
 			(free(start->word), start->word = pattern);
-			if (start != end)
-				del_this_shit(&start->next, &end);
+			if (is_cmd(start->next->token) == 1)
+				del_this_shit(&start->next);
 			if (expand_wildcard(&start, pattern, tab, var) > 0)
 				del_start(&tmp, &start, var);
 			free(tab);
