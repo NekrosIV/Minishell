@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:02 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/05 15:33:05 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 17:17:07 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ int	exit_builtin(char **cmd, t_var *var)
 			}
 		}
 	}
+	var->exit = true;
 	return (g_exit_status);
 }

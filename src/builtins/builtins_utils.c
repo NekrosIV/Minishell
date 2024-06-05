@@ -3,14 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/05 16:33:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 17:28:38 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	find_replace_env(t_env *envp, char *str, int len, char *tmp)
+{
+	while (envp)
+	{
+		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
+			- 1] == '=')
+		{
+			free(envp->line);
+			envp->line = tmp;
+			return (0);
+		}
+		envp = envp->next;
+	}
+	return 1;
+}
 
 int	replace_env(t_var *var, char *str, char *new_env_value)
 {
@@ -28,20 +44,8 @@ int	replace_env(t_var *var, char *str, char *new_env_value)
 	if (!tmp)
 		return (free(str_tmp), free_error(var, E_MALLOC, "replace_env", 1), 0);
 	free(str_tmp);
-	while (envp)
-	{
-		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
-			- 1] == '=')
-		{
-			free(envp->line);
-			envp->line = tmp;
-			ft_putstr_fd("pwd1 = ", 1);
-			ft_putendl_fd(envp->line, 1);
-			// print_list_env(var->env);
-			return (0);
-		}
-		envp = envp->next;
-	}
+	if (find_replace_env(envp, str, len, tmp) == 0)
+		return(0);
 	return (add_node_env(&(var->env), tmp), 0);
 }
 

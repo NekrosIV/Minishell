@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/05 16:19:26 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/05 17:28:53 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -373,6 +373,10 @@ int					exit_builtin(char **cmd, t_var *var);
 int					replace_env(t_var *var, char *str, char *new_env_value);
 void	replace_in_env(t_var *var);
 int					ft_strcmp(const char *s1, const char *s2);
+int	ft_chdir(char *path, t_var *var, char *env);
+int	find_replace_env(t_env *envp, char *str, int len, char *tmp);
+
+
 
 /****************************************************************************/
 /*                                  SIGNAL                                  */
