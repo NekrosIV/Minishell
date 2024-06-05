@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:02 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/04 17:35:47 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 15:33:05 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,22 @@ int	exit_builtin(char **cmd, t_var *var)
 	bool		good_llint;
 
 	exit = 0;
-	var->exit = true;
-	if (var->in_fork == false)
+	if (var->in_fork == false && isatty(0))
 		ft_putstr_fd("exit\n", 1);
 	if (cmd[1])
 	{
 		good_llint = ft_strtoll(cmd[1], &exit);
 		if (cmd[2] && good_llint == true)
-			return (free_error(NULL, E_EXIT, E_EXIT_MANY, -2), 2);
+			return (ft_putstr_fd(E_EXIT E_EXIT_MANY, 2), 1);
 		else
 		{
+			var->exit = true;
 			if (good_llint == true)
 				return (exit % 256);
 			else
 			{
-				ft_putstr_fd(E_EXIT, 2);
-				return (free_error(NULL, cmd[1], E_EXIT_NUM, -2), 2);
+				(ft_putstr_fd(E_EXIT, 2), ft_putstr_fd(cmd[1], 2));
+				return (ft_putstr_fd(": ", 2), ft_putstr_fd(E_EXIT_NUM, 2), 2);
 			}
 		}
 	}

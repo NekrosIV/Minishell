@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 16:22:18 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 15:22:12 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@
 # define E_DIR_ERROR "error retrieving current directory: "
 # define E_GETCWD_ERROR "getcwd: cannot access parent directories:"
 # define E_EXIT "exit: "
-# define E_EXIT_MANY "too many arguments"
-# define E_EXIT_NUM "numeric argument required"
+# define E_EXIT_MANY "too many arguments\n"
+# define E_EXIT_NUM "numeric argument required\n"
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
