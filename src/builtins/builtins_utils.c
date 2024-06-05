@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 18:24:46 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 16:18:32 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ int	replace_env(t_var *var, char *str, char *new_env_value)
 		{
 			free(envp->line);
 			envp->line = tmp;
+			ft_putstr_fd("pwd1 = ", 1);
+			ft_putendl_fd(envp->line, 1);
+			// print_list_env(var->env);
 			return (0);
 		}
 		envp = envp->next;

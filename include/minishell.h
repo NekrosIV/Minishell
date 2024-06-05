@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/05 15:22:12 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/05 16:19:26 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,7 @@ int					echo(char **cmd, t_var *var);
 int					env(char **cmd, t_var *var);
 int					exit_builtin(char **cmd, t_var *var);
 int					replace_env(t_var *var, char *str, char *new_env_value);
-void				replace_in_env(char *env, t_var *var);
+void	replace_in_env(t_var *var);
 int					ft_strcmp(const char *s1, const char *s2);
 
 /****************************************************************************/
