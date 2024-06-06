@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/05 18:30:52 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/06 17:24:36 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@
 # define E_EXIT "exit: "
 # define E_EXIT_MANY "too many arguments\n"
 # define E_EXIT_NUM "numeric argument required\n"
+# define E_EXPORT "export: "
+# define E_2 ": "
+# define E_EXPORT_ID "not a valid identifier"
+# define E_CD "cd: "
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -236,7 +240,7 @@ void				handle_token_logic(t_word *tmp, t_var *var, int token,
 
 /* ***************************** PARSING_UTILS.C **************************** */
 
-char				*ft_strndup(char *line, int end, int start);
+char				*ft_strndup(char *line, size_t end, size_t start);
 t_word				*get_last_tword(t_word *word);
 void				del_tword(t_word **word);
 t_word				*skip_token(t_word *tmp, int token, bool dir);
@@ -363,6 +367,7 @@ void				print_exit_status(int width, bool is_error);
 /********************************* BUILTINS *********************************/
 int					do_bultins(t_var *var);
 int					is_builtins(t_word *tmp);
+void				error_msg_builtins(char *builtin, char *fautife, char *err);
 int					cd(char **cmd, t_var *var);
 int					pwd(char **cmd, t_var *var);
 int					export(char **cmd, t_var *var);

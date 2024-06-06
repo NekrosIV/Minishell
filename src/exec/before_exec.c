@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 15:01:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/06 14:03:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	do_here_doc(t_var *var)
 			nb = ft_itoa(var->here_doc_count++);
 			if (!nb)
 				free_error(var, E_MALLOC, "nb", 1);
-			file_name = ft_strjoin("here_doc_", nb);
+			file_name = ft_strjoin("/tmp/here_doc_", nb);
 			if (!file_name)
 				free_error(var, E_MALLOC, "file_name", 1);
 			free(nb);

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:47:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/05 18:55:17 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/06 16:45:53 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ int	ft_chdir(char *path, t_var *var, char *env)
 		return (free_error(NULL, "cd: ", env, -1), 1);
 	else if (chdir(path) == -1)
 	{
-		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(path, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
+		error_msg_builtins(E_CD, path, strerror(errno));
 		return (1);
 	}
 	else

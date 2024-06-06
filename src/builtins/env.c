@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:11 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/05 16:47:40 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/06 18:36:19 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	env(char **cmd, t_var *var)
 	env = var->env;
 	while (env)
 	{
-		ft_putendl_fd(env->line, 1);
+		if (ft_strchr(env->line, '=') != NULL)
+			ft_putendl_fd(env->line, 1);
 		env = env->next;
 	}
 	return (0);
