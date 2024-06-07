@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/06 18:23:07 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/07 18:52:08 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@ int	find_replace_env(t_env *envp, char *str, int len, char *tmp)
 		i = 1;
 	while (envp)
 	{
-		if (ft_strncmp(&str[i], envp->line, len - i) == 0 && envp->line[len
-			- i] == '=')
+		if (ft_strncmp(&str[i], envp->line, len - i) == 0 && (envp->line[len
+				- i] == '=' || envp->line[len - i] == '\0'))
 		{
-			printf("str = %s\ncmd = %s\n", str, tmp);
 			free(envp->line);
 			envp->line = tmp;
 			return (0);

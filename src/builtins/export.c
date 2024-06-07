@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/06 18:35:07 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/07 18:55:22 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,19 @@ int	is_valid_identifier(char *str)
 void	add_variable_in_env(t_var *var, char *tmp)
 {
 	t_env	*env;
+	size_t	len;
 
+	len = ft_strlen(tmp);
 	env = var->env;
 	while (env)
 	{
-		if (ft_strcmp(env->line, tmp) == 0)
+		if (ft_strncmp(env->line, tmp, len) == 0 && env->line[len] == '=')
 		{
-			free(env->line);
-			env->line = tmp;
+			if (env->line[len] == '\0')
+			{
+				free(env->line);
+				env->line = tmp;
+			}
 			return ;
 		}
 		env = env->next;
@@ -108,7 +113,6 @@ void	choose_how_to_add(t_var *var, char *cmd)
 	name_end = ft_strchr(cmd, '=');
 	if (name_end)
 	{
-		printf("in\n");
 		name_len = ft_strlen(cmd) - ft_strlen(name_end);
 		name = ft_strndup(cmd, name_len, 0);
 		if (!name)
