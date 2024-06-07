@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/07 17:10:45 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/07 18:33:55 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void ft_unset(t_env **env, char *var)
 	while (current)
 	{
 		tmp = NULL;
-		if (ft_strncmp(var, current->line, len) == 0 && current->line[len] == '=')
+		if ((ft_strncmp(var, current->line, len) == 0 && current->line[len] == '=') 
+			|| (ft_strncmp(var, current->line, len) == 0 && current->line[len] == '\0'))
 		{
 			flag = 1;
 			if (current->prev == NULL && current->next == NULL)
