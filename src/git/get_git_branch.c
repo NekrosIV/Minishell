@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_git_branch.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/01 17:49:41 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/06 14:15:31 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,24 @@ static int	dup_for_git(char *filename)
 	int	stderor;
 	int	fd_out;
 
-	fd_out = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd_out == -1)
-		return (perror(filename), -1);
 	stderor = open("/dev/null", O_RDONLY);
 	if (stderor == -1)
 		return (-1);
-	if (dup2(fd_out, STDOUT_FILENO) == -1)
-	{
-		(perror("dup2(fd_out)"), close(fd_out));
-		return (-1);
-	}
-	close(fd_out);
 	if (dup2(stderor, STDERR_FILENO) == -1)
 	{
 		(perror("dup2(fd_in)"), close(stderor));
 		return (-1);
 	}
 	close(stderor);
+	fd_out = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_out == -1)
+		return (perror(filename), -1);
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+	{
+		(perror("dup2(fd_out)"), close(fd_out));
+		return (-1);
+	}
+	close(fd_out);
 	return (0);
 }
 

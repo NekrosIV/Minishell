@@ -6,17 +6,17 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:57:26 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/28 15:26:29 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/06 17:24:18 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strndup(char *line, int end, int start)
+char	*ft_strndup(char *line, size_t end, size_t start)
 {
 	char	*str;
-	int		j;
-	int		size;
+	size_t	j;
+	size_t	size;
 
 	size = end - start;
 	j = 0;
