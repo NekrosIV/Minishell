@@ -6,7 +6,7 @@
 /*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 20:06:12 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/08 21:42:32 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	is_valid_identifier(char *str)
 {
 	int	i;
 
-	if (!str || !ft_isalpha(str[0]))
-		return (0);
 	i = 0;
+	if ((!str || !ft_isalpha(str[0])) && (str[i] != '_'))
+		return (0);
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
