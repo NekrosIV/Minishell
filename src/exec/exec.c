@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 13:49:03 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 20:25:20 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,6 @@ void	exec(char **cmd, char **env)
 		error_msg(path, cmd, env);
 	execve(path, cmd, env);
 	error_msg(path, cmd, env);
-}
-
-void	print_cmd(char **cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-	{
-		printf("cmd[%d]: %s\n", i, cmd[i]);
-		i++;
-	}
 }
 
 t_word	*cmd_found(t_word *lexer)
@@ -145,3 +133,15 @@ void	exe_cmd(t_var *var)
 	else if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_PIPE, NULL, -99);
 }
+
+// void	print_cmd(char **cmd)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (cmd[i])
+// 	{
+// 		printf("cmd[%d]: %s\n", i, cmd[i]);
+// 		i++;
+// 	}
+// }

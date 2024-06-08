@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 13:26:05 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 19:58:18 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <unistd.h>
 
 char	*get_pwd(t_var *var)
 {
@@ -116,31 +115,4 @@ void	init_tab_builtins(t_var **var)
 	(*var)->tab_builtins[5] = echo;
 	(*var)->tab_builtins[6] = env;
 	(*var)->tab_builtins[7] = exit_builtin;
-}
-
-t_var	*init_var(t_env **envs)
-{
-	t_var	*var;
-
-	var = malloc(sizeof(t_var));
-	if (!var)
-		(free_list_env(envs), free_error(NULL, E_MALLOC, "var", 1));
-	var->exit = false;
-	var->error = false;
-	var->bonus_cmd = false;
-	var->uncommitted_changes = false;
-	var->in_fork = false;
-	var->in_parenth = false;
-	var->git = true;
-	var->execute_next = true;
-	var->line = NULL;
-	var->lexer = NULL;
-	var->envp = NULL;
-	var->env = *envs;
-	var->quoted_cmds = NULL;
-	var->tmp = NULL;
-	var->here_doc_count = 0;
-	var->last_pid = 0;
-	init_tab_builtins(&var);
-	return (var);
 }

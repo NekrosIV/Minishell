@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   before_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 13:42:49 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 20:10:22 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,44 +107,6 @@ void	do_here_doc(t_var *var)
 			free(nb);
 			fork_here_doc(var, tmp, file_name);
 		}
-		tmp = tmp->next;
-	}
-}
-
-void	join_node2(t_word *head, t_var *var)
-{
-	t_word	*end;
-	char	*str;
-	t_word	*start;
-	t_word	*temp;
-
-	if (head->next == NULL)
-		return ;
-	end = head->next;
-	start = head->next;
-	while (end->token == CMD || end->token == DOUBLE_QUOTE
-		|| end->token == SINGLE_QUOTE)
-		end = end->next;
-	if (start == end)
-		return ;
-	str = ft_strjoin_tword(head, var, head->token);
-	(free(head->word), head->word = str);
-	while (start != end)
-	{
-		temp = start->next;
-		(del_tword(&start), start = temp);
-	}
-}
-
-void	join_node(t_var *var)
-{
-	t_word	*tmp;
-
-	tmp = var->lexer;
-	while (tmp->token != END)
-	{
-		if (is_cmd(tmp->token) == 1)
-			join_node2(tmp, var);
 		tmp = tmp->next;
 	}
 }

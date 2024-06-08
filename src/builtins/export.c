@@ -3,50 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 17:59:55 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 20:06:12 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_env	*find_smallest_node(t_env *head)
-{
-	t_env	*smallest;
-	t_env	*current;
-
-	smallest = head;
-	current = head->next;
-	while (current != NULL)
-	{
-		if (ft_strcmp(current->line, smallest->line) < 0)
-			smallest = current;
-		current = current->next;
-	}
-	return (smallest);
-}
-
-t_env	*find_next_smallest_node(t_env *head, t_env *current_smallest)
-{
-	t_env	*smallest;
-	t_env	*current;
-
-	smallest = NULL;
-	current = head;
-	while (current != NULL)
-	{
-		if (ft_strcmp(current_smallest->line, current->line) < 0)
-		{
-			if (smallest == NULL || ft_strcmp(current->line,
-					smallest->line) < 0)
-				smallest = current;
-		}
-		current = current->next;
-	}
-	return (smallest);
-}
 
 void	print_env_ordered(t_env *env_list)
 {

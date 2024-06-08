@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 13:26:02 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 20:38:51 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@
 # define E_2 ": "
 # define E_EXPORT_ID "not a valid identifier"
 # define E_CD "cd: "
+# define E_ENV "env: "
 
 /* ************************************************************************** */
 /*                            DEFINE ALL STRUCTURE                            */
@@ -135,6 +136,14 @@ typedef struct s_var
 	t_env			*env;
 }					t_var;
 
+typedef struct index
+{
+	int				i;
+	int				j;
+	int				last_star_i;
+	int				last_star_j;
+}					t_index;
+
 /* ************************************************************************** */
 extern int			g_exit_status;
 
@@ -150,13 +159,16 @@ void				sigint_handler(int sig);
 void				sigint_handler_child(int sig);
 void				set_signals(void);
 void				sigint_handler_here_doc(int signum);
-// int					main(int ac, char **av, char **env);
 
 /* ****************************** MAIN_UTILS.C ****************************** */
 
 char				*get_git_branch(t_var *var);
 void				get_line(t_var *var);
 t_var				*init_var(t_env **envs);
+void				init_tab_builtins(t_var **var);
+char				*get_prompt(t_var *var);
+char				*get_prompt_two(t_var *var, char *tmp2, char *git_branch);
+char				*get_pwd(t_var *var);
 
 /* ************************************************************************** */
 /*                                      ENV                                   */
@@ -204,6 +216,18 @@ void				handle_end(t_var *var);
 /* ******************************* WILDCARD.C ******************************* */
 
 void				do_wildcard(t_var *var);
+void				del_start(t_word **tmp, t_word **start, t_var *var);
+int					expand_wildcard(t_word **start, char *pattern, int *tab,
+						t_var *var);
+int					join_and_check_err(int i, t_word **start, t_word **new,
+						t_var *var);
+int					expand_it(struct dirent *file, t_word **new, t_var *var);
+void				join_t_word(t_word **start, t_word **new);
+bool				is_expandable(char *file, char *pattern, int *tab);
+void				handle_index(t_index *index, int cas);
+void				del_this_shit(t_word **start);
+int					*init_tab_wildcard(t_word *start, t_var *var);
+t_word				*find_start(t_word *tmp);
 
 /* ****************************** CHECK_SYNTAX.C **************************** */
 
@@ -224,11 +248,15 @@ char				*ft_strjoin_tword(t_word *tmp, t_var *var, int token);
 
 /* *************************** CHECK_SYNTAX_OR_AND.C ************************ */
 
-int					check_pipe(t_word *tmp, bool dir);
 int					is_cmd(int token);
 int					check_syntax_or_and(t_word *lexer, t_var *var);
 int					check_syntax_parenth(t_word *lexer, t_var *var);
 t_word				*end_of_parenth(t_word *lexer);
+int					check_before_and_affter(t_word *tmp, bool dir);
+int					check_parenth_close(t_word *tmp, t_var *var);
+int					check_out_pareth(t_word *lexer);
+int					check_in_parenth2(t_word *tmp, bool cmd, bool parenthsis);
+int					check_in_parenth(t_word *lexer);
 
 /* ************************** CHECK_SYNTAX_UTILS.C ************************** */
 
@@ -286,6 +314,9 @@ void				loop_here_doc(char *eof, int fd, t_word *tmp, t_var *var);
 int					here_doc(t_word *tmp, t_var *var, char *file_name);
 void				do_here_doc(t_var *var);
 void				before_exe(t_var *var);
+void				fork_here_doc(t_var *var, t_word *tmp, char *file_name);
+void				join_node2(t_word *head, t_var *var);
+void				join_node(t_var *var);
 
 /********************************** EXEX.C **********************************/
 
@@ -306,6 +337,12 @@ int					do_bonus_cmd(int c_fd, int pipe_fd[2], int i, t_var *var);
 t_word				*find_token(t_word *lexer, int token);
 void				do_cmd_in_parenth(int c_fd, int pipe_fd[2], int i,
 						t_var *var);
+void				need_to_wait(t_word *tmp, pid_t pid);
+int					can_i_run_without_fork(t_var *var, t_word *tmp,
+						t_word *head, int i);
+void				run_without_fork(t_var *var, t_word **head, int c_fd,
+						int pipe_fd[2]);
+bool				run_in_fork(t_var *var, t_word *tmp, bool flag);
 
 /*********************************** DUP.C **********************************/
 
@@ -381,6 +418,19 @@ int					ft_strcmp(const char *s1, const char *s2);
 int					ft_chdir(char *path, t_var *var, char *env);
 int					find_replace_env(t_env *envp, char *str, int len,
 						char *tmp);
+int					do_dup_in_builtins(t_word *tmp);
+int					do_dup_out_builtins(t_word *tmp);
+int					do_dup_builtins(t_word *tmp, int *old_fd_in,
+						int *old_fd_out);
+int					restore_fds(int old_fd_in, int old_fd_out);
+int					is_dir_in_cmd(t_word *tmp);
+t_env				*find_smallest_node(t_env *head);
+t_env				*find_next_smallest_node(t_env *head,
+						t_env *current_smallest);
+void				print_env_ordered(t_env *env_list);
+int					is_valid_identifier(char *str);
+void				add_variable_in_env(t_var *var, char *tmp);
+void				choose_how_to_add(t_var *var, char *cmd);
 
 /****************************************************************************/
 /*                                  SIGNAL                                  */
@@ -393,7 +443,7 @@ void				sigint_handler_child(int sig);
 /****************************************************************************/
 
 void				count_node(t_word *word);
-void				print_list(t_word *word);
+// void				print_list(t_word *word);
 void				print_list_env(t_env *env);
 
 #endif

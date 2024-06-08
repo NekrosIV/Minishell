@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 18:05:42 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 19:17:28 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,23 @@ void	del_tenv(t_env **env, t_var *var)
 	free(current);
 }
 
+t_env	*ft_unset2(t_env *current, t_env *tmp, t_var *vars)
+{
+	if (current->prev == NULL && current->next == NULL)
+		(free(current->line), free(current), vars->env = NULL);
+	else if (current->next == NULL)
+	{
+		tmp = current->prev;
+		del_tenv2(&current);
+	}
+	else
+	{
+		tmp = current->prev;
+		del_tenv(&current, vars);
+	}
+	return (tmp);
+}
+
 void	ft_unset(t_env **env, t_var *vars, char *var)
 {
 	t_env	*current;
@@ -66,18 +83,7 @@ void	ft_unset(t_env **env, t_var *vars, char *var)
 					len) == 0 && current->line[len] == '\0'))
 		{
 			flag = 1;
-			if (current->prev == NULL && current->next == NULL)
-				(free(current->line), free(current), vars->env = NULL);
-			else if (current->next == NULL)
-			{
-				tmp = current->prev;
-				del_tenv2(&current);
-			}
-			else
-			{
-				tmp = current->prev;
-				del_tenv(&current, vars);
-			}
+			tmp = ft_unset2(current, tmp, vars);
 		}
 		if (flag == 1)
 			current = tmp;

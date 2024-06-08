@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:02 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 19:02:18 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 19:34:36 by pscala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool	ft_strtoll(char *str, unsigned long long *exit)
 		value = value * 10 + d;
 		i++;
 	}
-	if ((str[i] && !ft_isdigit(str[i]) || str[0] == '\0'))
+	if (((str[i] && !ft_isdigit(str[i])) || str[0] == '\0'))
 		return (false);
 	if ((sign == -1 && value > (unsigned long long)LLONG_MAX + 1))
 		return (false);

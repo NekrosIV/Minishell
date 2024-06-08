@@ -2,7 +2,7 @@ NAME = minishell
 BONUS_NAME = minishell_bonus
 LIBFTNAME = libft.a
 CC = cc
-CFLAGS = -g3 #-Wall -Wextra -Werror 
+CFLAGS = -g3 -Wall -Wextra -Werror 
 LIBFTDIR = ./libft
 
 # Dossiers sources
@@ -21,13 +21,18 @@ GIT_DIR = $(SRCDIR)/git
 SRCS = $(ENV_DIR)/env_utils.c \
       $(ENV_DIR)/env.c \
       $(EXEC_DIR)/before_exec.c \
+      $(EXEC_DIR)/before_exec_utils.c \
       $(EXEC_DIR)/dup.c \
       $(EXEC_DIR)/exec_utils_two.c \
       $(EXEC_DIR)/exec_utils.c \
       $(EXEC_DIR)/exec.c \
       $(EXEC_DIR)/split_cmd.c \
 	  $(EXEC_DIR)/exec_bonus_cmd.c \
+	  $(EXEC_DIR)/exec_bonus_cmd2.c \
+	  $(EXEC_DIR)/exec_bonus_cmd3.c \
 	  $(BUILTINS_DIR)/builtins_utils.c \
+	  $(BUILTINS_DIR)/builtins_utils2.c \
+	  $(BUILTINS_DIR)/builtins_utils3.c \
 	  $(BUILTINS_DIR)/cd.c \
 	  $(BUILTINS_DIR)/echo.c \
 	  $(BUILTINS_DIR)/unset.c \
@@ -39,14 +44,18 @@ SRCS = $(ENV_DIR)/env_utils.c \
       $(EXPAND_DIR)/expand.c \
       $(EXPAND_DIR)/handle_expand.c \
       $(EXPAND_DIR)/wildcard.c \
+      $(EXPAND_DIR)/wildcard_utils.c \
+      $(EXPAND_DIR)/wildcard_utils2.c \
       $(FREE_AND_EXIT_DIR)/exit.c \
       $(FREE_AND_EXIT_DIR)/free.c \
       $(FREE_AND_EXIT_DIR)/free_two.c \
 	  $(GIT_DIR)/get_git_branch.c \
       $(MAIN_DIR)/main_utils.c \
+      $(MAIN_DIR)/main_utils1.c \
       $(MAIN_DIR)/main.c \
       $(PARSING_DIR)/check_syntax_pipe.c \
       $(PARSING_DIR)/check_syntax_bonus.c \
+      $(PARSING_DIR)/check_syntax_bonus_utils.c \
       $(PARSING_DIR)/check_syntax_redir.c \
 	  $(PARSING_DIR)/check_syntax_utils.c \
       $(PARSING_DIR)/check_syntax.c \
