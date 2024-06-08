@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:57:03 by pscala            #+#    #+#             */
-/*   Updated: 2024/05/11 15:42:28 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:38:48 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*find_in_env(char *str, t_var *var)
 	while (envp)
 	{
 		if (ft_strncmp(&str[1], envp->line, len - 1) == 0 && envp->line[len
-				- 1] == '=')
+			- 1] == '=')
 		{
 			result = ft_strdup(&envp->line[len]);
 			if (!result)

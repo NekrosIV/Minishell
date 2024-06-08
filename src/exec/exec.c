@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 16:49:50 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:49:03 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	var->exit = true;
 	if (is_builtins(cmd_found(var->lexer)) != 0)
 	{
-		(g_exit_status = do_bultins(var), free_var(var));
+		g_exit_status = do_bultins(var);
+		free(var);
 		exit(g_exit_status);
 	}
 	env = split_env(var->env);

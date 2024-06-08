@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 13:44:15 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/06 14:15:31 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:38:43 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static char	*get_git_branch_two(int status, char *file_name)
 			return (unlink(file_name), close(fd), NULL);
 		return (unlink(file_name), close(fd), "yes");
 	}
-	(line = get_next_line(fd), unlink(file_name), close(fd));
+	line = get_next_line(fd);
 	if (!line)
-		return (NULL);
+		return (unlink(file_name), close(fd), NULL);
 	tmp = ft_strtrim(line, "\n");
 	if (!tmp)
-		return (free(line), NULL);
-	return (free(line), tmp);
+		return (unlink(file_name), close(fd), free(line), NULL);
+	return (unlink(file_name), close(fd), free(line), tmp);
 }
 
 char	*get_git_info(t_var *var, char *str, char *file_name)

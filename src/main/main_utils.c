@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/02 16:52:30 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:26:05 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,9 @@ char	*get_prompt(t_var *var)
 	if (!git_branch)
 		(free(pwd), free_error(var, E_MALLOC, "git_branch", 1));
 	if (g_exit_status == 0)
-		prompt = ft_strjoin(GREEN "➜ " BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE,
-				pwd);
+		prompt = ft_strjoin(GREEN "➜ " BOLD LILA "minirt " BOLD O_BLUE, pwd);
 	else
-		prompt = ft_strjoin(RED "➜ " BOLD LILA "minirt" RESET " " BOLD OCEAN_BLUE,
-				pwd);
+		prompt = ft_strjoin(RED "➜ " BOLD LILA "minirt " BOLD O_BLUE, pwd);
 	free(pwd);
 	if (!prompt)
 		(free(git_branch), free_error(var, E_MALLOC, "prompt", 1));

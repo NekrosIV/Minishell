@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:02 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/05 17:17:07 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/08 19:02:18 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	go_to_digit(char *str, int *sign)
 	return (i);
 }
 
-bool	ft_strtoll(char *str, long long *exit)
+bool	ft_strtoll(char *str, unsigned long long *exit)
 {
 	int							sign;
 	unsigned long long			value;
@@ -59,8 +59,8 @@ bool	ft_strtoll(char *str, long long *exit)
 
 int	exit_builtin(char **cmd, t_var *var)
 {
-	long long	exit;
-	bool		good_llint;
+	unsigned long long	exit;
+	bool				good_llint;
 
 	exit = 0;
 	if (var->in_fork == false && isatty(0))

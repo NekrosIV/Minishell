@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:47:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/06 16:45:53 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:57:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	replace_in_env(t_var *var)
 
 int	ft_chdir(char *path, t_var *var, char *env)
 {
-	if (!path)
-		return (free_error(NULL, "cd: ", env, -1), 1);
+	if (!path || path[0] == '\0')
+		return (error_msg_builtins(E_CD, env, "not set"), 1);
 	else if (chdir(path) == -1)
 	{
 		error_msg_builtins(E_CD, path, strerror(errno));
@@ -51,14 +51,16 @@ int	cd(char **cmd, t_var *var)
 	if (!cmd[1])
 	{
 		path = find_in_env("$HOME", var);
-		return (ft_chdir(path, var, "$HOME"), free(path), 0);
+		if (ft_chdir(path, var, "HOME") == 0)
+			return (free(path), 0);
+		return (free(path), 1);
 	}
 	else if (cmd[2])
 		return (free_error(NULL, "cd: ", "too many arguments", -1), 1);
 	else if (ft_strcmp(cmd[1], "-") == 0)
 	{
 		path = find_in_env("$OLDPWD", var);
-		if (ft_chdir(path, var, "$OLDPWD") == 0)
+		if (ft_chdir(path, var, "OLDPWD") == 0)
 			return (ft_putendl_fd(path, 1), free(path), 0);
 		return (free(path), 1);
 	}

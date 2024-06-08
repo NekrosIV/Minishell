@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/06 17:24:36 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:26:02 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 # define BOLD "\1\e[1m\2"
 # define GREY "\033[90m\2"
 # define LILA "\1\033[38;5;147m\2"
-# define OCEAN_BLUE "\1\033[38;5;24m\2"
+# define O_BLUE "\1\033[38;5;24m\2"
 # define TEAL "\1\033[38;5;44m\2"
 # define LIGHT_GREEN "\1\033[38;5;120m\2"
 

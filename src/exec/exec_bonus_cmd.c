@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 13:44:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/04 16:12:38 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:46:40 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,11 @@ bool	update_execution_state(t_word **start, t_word *tmp, t_var *var,
 {
 	if (tmp->token == AND || tmp->token == OR)
 	{
-		var->execute_next = (tmp->token == AND && g_exit_status == 0)
-			|| (tmp->token == OR && g_exit_status != 0);
+		if ((tmp->token == AND && g_exit_status == 0) || (tmp->token == OR
+				&& g_exit_status != 0))
+			var->execute_next = true;
+		else
+			var->execute_next = false;
 		*start = tmp->next;
 		return (true);
 	}
@@ -118,6 +121,7 @@ void	need_to_wait(t_word *tmp, pid_t pid)
 	}
 	g_exit_status = wait_for_child(pid);
 }
+
 int	can_i_run_without_fork(t_var *var, t_word *tmp, t_word *head, int i)
 {
 	if (var->in_parenth == false && head->prev == NULL && i != 0)
@@ -144,7 +148,7 @@ void	run_without_fork(t_var *var, t_word **head, int c_fd, int pipe_fd[2])
 	{
 		if (c_fd >= 0)
 			close(c_fd);
-		close(pipe_fd[0]), close(pipe_fd[1]);
+		(close(pipe_fd[0]), close(pipe_fd[1]));
 		free_error(var, NULL, NULL, g_exit_status);
 	}
 }

@@ -6,11 +6,19 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:48:39 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/05 15:04:34 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 16:42:33 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+typedef struct index
+{
+	int	i;
+	int	j;
+	int	last_star_i;
+	int	last_star_j;
+}		t_index;
 
 t_word	*find_start(t_word *tmp)
 {
@@ -64,40 +72,47 @@ void	del_this_shit(t_word **start)
 	}
 }
 
+void	handle_index(t_index *index, int cas)
+{
+	if (cas == 1)
+	{
+		index->last_star_i = index->i++;
+		index->last_star_j = index->j;
+	}
+	else if (cas == 2)
+	{
+		index->i++;
+		index->j++;
+	}
+	else if (cas == 3)
+	{
+		index->i = index->last_star_i + 1;
+		index->j = ++index->last_star_j;
+	}
+}
+
 bool	is_expandable(char *file, char *pattern, int *tab)
 {
-	int	i;
-	int	j;
-	int	last_star_i;
-	int	last_star_j;
+	t_index	index;
 
-	i = 0;
-	j = 0;
-	last_star_i = -1;
-	last_star_j = -1;
-	while (file[j])
+	index.i = 0;
+	index.j = 0;
+	index.last_star_i = -1;
+	index.last_star_j = -1;
+	while (file[index.j])
 	{
-		if (pattern[i] == '*' && tab[i] == WILDCARD)
-		{
-			last_star_i = i++;
-			last_star_j = j;
-		}
-		else if (pattern[i] == file[j])
-		{
-			i++;
-			j++;
-		}
-		else if (last_star_i != -1)
-		{
-			i = last_star_i + 1;
-			j = ++last_star_j;
-		}
+		if (pattern[index.i] == '*' && tab[index.i] == WILDCARD)
+			handle_index(&index, 1);
+		else if (pattern[index.i] == file[index.j])
+			handle_index(&index, 2);
+		else if (index.last_star_i != -1)
+			handle_index(&index, 3);
 		else
 			return (false);
 	}
-	while (pattern[i] == '*' && tab[i] == WILDCARD)
-		i++;
-	return (pattern[i] == '\0');
+	while (pattern[index.i] == '*' && tab[index.i] == WILDCARD)
+		index.i++;
+	return (pattern[index.i] == '\0');
 }
 
 void	join_t_word(t_word **start, t_word **new)
@@ -115,6 +130,7 @@ void	join_t_word(t_word **start, t_word **new)
 	}
 	(*new)->next = tmp;
 }
+
 int	expand_it(struct dirent *file, t_word **new, t_var *var)
 {
 	char	*str;
@@ -182,6 +198,7 @@ void	del_start(t_word **tmp, t_word **start, t_var *var)
 		var->lexer = *tmp;
 	del_tword(start);
 }
+
 void	do_wildcard(t_var *var)
 {
 	t_word	*tmp;

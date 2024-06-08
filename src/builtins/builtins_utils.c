@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:28:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/07 18:52:08 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:52:27 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@ int	find_replace_env(t_env *envp, char *str, int len, char *tmp)
 	i = 0;
 	if (str[0] == '$')
 		i = 1;
+	len = len - i;
 	while (envp)
 	{
-		if (ft_strncmp(&str[i], envp->line, len - i) == 0 && (envp->line[len
-				- i] == '=' || envp->line[len - i] == '\0'))
+		if (ft_strncmp(&str[i], envp->line, len) == 0 && (envp->line[len] == '='
+				|| envp->line[len] == '\0'))
 		{
 			free(envp->line);
 			envp->line = tmp;
@@ -91,6 +92,7 @@ int	is_builtins(t_word *tmp)
 		return (7);
 	return (0);
 }
+
 void	error_msg_builtins(char *builtin, char *fautife, char *err)
 {
 	ft_putstr_fd(builtin, 2);
@@ -98,6 +100,7 @@ void	error_msg_builtins(char *builtin, char *fautife, char *err)
 	ft_putstr_fd(E_2, 2);
 	ft_putendl_fd(err, 2);
 }
+
 int	do_dup_in_builtins(t_word *tmp)
 {
 	int	fd_in;

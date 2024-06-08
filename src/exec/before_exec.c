@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:57:37 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/06 14:03:45 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 13:42:49 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,9 +143,7 @@ void	join_node(t_var *var)
 	tmp = var->lexer;
 	while (tmp->token != END)
 	{
-		if (tmp->token == CMD || tmp->token == DOUBLE_QUOTE 
-			|| tmp->token == SINGLE_QUOTE || tmp->token == REDIR_IN
-			|| tmp->token == REDIR_OUT || tmp->token == REDIR_APPEND)
+		if (is_cmd(tmp->token) == 1)
 			join_node2(tmp, var);
 		tmp = tmp->next;
 	}
@@ -166,7 +164,6 @@ void	before_exe(t_var *var)
 		expand(var);
 	if (var->error == false)
 		do_wildcard(var);
-	// print_list(var->lexer);
 	if (var->error == false)
 		join_node(var);
 	if (var->error == false)

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/07 18:55:22 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:59:55 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	print_env_ordered(t_env *env_list)
 	smallest = find_smallest_node(env_list);
 	while (smallest != NULL)
 	{
-		ft_printf("declare -x %s\n", smallest->line);
+		ft_printf("export %s\n", smallest->line);
 		smallest = find_next_smallest_node(env_list, smallest);
 	}
 }
@@ -77,6 +77,7 @@ int	is_valid_identifier(char *str)
 	}
 	return (1);
 }
+
 void	add_variable_in_env(t_var *var, char *tmp)
 {
 	t_env	*env;
