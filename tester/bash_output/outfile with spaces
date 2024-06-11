@@ -1,4 +1,5 @@
 bash_output
+cd
 eof.sh
 minishell_output
 readline.supp

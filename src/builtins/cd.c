@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:47:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 17:57:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/11 19:00:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	replace_in_env(t_var *var)
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		return (free_error(NULL, "cd: ..:", strerror(errno), -1), 1);
+		return (error_msg_builtins(E_CD, "..:", strerror(errno)), 1);
 	old_pwd = find_in_env("$PWD", var);
 	if (!old_pwd)
 		old_pwd = ft_strdup("");

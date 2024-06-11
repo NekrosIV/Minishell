@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 19:20:32 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 19:24:21 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/11 18:52:25 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ void	error_msg_builtins(char *builtin, char *fautife, char *err)
 {
 	ft_putstr_fd(builtin, 2);
 	ft_putstr_fd(fautife, 2);
-	ft_putstr_fd(E_2, 2);
+	if (ft_strchr(fautife, '/') != NULL)
+		ft_putstr_fd(": ", 2);
+	else
+		ft_putstr_fd(" ", 2);
 	ft_putendl_fd(err, 2);
 }

@@ -97,19 +97,15 @@ echo "$new_command"
 
 print_result() {
 
-    local len=$((${#command} + 9))  # 9 caractères pour "TEST : "
-    local total_len=75
-    local padding=$(($total_len - $len))
-
     # Positionner le curseur correctement pour l'affichage du résultat
     if [ -z "$out_diff" ] && [ "$err_diff" = "no_error" ] &&
        [ -z "$valgrind_check_fd" ] && [ -z "$valgrind_check_leak" ] &&
        [ "$minishell_status" -eq "$bash_status" ] &&
        [ "$minishell_files" = "$bash_files" ]; then
-        printf "\r${BOLD}${GREEN}TEST[%d] : %s %-${padding}s[OK]${RESET}\n" "$TOTALE" "$command"
+        printf "\r${BOLD}${GREEN}TEST[%d] : %s[OK]${RESET}\n" "$TOTALE" "$command"
         NB_SUCESSES=$(($NB_SUCESSES + 1))
     else
-        printf "\r${BOLD}${RED}TEST[%d] : %s %-${padding}s[KO]${RESET}\n"  "$TOTALE"  "$command"
+        printf "\r${BOLD}${RED}TEST[%d] : %s[KO]${RESET}\n\n"  "$TOTALE"  "$command"
         print_details
     fi
     
@@ -134,10 +130,15 @@ run_test() {
     local minishell_command=$command
     local bash_command=$(printf "%s" "$command" | sed "s|minishell_output/|$BASH_DIR/|g")
 
-    printf "Test[%d] : %s ... " "$TOTALE" "$command"
+    num_lines=$(echo "$command" | wc -l)
+    
+    # Afficher le test seulement si la commande contient une seule ligne
+    if [ "$num_lines" -eq 1 ]; then
+        printf "Test[%d] : %s ... " "$TOTALE" "$command"
+    fi
     if [ $USE_VALGRIND -eq 1 ]; then
         # Exécuter la commande dans Minishell avec Valgrind et récupérer le statut
-        echo -e "$minishell_command" | $VALGRIND_COMMAND $MINISHELL > ./tests/minishell_full.test 2> ./tests/minishell_err.test
+        echo  "$minishell_command" | $VALGRIND_COMMAND $MINISHELL > ./tests/minishell_full.test 2> ./tests/minishell_err.test
         minishell_status=$?
         # Vérifier les résultats de Valgrind
         valgrind_check_fd=$(grep --text 'FILE DESCRIPTORS' ./tests/valgrind_output.test | tail -n 1 | awk '{num6 = $6; gsub(/[^0-9]/, "", num6); if (($4 == "4" && num6 != "3") || ($4 - 1 != num6)) print "fd_leak";}')
@@ -156,7 +157,7 @@ run_test() {
 
     # Filtrer les erreurs pour ne garder que la partie après le dernier ':'
     bash_error_filtered=$(cat ./tests/bash_err.test | grep -o '[^:]*$'  | head -n1 | eval $REMOVE_SPACES)
-    minishell_error_filtered=$(cat ./tests/minishell_err.test | eval $REMOVE_COLORS | grep -o '[^:]*$' | head -n1 | eval $REMOVE_SPACES)
+    minishell_error_filtered=$(cat ./tests/minishell_err.test | eval $REMOVE_COLORS | grep -o '[^:]*$' | head -n1 | eval $REMOVE_SPACES | sed 's/[^[:print:]]//g')
 
     # Nettoyer la sortie pour la comparaison
     # tail -n +2  ./tests/minishell_full.test > ./tests/minishell_out.test
@@ -180,10 +181,23 @@ run_test() {
 # Tests
 echo "Running tests..."
 
-while IFS= read -r LINE
-do
-    run_test "$LINE"
+# while IFS= read -r LINE
+# do
+#     run_test "$LINE"
+# done < zzz.sh
+
+buffer=""
+while IFS= read -r LINE; do
+    if [ -z "$LINE" ]; then
+        if [ -n "$buffer" ]; then
+            run_test "$buffer"
+            buffer=""
+        fi
+    else
+        buffer+="$LINE"$'\n'
+    fi
 done < vm.txt
+
 
 # LINE=$(< eof.sh)
 # run_test "$LINE"

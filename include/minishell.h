@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 20:38:51 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/11 18:23:44 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,7 @@ void				trim_tword(t_word **start, t_word **end);
 t_word				*trim_rout(t_word *start, t_var *var);
 void				handle_token_logic(t_word *tmp, t_var *var, int token,
 						t_word *head);
+bool				can_i_join(t_word *tmp, int token);
 
 /* ***************************** PARSING_UTILS.C **************************** */
 

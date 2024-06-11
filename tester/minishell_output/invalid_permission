@@ -1,4 +1,5 @@
 bash_output
+cd
 eof.sh
 minishell_output
 readline.supp
@@ -9,6 +10,7 @@ vm.txt
 zzz
 zzz.sh
 bash_output
+cd
 eof.sh
 minishell_output
 readline.supp

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 13:20:36 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/30 13:25:06 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:23:39 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,11 @@ void	handle_token_logic(t_word *tmp, t_var *var, int token, t_word *head)
 	if (token == HERE_DOC && (tmp->token == DOUBLE_QUOTE
 			|| tmp->token == SINGLE_QUOTE))
 		head->here_doc_expand = false;
+}
+
+bool	can_i_join(t_word *tmp, int token)
+{
+	return (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
+		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL
+		|| token == REDIR_APPEND || token == REDIR_IN || token == REDIR_OUT);
 }

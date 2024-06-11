@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:13:12 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/09 16:44:59 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/11 18:24:45 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,24 @@ char	*ft_strjoin_tword(t_word *tmp, t_var *var, int token)
 	char	*str;
 	int		i;
 	int		j;
+	t_word	*head;
 
+	head = tmp;
 	str = malloc(sizeof(char) * ft_strlen_tword(tmp, token) + 1);
 	if (!str)
 		free_error(var, E_MALLOC, "str", 1);
 	i = 0;
-	while (tmp->token == CMD || tmp->token == DOUBLE_QUOTE
-		|| tmp->token == SINGLE_QUOTE || tmp->token == DOL
-		|| token == REDIR_APPEND || token == REDIR_IN || token == REDIR_OUT)
+	while (can_i_join(tmp, token))
 	{
+		if (token == HERE_DOC && (tmp->token == DOUBLE_QUOTE
+				|| tmp->token == SINGLE_QUOTE))
+			head->here_doc_expand = false;
+		else if (token != HERE_DOC)
+			token = -1;
 		j = 0;
 		while (tmp->word[j])
 			str[i++] = tmp->word[j++];
 		tmp = tmp->next;
-		token = -1;
 	}
 	str[i] = '\0';
 	return (str);
