@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 19:20:32 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/11 18:52:25 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/11 19:26:15 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	error_msg_builtins(char *builtin, char *fautife, char *err)
 {
 	ft_putstr_fd(builtin, 2);
 	ft_putstr_fd(fautife, 2);
-	if (ft_strchr(fautife, '/') != NULL)
+	if (ft_strchr(fautife, '/') != NULL || ft_strcmp(builtin, E_EXPORT) == 0)
 		ft_putstr_fd(": ", 2);
 	else
 		ft_putstr_fd(" ", 2);

@@ -1,3 +1,9 @@
+hello
+
+hello/hello
+
+$HOME
+
 /bin/echo ""$?""
 
 /bin/echo $?"42"
@@ -393,6 +399,8 @@ exit 42 | ls
 
 ls | exit 42
 
+echo 42 && exit && echo 42
+
 pwd
 
 (echo a && echo b || echo c && (echo d || ( echo e || (echo f && (echo g))) || echo h ) && echo i || (echo j && (echo k || echo l)) && echo m)
@@ -405,7 +413,6 @@ cd /bin && /bin/pwd
 
 cd && /bin/pwd && cd - && /bin/pwd
 
-unset HOME && cd 
 
 mkdir s && cd s && mkdir p && cd p && rm -rf ../../s && pwd
 
@@ -415,7 +422,43 @@ mkdir s && cd s && mkdir p && cd p && rm -rf ../../s && cd ..
 
 mkdir s && cd s && mkdir p && cd p && rm -rf ../../s && cd -
 
+env | grep USER
+
+unset
+
+unset babjabababjlbl
+
+unset USER && env | grep USER
+
+unset HOME && cd 
 
 unset OLDPWD && cd -
+
+export | grep USER
+
+export popo=lo && env | grep popo
+
+export popo && export | grep popo
+
+export popo && export popo=lo && export | grep popo
+
+export popo=lo && export popo && export | grep popo
+
+export 787867=ssf
+
+export %$=ssf
+
+export _popo=lo && env | grep _popo
+
+export popo7=lo
+
+export _popo=lo && env | grep _popo && unset _popo && env | grep _popo
+
+ls && (ls && pwd ) | cat -e
+
+(ls && pwd ) && ls | cat -e
+
+(unset PATH && polo) || ls
+
 
 

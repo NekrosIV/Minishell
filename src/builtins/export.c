@@ -3,25 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 21:42:32 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/11 19:41:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env_ordered(t_env *env_list)
+void	print_env_ordered(t_env *env_list, t_var *var)
 {
 	t_env	*smallest;
+	char	*name;
+	char	*name_end;
+	int		name_len;
 
 	if (env_list == NULL)
 		return ;
 	smallest = find_smallest_node(env_list);
 	while (smallest != NULL)
 	{
-		ft_printf("export %s\n", smallest->line);
+		name_end = ft_strchr(smallest->line, '=');
+		if (name_end)
+		{
+			name_end = name_end + 1;
+			name_len = ft_strlen(smallest->line) - ft_strlen(name_end);
+			name = ft_strndup(smallest->line, name_len, 0);
+			if (!name)
+				free_error(var, E_MALLOC, "export()", 1);
+			ft_printf("export %s\"%s\"\n", name, name_end);
+			free(name);
+		}
+		else
+			ft_printf("export %s\n", smallest->line);
 		smallest = find_next_smallest_node(env_list, smallest);
 	}
 }
@@ -100,7 +115,7 @@ int	export(char **cmd, t_var *var)
 	exit = 0;
 	i = 1;
 	if (!cmd[1])
-		print_env_ordered(env);
+		print_env_ordered(env, var);
 	else
 	{
 		while (cmd[i])

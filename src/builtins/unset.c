@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:18 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/08 19:17:28 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/11 19:46:07 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	unset(char **cmd, t_var *var)
 
 	i = 1;
 	if (!cmd[i])
-		return (free_error(NULL, "unset: ", "not enough arguments", -1), 1);
+		return (0);
 	while (cmd[i])
 	{
 		ft_unset(&var->env, var, cmd[i]);

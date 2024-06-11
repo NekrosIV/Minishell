@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 11:52:16 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/11 18:23:44 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/11 19:38:32 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,7 +428,7 @@ int					is_dir_in_cmd(t_word *tmp);
 t_env				*find_smallest_node(t_env *head);
 t_env				*find_next_smallest_node(t_env *head,
 						t_env *current_smallest);
-void				print_env_ordered(t_env *env_list);
+void				print_env_ordered(t_env *env_list, t_var *var);
 int					is_valid_identifier(char *str);
 void				add_variable_in_env(t_var *var, char *tmp);
 void				choose_how_to_add(t_var *var, char *cmd);

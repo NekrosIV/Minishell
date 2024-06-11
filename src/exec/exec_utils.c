@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:42:40 by kasingh           #+#    #+#             */
-/*   Updated: 2024/05/31 12:23:37 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/11 20:27:03 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	error_msg(char *path, char **cmd, char **env)
 	{
 		if (!path)
 			(ft_putendl_fd(": command not found", 2), status = 127);
+		else if (ft_strcmp(path, "NULL") == 0)
+			(ft_putendl_fd(": No such file or directory", 2), status = 127);
 		else if (access(path, X_OK) == -1)
 			(ft_putendl_fd(": Permission denied", 2), status = 126);
 	}

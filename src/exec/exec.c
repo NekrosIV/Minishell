@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 20:25:20 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/11 20:22:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	exec(char **cmd, char **env)
 		if (env[i])
 			tmp_path = ft_split(&env[i][5], ':');
 		if (!tmp_path)
-			error_msg(path, cmd, env);
+			error_msg(ft_strdup("NULL"), cmd, env);
 		path = get_path(cmd, tmp_path);
 	}
 	if (!path)
