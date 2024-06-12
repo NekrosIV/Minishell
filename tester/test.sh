@@ -5,6 +5,7 @@
 MINISHELL="../minishell"
 MINISHELL_DIR="minishell_output"
 BASH_DIR="bash_output"
+PWD=$PWD
 # Création des dossiers pour stocker les fichiers créés par Minishell et Bash
 mkdir -p $MINISHELL_DIR
 mkdir -p $BASH_DIR
@@ -31,7 +32,7 @@ MAGENTA="\033[35m"
 #Vérifier si 'valgrind' est passé en argument
 if [ "$1" = "valgrind" ]; then
     USE_VALGRIND=1
-    VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --log-file=./tests/valgrind_output.test --suppressions=readline.supp "
+    VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --log-file=$PWD/tests/valgrind_output.test --suppressions=$PWD/readline.supp "
 else
     USE_VALGRIND=0
 fi
@@ -208,4 +209,4 @@ printf "%d/%d\n" $NB_SUCESSES $TOTALE
 
 
 # Nettoyage
-# rm -rf tests $MINISHELL_DIR $BASH_DIR
+rm -rf tests $MINISHELL_DIR $BASH_DIR

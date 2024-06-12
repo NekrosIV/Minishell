@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pscala <pscala@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 17:15:08 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/08 19:58:18 by pscala           ###   ########.fr       */
+/*   Updated: 2024/06/12 11:28:51 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,12 @@ void	get_line(t_var *var)
 	char	*prompt;
 
 	str = NULL;
-	prompt = get_prompt(var);
 	if (isatty(0))
+	{
+		prompt = get_prompt(var);
 		var->line = readline(prompt);
+		free(prompt);
+	}
 	else
 	{
 		str = get_next_line(0);
@@ -102,7 +105,6 @@ void	get_line(t_var *var)
 			var->line = ft_strtrim(str, "\n");
 	}
 	free(str);
-	free(prompt);
 }
 
 void	init_tab_builtins(t_var **var)
