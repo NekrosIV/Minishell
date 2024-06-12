@@ -29,7 +29,7 @@ MAGENTA="\033[35m"
 
 
 #Vérifier si 'valgrind' est passé en argument
-if [ "$1" = "valgrind" ]; then
+if [ "$1" = "v" ]; then
     USE_VALGRIND=1
     VALGRIND_COMMAND="valgrind --track-fds=yes --trace-children=yes --leak-check=full --show-leak-kinds=all --log-file=./tests/valgrind_output.test --suppressions=readline.supp "
 else
@@ -208,4 +208,4 @@ printf "%d/%d\n" $NB_SUCESSES $TOTALE
 
 
 # Nettoyage
-# rm -rf tests $MINISHELL_DIR $BASH_DIR
+rm -rf tests $MINISHELL_DIR $BASH_DIR

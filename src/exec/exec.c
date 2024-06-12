@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/11 20:22:56 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/12 11:23:19 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	if (is_builtins(cmd_found(var->lexer)) != 0)
 	{
 		g_exit_status = do_bultins(var);
-		free(var);
+		free_var(var);
 		exit(g_exit_status);
 	}
 	env = split_env(var->env);
@@ -76,7 +76,6 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	cmd = split_cmd(var);
 	if (!cmd)
 		free_error(var, E_MALLOC, "cmd", 1);
-	free_var(var);
 	if (cmd[0][0] == '\0')
 		error_msg(NULL, cmd, env);
 	exec(cmd, env);
@@ -133,15 +132,3 @@ void	exe_cmd(t_var *var)
 	else if (fork_loop(var, nb_pipe + 1) == -1)
 		free_error(NULL, E_PIPE, NULL, -99);
 }
-
-// void	print_cmd(char **cmd)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (cmd[i])
-// 	{
-// 		printf("cmd[%d]: %s\n", i, cmd[i]);
-// 		i++;
-// 	}
-// }
