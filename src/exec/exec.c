@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 16:44:47 by kasingh           #+#    #+#             */
-/*   Updated: 2024/06/15 13:19:33 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/15 13:29:25 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,14 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	char	**env;
 	char	**cmd;
 
+	if (node_cmp_token(var->lexer, PARENTH_OPEN) == 0)
+	{
+		expand(var);
+		if (var->error == false)
+			do_wildcard(var);
+		if (var->error == false)
+			join_node(var);
+	}
 	(signal(SIGQUIT, SIG_DFL), do_dup(c_fd, pipe_fd, i, var));
 	if (cmd_found(var->lexer) == 0)
 		(close_all_fd(pipe_fd, c_fd, i, true), free_error(var, NULL, NULL, 0));
@@ -76,6 +84,7 @@ void	child(int c_fd, int pipe_fd[2], int i, t_var *var)
 	cmd = split_cmd(var);
 	if (!cmd)
 		free_error(var, E_MALLOC, "cmd", 1);
+	free_var(var);
 	if (cmd[0][0] == '\0')
 		error_msg(NULL, cmd, env);
 	exec(cmd, env);
