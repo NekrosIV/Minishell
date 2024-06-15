@@ -127,7 +127,7 @@ $(NAME): $(OBJS)
 	printf "\r$(LBLUE)[Compilation]$(RESET) Completed   ... $(GREEN)$<" && \
 	printf " $(LBLUE)[$(RESET)$(CC)$(LBLUE)/]$(RESET)\n"
 
-bonus :  ${BONUS_NAME}
+bonus :  ${NAME}
 
 ${BONUS_NAME} : $(BONUS_OBJS)
 	@make -C $(LIBFTDIR)

@@ -6,7 +6,7 @@
 /*   By: kasingh <kasingh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 15:49:15 by pscala            #+#    #+#             */
-/*   Updated: 2024/06/11 19:41:32 by kasingh          ###   ########.fr       */
+/*   Updated: 2024/06/12 14:04:56 by kasingh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	add_variable_in_env(t_var *var, char *tmp)
 				free(env->line);
 				env->line = tmp;
 			}
+			else
+				free(tmp);
 			return ;
 		}
 		env = env->next;
